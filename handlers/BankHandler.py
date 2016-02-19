@@ -1,28 +1,29 @@
 import tornado.web
+
 from architecture.privatemethod import privatemethod
+
+from controller.BanksController import BanksController
 
 class BankHandler(tornado.web.RequestHandler):
     app = None
     
     def initialize(self, app):
         self.app = app
-        self.banks = self.app.controllers["data"].banks
         
     def get(self, bank, patch=None, effect=None, param=None):
-        banks = self.app.controllers["data"].banks
+        banks = self.app.controller(BanksController).banks
 
-        bank = int(bank)
+        bank = banks.get(int(bank))
         patch  = int(patch)  if patch  is not None else None
         effect = int(effect) if effect is not None else None
         param  = int(param)  if param  is not None else None
         
-        if not self.hasBank(bank):
+        if bank is None:
             self.write({})
             return
         
-        bank = self.getBank(bank)
         if patch is None:
-            data = bank.data
+            data = bank.json
         elif effect is None:
             data = bank.getPatch(patch)
         elif param is None:
@@ -34,11 +35,3 @@ class BankHandler(tornado.web.RequestHandler):
             data = {}
         
         self.write(data)
-    
-    #@privatemethod
-    def hasBank(self, bank):
-        return len(self.banks) >= bank+1
-    
-    #@privatemethod
-    def getBank(self, bank):
-        return self.banks[bank]

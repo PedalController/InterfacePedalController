@@ -1,31 +1,37 @@
 import json
 import glob
 
+from dao.DataBank import DataBank
 from architecture.privatemethod import privatemethod
 
 from model.Bank import Bank
+from model.Banks import Banks
 
-class DataController:
+class BankDao:
     dataPath = ""
-    _banks = []
     
     def __init__(self, dataPath):
         self.dataPath = dataPath
-        self.readBank(dataPath)
+    
+    @property
+    def all(self):
+        return Banks(self.readBanks(self.dataPath))
         
-    @privatemethod
-    def readBank(self, dataPath):
+    #@privatemethod
+    def readBanks(self, dataPath):
+        banks = []
+        
         for file in glob.glob(dataPath + "*.json"):
             bank = Bank(DataBank.read(file))
-            self._banks.append(bank)
+            banks.append(bank)
+        
+        return banks
 
+    '''
     def saveBank(self, bank):
         url = self.dataPath + "/" + bank.name + ".json"
         DataBank.save(url, bank)
-
-    @property
-    def banks(self):
-        return self._banks
+    '''
 
     '''
     @my_attribute.setter
@@ -34,14 +40,3 @@ class DataController:
         self._my_attribute = value
     '''
 
-class DataBank:
-
-    @staticmethod
-    def read(url):
-        with open(url) as data_file:    
-            return json.load(data_file)
-
-    def save(url, data):
-        jsonFile = open(url, "w+")
-        jsonFile.write(json.dumps(data))
-        jsonFile.close()

@@ -1,8 +1,15 @@
+import json
+import tornado.escape
+
 class Bank:
     data = {}
 
     def __init__(self, data):
         self.data = data
+    
+    @property
+    def json(self):
+        return self.data
     
     def getParam(self, patch, effect, param):
         effect = self.getEffect(patch, effect)

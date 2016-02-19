@@ -1,3 +1,4 @@
+from controller.BanksController import BanksController
 import tornado.web
 
 class BanksHandler(tornado.web.RequestHandler):
@@ -7,6 +8,6 @@ class BanksHandler(tornado.web.RequestHandler):
         self.app = app
         
     def get(self):
-        data = {"banks": self.app.controllers["data"].banks}
+        controller = self.app.controller(BanksController)
         
-        self.write(data)
+        self.write({"banks": controller.banks.json})

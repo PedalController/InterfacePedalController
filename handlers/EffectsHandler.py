@@ -1,3 +1,4 @@
+from controller.PluginsController import PluginsController
 import tornado.web
 
 class EffectsHandler(tornado.web.RequestHandler):
@@ -7,6 +8,6 @@ class EffectsHandler(tornado.web.RequestHandler):
         self.app = app
         
     def get(self):
-        plugins = self.app.controllers["plugins"]
+        controller = self.app.controller(PluginsController)
         
-        self.write(plugins.all)
+        self.write(controller.plugins)

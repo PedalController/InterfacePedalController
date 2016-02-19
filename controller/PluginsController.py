@@ -1,9 +1,9 @@
 from util.Lv2Library import Lv2Library
 
 class PluginsController:
-    all = []
+    plugins = []
 
     def __init__(self):
         lib = Lv2Library()
-        self.all = lib.plugins
+        self.plugins = lib.plugins
     
