@@ -1,0 +1,29 @@
+{
+    "name": "Igreja",
+    "patches": [
+        {
+            "name": "Shows",
+            "effects" : [
+                {
+                    "name": "Distortion drive",
+                    "company": "MOD",
+                    "params": [
+                        {
+                            "name": "ratio",
+                            "min": 0,
+                            "max": 10,
+                            "current": 5
+                        },
+                        {
+                            "name": "volume",
+                            "min": 0,
+                            "max": 100,
+                            "current": 5,
+                            "unit": "%"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
