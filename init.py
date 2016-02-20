@@ -19,6 +19,10 @@ def make_app(app):
         (r"/bank/(?P<bank>[0-9]+)/patch/(?P<patch>[0-9]+)/effect/(?P<effect>[0-9]+)", BankHandler, dict(app=app)),
         (r"/bank/(?P<bank>[0-9]+)/patch/(?P<patch>[0-9]+)", BankHandler, dict(app=app)),
         (r"/bank/(?P<bank>[0-9]+)", BankHandler, dict(app=app)),
+
+        (r"/bank/(?P<bank>[0-9]+)/patch/(?P<patch>[0-9]+)/effect", BankHandler, dict(app=app)),
+        (r"/bank/(?P<bank>[0-9]+)/patch", BankHandler, dict(app=app)),
+        (r"/bank", BankHandler, dict(app=app)),
     ])
 
 if __name__ == "__main__":

@@ -15,11 +15,11 @@ class BankDao:
     
     @property
     def all(self):
-        return Banks(self.readBanks(self.dataPath))
+        return self.readBanks(self.dataPath)
         
     #@privatemethod
     def readBanks(self, dataPath):
-        banks = []
+        banks = Banks([])
         
         for file in glob.glob(dataPath + "*.json"):
             bank = Bank(DataBank.read(file))

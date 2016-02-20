@@ -7,35 +7,61 @@ class Bank:
     def __init__(self, data):
         self.data = data
     
+    '''==================================
+    Property
+    =================================='''
+    
     @property
     def json(self):
         return self.data
     
+    @json.setter
+    def setJson(self, value):
+        self.data = value
+    
+    @property
+    def patches(self):
+        return self.data["patches"]
+    
+    
+    '''==================================
+    Facade
+    =================================='''
+    
     def getParam(self, patch, effect, param):
-        effect = self.getEffect(patch, effect)
-        
-        if effect is None:
-            return None
-        
-        params = patch["params"]
+        params = self.getParams(patch, effect)
         return self.get(params, param)
-
-    def getEffect(self, patch, effect):
+    
+    def getParams(self, patch, effect):
+        return self.getEffect(patch, effect)["params"]
+    
+    def addEffect(self, patch, effect):
         patch = self.getPatch(patch)
-        
-        if patch is None:
-            return None
-        
-        effects = patch["effects"]
-        return self.get(effects, effect)
+        patch["effects"].append(effect)
+    
+    def getEffect(self, patch, effect):
+        effects = self.getEffects(patch)
+        return self.get(effects, effect)    
+    
+    def getEffects(self, patch):
+        return self.getPatch(patch)["effects"]
     
     def getPatch(self, patch):
-        patches = self.data["patches"]
-        
-        return self.get(patches, patch)
+        return self.get(self.patches, patch)
+
+    def addPatch(self, patch):
+        self.patches.append(patch)
+    
+    '''==================================
+    Private
+    =================================='''
 
     #@privatemethod
     def get(self, collection, index):
         hasElement = len(collection) >= index+1
         
-        return collection[index] if hasElement else None
+        try:
+            return collection[index]
+        except IndexError:
+            raise IndexError("Element not found")
+        
