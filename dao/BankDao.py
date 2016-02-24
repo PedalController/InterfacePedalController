@@ -11,7 +11,7 @@ class BankDao:
     dataPath = ""
     
     def __init__(self, dataPath):
-        self.dataPath = dataPath
+        self.dataPath = dataPath + 'banks/'
     
     @property
     def all(self):
