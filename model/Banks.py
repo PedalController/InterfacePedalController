@@ -10,6 +10,9 @@ class Banks:
     def __len__(self):
         return len(self.banks)
     
+    def __getitem__(self, index):
+        return self.get(index)
+
     def get(self, index):
         hasBank = len(self.banks) >= index+1
         try:

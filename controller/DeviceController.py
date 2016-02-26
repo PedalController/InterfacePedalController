@@ -4,5 +4,5 @@ class DeviceController:
         self.app = app
     
     def setPatch(self, patch):
-        print("Loading effects", patch.effects)
-        print("connecting", patch.connections)
+        print("Loading effects", patch["effects"])
+        print("connecting", patch["connections"])

@@ -2,17 +2,20 @@ from architecture.privatemethod import privatemethod
 
 from controller.BanksController import BanksController
 from controller.PluginsController import PluginsController
+from controller.DeviceController import DeviceController
 
 from dao.CurrentDao import CurrentDao
 
 class CurrentController:
+    bank = 0
+    patch = 0
     def __init__(self, app):
         self.app = app
         
         data = app.dao(CurrentDao).load()
         self.bank = data["bank"]
         self.patch = data["patch"]
-
+        
     def setPatch(self, patch):
         if self.patch == patch:
             return
@@ -39,6 +42,6 @@ class CurrentController:
         banksController = self.app.controller(BanksController)
         
         bank = banksController.banks[self.bank]
-        patch = self.bank.getPatch(self.patch)
+        patch = bank.getPatch(self.patch)
         
         deviceController.setPatch(patch)
