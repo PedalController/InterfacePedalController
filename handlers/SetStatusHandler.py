@@ -30,11 +30,23 @@ class SetStatusHandler(tornado.web.RequestHandler):
         
         self.success()
 
+    @verb("get")
+    def putPatch(self, patch):
+        patch = int(patch)
+        
+        try:
+            self.controller.setPatch(patch)
+        except IndexError as error:
+            self.error(str(error))
+            return
+        
+        self.success()
+        
     @privatemethod
     def success(self):
         self.clear()
         self.set_status(204)
-        self.finish({"Teste": "teste"})
+        self.finish()
 
     @privatemethod
     def error(self, message):
