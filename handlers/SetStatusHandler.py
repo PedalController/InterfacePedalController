@@ -18,6 +18,20 @@ class SetStatusHandler(tornado.web.RequestHandler):
     def get(self, *args, **kwargs):
         pass
     
+    '''
+    def put(self, *args, **kwargs):
+        method = register.method(*args, **kwargs)
+        args = HandleUtils(*args)
+
+        try:
+            method(args)
+        except IndexError as error:
+            self.error(str(error))
+            return
+        
+        self.success()
+    '''
+        
     @verb("get")
     def putBank(self, bank):
         bank = int(bank)
@@ -41,7 +55,19 @@ class SetStatusHandler(tornado.web.RequestHandler):
             return
         
         self.success()
+    
+    @verb("get")
+    def putEffect(self, effect):
+        effect = int(effect)
         
+        try:
+            self.controller.toggleStatusEffect(effect)
+        except IndexError as error:
+            self.error(str(error))
+            return
+        
+        self.success()
+
     @privatemethod
     def success(self):
         self.clear()

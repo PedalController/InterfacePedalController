@@ -122,9 +122,10 @@ class BankHandler(tornado.web.RequestHandler):
         
         try:            
             index = self.controller.createBank(self.banks, body)
-            self.created({"index":index})
         except IndexError as error:
             self.error(str(error))
+            
+        self.created({"index":index})
 
     @verb("post")
     def postPatch(self, bank):
@@ -135,11 +136,10 @@ class BankHandler(tornado.web.RequestHandler):
         try:
             bank = self.banks.get(bank)
             index = self.controller.createPatch(bank, body)
-
-            self.created({"index":index})
-
         except IndexError as error:
             self.error(str(error))
+            
+        self.created({"index":index})
 
     @verb("post")
     def postEffect(self, bank, patch):
@@ -150,11 +150,10 @@ class BankHandler(tornado.web.RequestHandler):
         try:
             bank = self.banks.get(bank)
             index = self.controller.addEffect(bank, patch, body)
-
-            self.created({"index":index})
-
         except IndexError as error:
             self.error(str(error))
+            
+        self.created({"index":index})
 
     @privatemethod
     def created(self, message):
