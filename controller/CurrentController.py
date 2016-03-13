@@ -37,22 +37,24 @@ class CurrentController:
         if self.patch == patch:
             return
         
-        self.patch = patch
-        self.loadDevicePatch(self.bank, self.patch)
+        self.loadDevicePatch(self.bank, patch)
         self.saveCurrent()
+        self.patch = patch
 
     def setBank(self, bank):
         if self.bank == bank:
             return
 
-        self.bank = bank
-        self.patch = 0
-        self.loadDevicePatch(self.bank, self.patch)
+        patch = 0
+        
+        self.loadDevicePatch(bank, patch)
         self.saveCurrent()
+        
+        self.bank = bank
+        self.patch = patch
     
     @privatemethod
     def saveCurrent(self):
-        
         print("saving:", self.bank)
 
     @privatemethod

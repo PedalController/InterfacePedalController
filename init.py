@@ -27,11 +27,16 @@ def make_app(app):
         (r"/bank/(?P<bank>[0-9]+)/patch/(?P<patch>[0-9]+)/effect", BankHandler, dict(app=app)),
         (r"/bank/(?P<bank>[0-9]+)/patch", BankHandler, dict(app=app)),
         (r"/bank", BankHandler, dict(app=app)),
-      
+        
+        # Current
         (r"/current/bank/(?P<bank>[0-9]+)", SetStatusHandler, dict(app=app)),
         (r"/current/patch/(?P<patch>[0-9]+)", SetStatusHandler, dict(app=app)),
         (r"/current/effect/(?P<effect>[0-9]+)", SetStatusHandler, dict(app=app)),
         (r"/current/effect/(?P<effect>[0-9]+)/param/(?P<param>[0-9]+)", SetStatusHandler, dict(app=app)),
+
+        # Connections
+        
+        # Peripheral
     ])
 
 if __name__ == "__main__":
