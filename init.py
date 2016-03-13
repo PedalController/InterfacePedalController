@@ -31,7 +31,7 @@ def make_app(app):
         (r"/current/bank/(?P<bank>[0-9]+)", SetStatusHandler, dict(app=app)),
         (r"/current/patch/(?P<patch>[0-9]+)", SetStatusHandler, dict(app=app)),
         (r"/current/effect/(?P<effect>[0-9]+)", SetStatusHandler, dict(app=app)),
-        #(r"/current/effect/(?P<effect>[0-9]+)/param/(?P<param>[0-9]+)", SetStatusHandler, dict(app=app)),
+        (r"/current/effect/(?P<effect>[0-9]+)/param/(?P<param>[0-9]+)", SetStatusHandler, dict(app=app)),
     ])
 
 if __name__ == "__main__":

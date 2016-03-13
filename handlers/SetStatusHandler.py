@@ -4,6 +4,7 @@ from architecture.privatemethod import privatemethod
 
 from controller.CurrentController import CurrentController
 
+from util.HandlerUtils import HandlerUtils
 from util.RestOverloading import register, verb
 
 
@@ -14,68 +15,52 @@ class SetStatusHandler(tornado.web.RequestHandler):
         self.app = app
         self.controller = app.controller(CurrentController)
         
-    @register
-    def get(self, *args, **kwargs):
-        pass
-    
-    '''
-    def put(self, *args, **kwargs):
-        method = register.method(*args, **kwargs)
-        args = HandleUtils(*args)
-
+    @register('SetStatusHandler')
+    def put(self, function, *args, **kwargs):
         try:
-            method(args)
+            function(self, *args, **kwargs)
+            self.success()
+
         except IndexError as error:
-            self.error(str(error))
-            return
+            return self.error(str(error))
+        except Exception as error:
+            print(error)
+            return self.send(404)
         
-        self.success()
-    '''
-        
-    @verb("get")
+    @verb('put', 'SetStatusHandler')
     def putBank(self, bank):
         bank = int(bank)
-        
-        try:
-            self.controller.setBank(bank)
-        except IndexError as error:
-            self.error(str(error))
-            return
-        
-        self.success()
+        self.controller.setBank(bank)
 
-    @verb("get")
+    @verb('put', 'SetStatusHandler')
     def putPatch(self, patch):
         patch = int(patch)
-        
-        try:
-            self.controller.setPatch(patch)
-        except IndexError as error:
-            self.error(str(error))
-            return
-        
-        self.success()
+        self.controller.setPatch(patch)
     
-    @verb("get")
-    def putEffect(self, effect):
+    @verb('put', 'SetStatusHandler')
+    def putStatusEffect(self, effect):
         effect = int(effect)
-        
-        try:
-            self.controller.toggleStatusEffect(effect)
-        except IndexError as error:
-            self.error(str(error))
-            return
-        
-        self.success()
+        self.controller.toggleStatusEffect(effect)
+
+    @verb('put', 'SetStatusHandler')
+    def putParam(self, effect, param):
+        effect, param = HandlerUtils.toInt(effect, param)
+        self.controller.setEffectParam(effect, param)
 
     @privatemethod
     def success(self):
-        self.clear()
-        self.set_status(204)
-        self.finish()
+        self.send(204)
+    
+    @privatemethod
+    def created(self, message):
+        self.send(201, message)
 
     @privatemethod
     def error(self, message):
+        self.send(400, {"error": message})
+        
+    @privatemethod
+    def send(self, status, message=None):
         self.clear()
-        self.set_status(400)
-        self.finish({"error": message})
+        self.set_status(status)
+        self.finish(message)

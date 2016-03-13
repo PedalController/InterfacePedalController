@@ -13,154 +13,78 @@ class BankHandler(tornado.web.RequestHandler):
     
     def initialize(self, app):
         self.app = app
-        
-        #prepare
+
         self.controller = self.app.controller(BanksController)
         self.banks = self.controller.banks
-    
-    def prepare(self):
-        pass
 
-    @register
-    def get(self, *args, **kwargs):
-        pass
-    
-    @verb("get")
-    def getBank(self, bank):
-        bank = HandlerUtils.toInt(bank)
+    @register('BankHandler')
+    def get(self, function, *args, **kwargs):
         try:
-            bank = self.banks.get(bank)
-            self.write(bank.json)
-            
+            data = function(self, *args, **kwargs)
+            self.write(data)
+
         except IndexError as error:
             self.error(str(error))
+        except Exception as error:
+            return self.send(404)
+    
+    @verb('get', 'BankHandler')
+    def getBank(self, bank):
+        bank = int(bank)
+        bank = self.banks.get(bank)
+        return bank.json
 
-    @verb("get")
+    @verb('get', 'BankHandler')
     def getPatch(self, bank, patch):
         bank, patch = HandlerUtils.toInt(bank, patch)
-        try:
-            bank = self.banks.get(bank)
-            self.write(bank.getPatch(patch))
-            
-        except IndexError as error:
-            self.error(str(error))
+        bank = self.banks.get(bank)
+        return bank.getPatch(patch)
 
-    @verb("get")
+    @verb('get', 'BankHandler')
     def getEffect(self, bank, patch, effect):
         bank, patch, effect = HandlerUtils.toInt(bank, patch, effect)
-        try:
-            bank = self.banks.get(bank)
-            self.write(bank.getEffect(patch, effect))
-            
-        except IndexError as error:
-            self.error(str(error))
+        bank = self.banks.get(bank)
+        return bank.getEffect(patch, effect)
         
-    @verb("get")
+    @verb('get', 'BankHandler')
     def getParam(self, bank, patch, effect, param):
         bank, patch, effect, param = HandlerUtils.toInt(bank, patch, effect, param)
+        bank = self.banks.get(bank)
+        return bank.getParam(patch, effect, param)
+
+    @register('BankHandler')
+    def post(self, function, *args, **kwargs):
         try:
-            bank = self.banks.get(bank)
-            self.write(bank.getParam(patch, effect, param))
-            
+            index = function(self, *args, **kwargs)
+            self.created({"index":index})
+
         except IndexError as error:
             self.error(str(error))
-    
-    @privatemethod
-    def error(self, message):
-        self.clear()
-        self.set_status(400)
-        self.finish({"error": message})
+        except KeyError as error:
+            print(error)
+            return self.send(404)
+        except Exception as error:
+            print(error)
+            return self.send(500)
 
-    '''
-    def get(self, bank, patch=None, effect=None, param=None):
-        bank, patch, effect, param = HandlerUtils.toInt(bank, patch, effect, param)
-
-        try:
-            bank = self.banks.get(bank)
-            data = self.getData(bank, patch, effect, param)
-        except IndexError as error:
-            self.error(str(error))
-            return
-        
-        self.write(data)
-    '''
-
-    '''
-    @register
-    def post(self, *args, **kwargs):
-        bank, patch = HandlerUtils.toInt(bank, patch)
-        
-        body = json.loads(self.request.body.decode('utf-8'))
-        
-        index = -1
-        try:            
-            if bank is None:
-                index = self.controller.createBank(self.banks, body)
-            elif patch is None:
-                bank = self.banks.get(bank)
-                index = self.controller.createPatch(bank, body)
-            elif effect is None:
-                bank = self.banks.get(bank)
-                index = self.controller.addEffect(bank, patch, body)
-            
-        except IndexError as error:
-            self.error(str(error))
-            return
-        
-        self.clear()
-        self.set_status(201)
-        self.finish({"index":index})
-    '''
-
-    @register
-    def post(self, *args, **kwargs):
-        pass
-
-    @verb("post")
+    @verb("post", 'BankHandler')
     def postBank(self):
         body = json.loads(self.request.body.decode('utf-8'))
-        
-        try:            
-            index = self.controller.createBank(self.banks, body)
-        except IndexError as error:
-            self.error(str(error))
-            
-        self.created({"index":index})
+        return self.controller.createBank(self.banks, body)
 
-    @verb("post")
+    @verb("post", 'BankHandler')
     def postPatch(self, bank):
-        bank = HandlerUtils.toInt(bank)
-
+        bank = int(bank)
         body = json.loads(self.request.body.decode('utf-8'))
-        
-        try:
-            bank = self.banks.get(bank)
-            index = self.controller.createPatch(bank, body)
-        except IndexError as error:
-            self.error(str(error))
-            
-        self.created({"index":index})
+        bank = self.banks.get(bank)
+        return self.controller.createPatch(bank, body)
 
-    @verb("post")
+    @verb("post", 'BankHandler')
     def postEffect(self, bank, patch):
         bank, patch = HandlerUtils.toInt(bank, patch)
-        
         body = json.loads(self.request.body.decode('utf-8'))
-        
-        try:
-            bank = self.banks.get(bank)
-            index = self.controller.addEffect(bank, patch, body)
-        except IndexError as error:
-            self.error(str(error))
-            
-        self.created({"index":index})
-
-    @privatemethod
-    def created(self, message):
-        self.clear()
-        self.set_status(201)
-        self.finish(message)
-
+        bank = self.banks.get(bank)
+        return self.controller.addEffect(bank, patch, body)
     
     def put(self, bank, patch=None, effect=None, param=None):
         bank, patch, effect = HandlerUtils.toInt(bank, patch, effect)
@@ -177,13 +101,29 @@ class BankHandler(tornado.web.RequestHandler):
             self.error(str(error))
             return
 
+        self.success()
+    
+    
+    @privatemethod
+    def success(self):
+        self.send(204)
+        
+    @privatemethod
+    def created(self, message):
+        self.send(201, message)
+
+    @privatemethod
+    def error(self, message):
+        self.send(400, {"error": message})
+        
+    @privatemethod
+    def send(self, status, message=None):
         self.clear()
-        self.set_status(204)
-        self.finish()
+        self.set_status(status)
+        self.finish(message)
     
-    
-    '''
-    #@privatemethod
+    ''''''
+    @privatemethod
     def getData(self, bank, patch, effect, param):
         if patch is None:
             return bank.json
@@ -193,4 +133,4 @@ class BankHandler(tornado.web.RequestHandler):
             return bank.getEffect(patch, effect)
         else:
             return bank.getParam(patch, effect, param)
-    '''
+    ''''''

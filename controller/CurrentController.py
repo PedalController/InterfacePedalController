@@ -29,6 +29,9 @@ class CurrentController:
         deviceController = self.app.controller(DeviceController)
         deviceController.toggleStatusEffect(effectNumber)
         self.saveCurrent()
+    
+    def setEffectParam(self, effect, param):
+        raise Exception("setEffectParam: Nao implementado")
         
     def setPatch(self, patch):
         if self.patch == patch:
