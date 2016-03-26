@@ -1,12 +1,12 @@
 import tornado.web
 import json
 
-from architecture.privatemethod import privatemethod
+from application.architecture.privatemethod import privatemethod
 
-from controller.BanksController import BanksController
+from application.controller.BanksController import BanksController
 
-from util.HandlerUtils import HandlerUtils
-from util.RestOverloading import register, verb
+from application.util.HandlerUtils import HandlerUtils
+from application.util.RestOverloading import register, verb
 
 class BankHandler(tornado.web.RequestHandler):
     app = None

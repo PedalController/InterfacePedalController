@@ -8,6 +8,23 @@ sudo apt-get install guitarix calf-plugins
 
 //URL='http://security.ubuntu.com/ubuntu/pool/universe/l/lilv/liblilv-dev_0.20.0~dfsg0-1_amd64.deb'; FILE=`mktemp`; wget "$URL" -qO $FILE && sudo dpkg -i $FILE; rm $FILE
 
+###########
+# Mod Host
+###########
+# sudo apt-get update 
+# sudo apt-get upgrade
+
+sudo apt-get install libreadline-dev libjack-jackd2-dev liblilv-dev lilv-utils
+
+# Update lv2-lib
+wget "http://lv2plug.in/spec/lv2-1.12.0.tar.bz2"
+tar xvjf lv2-1.12.0.tar.bz2
+cd lv2-1.12.0
+./waf configure && ./waf build && sudo ./waf install
+cd ..
+rm lv2-1.12.0.tar.bz2
+# para finalizar, delete a pastar rm lv2-1.12.0/ manualmente
+# Reiniciar
 
 ###########
 # Python
@@ -18,3 +35,7 @@ http://legacy.python.org/dev/peps/pep-0443/
 https://www.python.org/dev/peps/pep-0484/
 https://docs.python.org/3/tutorial/controlflow.html#function-annotations
 
+
+
+
+URL=''; FILE=`mktemp`; wget "$URL" -qO $FILE && sudo dpkg -i $FILE; rm $FILE

@@ -1,6 +1,10 @@
 import tornado.ioloop
 import tornado.web
 
+import sys
+folder = 'application'
+sys.path.append(folder)
+
 from handlers.BanksHandler import BanksHandler
 from handlers.BankHandler import BankHandler
 
@@ -9,7 +13,7 @@ from handlers.EffectHandler import EffectHandler
 
 from handlers.SetStatusHandler import SetStatusHandler
 
-from Application import Application
+from application.Application import Application
 
 def make_app(app):
     return tornado.web.Application([
@@ -40,7 +44,7 @@ def make_app(app):
     ])
 
 if __name__ == "__main__":
-    app = make_app(Application())
+    app = make_app(Application("application/data/"))
     print("PedalController API works!")
     app.listen(3000)
     tornado.ioloop.IOLoop.current().start()

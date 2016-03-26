@@ -1,5 +1,6 @@
-from controller.BanksController import BanksController
 import tornado.web
+
+from application.controller.BanksController import BanksController
 
 class BanksHandler(tornado.web.RequestHandler):
     app = None
