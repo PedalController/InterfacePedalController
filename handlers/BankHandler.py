@@ -103,6 +103,17 @@ class BankHandler(tornado.web.RequestHandler):
 
         self.success()
     
+    def delete(self, bank):
+        bank = int(bank)
+
+        try:
+            self.controller.delete(self.banks[bank])
+
+        except IndexError as error:
+            self.error(str(error))
+            return
+
+        self.success()
     
     @privatemethod
     def success(self):

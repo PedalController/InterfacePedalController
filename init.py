@@ -20,7 +20,7 @@ def make_app(app):
         (r"/effects", EffectsHandler, dict(app=app)),
         (r"/effect/([^/]+)", EffectHandler, dict(app=app)),
 
-        # Read and update
+        # Read, update and delete
         (r"/banks", BanksHandler, dict(app=app)),
         (r"/bank/(?P<bank>[0-9]+)/patch/(?P<patch>[0-9]+)/effect/(?P<effect>[0-9]+)/param/(?P<param>[0-9]+)", BankHandler, dict(app=app)),
         (r"/bank/(?P<bank>[0-9]+)/patch/(?P<patch>[0-9]+)/effect/(?P<effect>[0-9]+)", BankHandler, dict(app=app)),
