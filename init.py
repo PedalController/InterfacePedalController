@@ -5,13 +5,13 @@ import sys
 folder = 'application'
 sys.path.append(folder)
 
-from handlers.BanksHandler import BanksHandler
-from handlers.BankHandler import BankHandler
+from handler.BanksHandler import BanksHandler
+from handler.BankHandler import BankHandler
 
-from handlers.EffectsHandler import EffectsHandler
-from handlers.EffectHandler import EffectHandler
+from handler.EffectsHandler import EffectsHandler
+from handler.EffectHandler import EffectHandler
 
-from handlers.SetStatusHandler import SetStatusHandler
+from handler.SetStatusHandler import SetStatusHandler
 
 from application.Application import Application
 

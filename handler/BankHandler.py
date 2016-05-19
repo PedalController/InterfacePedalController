@@ -1,22 +1,26 @@
 import tornado.web
 import json
 
-from application.architecture.privatemethod import privatemethod
+from handler.AbstractRequestHandler import AbstractRequestHandler
 
 from application.controller.BanksController import BanksController
+
+from application.architecture.privatemethod import privatemethod
 
 from application.util.HandlerUtils import HandlerUtils
 from application.util.RestOverloading import register, verb
 
-class BankHandler(tornado.web.RequestHandler):
+class BankHandler(AbstractRequestHandler):
     app = None
     
     def initialize(self, app):
         self.app = app
 
         self.controller = self.app.controller(BanksController)
-        self.banks = self.controller.banks
 
+    ##############################
+    # GET
+    ##############################
     @register('BankHandler')
     def get(self, function, *args, **kwargs):
         try:
@@ -31,27 +35,30 @@ class BankHandler(tornado.web.RequestHandler):
     @verb('get', 'BankHandler')
     def getBank(self, bank):
         bank = int(bank)
-        bank = self.banks.get(bank)
+        bank = self.controller.banks.getById(bank)
         return bank.json
 
     @verb('get', 'BankHandler')
     def getPatch(self, bank, patch):
         bank, patch = HandlerUtils.toInt(bank, patch)
-        bank = self.banks.get(bank)
+        bank = self.controller.banks.getById(bank)
         return bank.getPatch(patch)
 
     @verb('get', 'BankHandler')
     def getEffect(self, bank, patch, effect):
         bank, patch, effect = HandlerUtils.toInt(bank, patch, effect)
-        bank = self.banks.get(bank)
+        bank = self.controller.banks.getById(bank)
         return bank.getEffect(patch, effect)
         
     @verb('get', 'BankHandler')
     def getParam(self, bank, patch, effect, param):
         bank, patch, effect, param = HandlerUtils.toInt(bank, patch, effect, param)
-        bank = self.banks.get(bank)
+        bank = self.controller.banks.getById(bank)
         return bank.getParam(patch, effect, param)
 
+    ##############################
+    # POST
+    ##############################
     @register('BankHandler')
     def post(self, function, *args, **kwargs):
         try:
@@ -61,38 +68,55 @@ class BankHandler(tornado.web.RequestHandler):
         except IndexError as error:
             self.error(str(error))
         except KeyError as error:
-            print(error)
             return self.send(404)
         except Exception as error:
             print(error)
             return self.send(500)
 
+
     @verb("post", 'BankHandler')
     def postBank(self):
         body = json.loads(self.request.body.decode('utf-8'))
-        return self.controller.createBank(self.banks, body)
+        return self.controller.createBank(body)
 
     @verb("post", 'BankHandler')
     def postPatch(self, bank):
         bank = int(bank)
         body = json.loads(self.request.body.decode('utf-8'))
-        bank = self.banks.get(bank)
+        bank = self.controller.banks.getById(bank)
         return self.controller.createPatch(bank, body)
 
     @verb("post", 'BankHandler')
     def postEffect(self, bank, patch):
         bank, patch = HandlerUtils.toInt(bank, patch)
         body = json.loads(self.request.body.decode('utf-8'))
-        bank = self.banks.get(bank)
+        bank = self.controller.banks.getById(bank)
         return self.controller.addEffect(bank, patch, body)
     
-    def put(self, bank, patch=None, effect=None, param=None):
+    ##############################
+    # PUT
+    ##############################
+    @register("BankHandler")
+    def put(self, function, *args, **kwargs):
+        try:
+            function(self, *args, **kwargs)
+            self.success()
+
+        except IndexError as error:
+            self.error(str(error))
+        except KeyError as error:
+            return self.send(404)
+        except Exception as error:
+            return self.send(500)
+
+        '''
         bank, patch, effect = HandlerUtils.toInt(bank, patch, effect)
         
         body = json.loads(self.request.body.decode('utf-8'))
         
         try:
-            bank = self.banks.get(bank)
+            print(bank, body)
+            bank = self.controller.banks.getById(bank)
             data = self.getData(bank, patch, effect, param)
             
             self.controller.update(data, body)
@@ -102,37 +126,29 @@ class BankHandler(tornado.web.RequestHandler):
             return
 
         self.success()
+        '''
     
+    @verb("put", 'BankHandler')
+    def putBank(self, bank):
+        body = json.loads(self.request.body.decode('utf-8'))
+        bank = int(bank)
+        bank = self.controller.banks.getById(bank)
+
+        self.controller.updateBank(bank, body)
+
+    ##############################
+    # DELETE
+    ##############################
     def delete(self, bank):
         bank = int(bank)
 
         try:
-            self.controller.delete(self.banks[bank])
-
+            self.controller.delete(self.controller.banks.getById(bank))
+            self.success()
         except IndexError as error:
             self.error(str(error))
             return
 
-        self.success()
-    
-    @privatemethod
-    def success(self):
-        self.send(204)
-        
-    @privatemethod
-    def created(self, message):
-        self.send(201, message)
-
-    @privatemethod
-    def error(self, message):
-        self.send(400, {"error": message})
-        
-    @privatemethod
-    def send(self, status, message=None):
-        self.clear()
-        self.set_status(status)
-        self.finish(message)
-    
     ''''''
     @privatemethod
     def getData(self, bank, patch, effect, param):
