@@ -9,6 +9,5 @@ class EffectHandler(tornado.web.RequestHandler):
     def get(self, uri):
         plugins = self.app.controllers["plugins"]
         
-        
         data = plugins.all[uri] if uri in plugins.all else {}
         self.write(data)

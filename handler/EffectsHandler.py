@@ -9,5 +9,5 @@ class EffectsHandler(tornado.web.RequestHandler):
         
     def get(self):
         controller = self.app.controller(PluginsController)
-        
-        self.write(controller.plugins)
+
+        self.write({'plugins':controller.plugins.values()})
