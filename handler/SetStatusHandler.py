@@ -23,9 +23,11 @@ class SetStatusHandler(tornado.web.RequestHandler):
 
         except IndexError as error:
             return self.error(str(error))
+        '''
         except Exception as error:
             print(error)
             return self.send(404)
+        '''
         
     @verb('put', 'SetStatusHandler')
     def putBank(self, bank):

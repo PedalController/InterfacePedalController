@@ -5,13 +5,13 @@ import sys
 folder = 'application'
 sys.path.append(folder)
 
-from handlers.BanksHandler import BanksHandler
-from handlers.BankHandler import BankHandler
+from handler.BanksHandler import BanksHandler
+from handler.BankHandler import BankHandler
 
-from handlers.EffectsHandler import EffectsHandler
-from handlers.EffectHandler import EffectHandler
+from handler.EffectsHandler import EffectsHandler
+from handler.EffectHandler import EffectHandler
 
-from handlers.SetStatusHandler import SetStatusHandler
+from handler.SetStatusHandler import SetStatusHandler
 
 from application.Application import Application
 
@@ -20,7 +20,7 @@ def make_app(app):
         (r"/effects", EffectsHandler, dict(app=app)),
         (r"/effect/([^/]+)", EffectHandler, dict(app=app)),
 
-        # Read and update
+        # Read, update and delete
         (r"/banks", BanksHandler, dict(app=app)),
         (r"/bank/(?P<bank>[0-9]+)/patch/(?P<patch>[0-9]+)/effect/(?P<effect>[0-9]+)/param/(?P<param>[0-9]+)", BankHandler, dict(app=app)),
         (r"/bank/(?P<bank>[0-9]+)/patch/(?P<patch>[0-9]+)/effect/(?P<effect>[0-9]+)", BankHandler, dict(app=app)),
