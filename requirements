@@ -9,8 +9,10 @@ sudo apt-get install guitarix calf-plugins
 //URL='http://security.ubuntu.com/ubuntu/pool/universe/l/lilv/liblilv-dev_0.20.0~dfsg0-1_amd64.deb'; FILE=`mktemp`; wget "$URL" -qO $FILE && sudo dpkg -i $FILE; rm $FILE
 
 
+pip install rdflib
+
 #https://apps.ubuntu.com/cat/applications/precise/python-lilv/
-sudo apt-get install python-lilv
+#sudo apt-get install python-lilv
 
 ###########
 # Mod Host

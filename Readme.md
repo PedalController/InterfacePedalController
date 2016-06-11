@@ -48,3 +48,15 @@
 ## Connections
         
 ## Peripheral
+
+## To install
+
+```
+# Do it
+sudo pip3 install virtualenv
+
+virtualenv PedalPi-WS
+source ./PedalPi-WS/bin/activate
+
+pip3 install -r requirements.txt
+```
