@@ -10,11 +10,11 @@ from util.RestOverloading import register, verb
 
 class SetStatusHandler(tornado.web.RequestHandler):
     app = None
-    
+
     def initialize(self, app):
         self.app = app
         self.controller = app.controller(CurrentController)
-        
+
     @register('SetStatusHandler')
     def put(self, function, *args, **kwargs):
         try:
@@ -28,7 +28,7 @@ class SetStatusHandler(tornado.web.RequestHandler):
             print(error)
             return self.send(404)
         '''
-        
+
     @verb('put', 'SetStatusHandler')
     def putBank(self, bank):
         bank = int(bank)
@@ -38,7 +38,7 @@ class SetStatusHandler(tornado.web.RequestHandler):
     def putPatch(self, patch):
         patch = int(patch)
         self.controller.setPatch(patch)
-    
+
     @verb('put', 'SetStatusHandler')
     def putStatusEffect(self, effect):
         effect = int(effect)
@@ -52,7 +52,7 @@ class SetStatusHandler(tornado.web.RequestHandler):
     @privatemethod
     def success(self):
         self.send(204)
-    
+
     @privatemethod
     def created(self, message):
         self.send(201, message)
@@ -60,7 +60,7 @@ class SetStatusHandler(tornado.web.RequestHandler):
     @privatemethod
     def error(self, message):
         self.send(400, {"error": message})
-        
+
     @privatemethod
     def send(self, status, message=None):
         self.clear()
