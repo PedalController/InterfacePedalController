@@ -1,4 +1,4 @@
-# WebService - Rest v1.0
+# WebService - Rest v0.1.2
 
 ## Effects
 
@@ -11,19 +11,19 @@
 
 * ```/banks```
   *  GET all banks
-* ```/bank/(?P<bank>[0-9]+)/patch/(?P<patch>[0-9]+)/effect/(?P<effect>[0-9]+)/param/(?P<param>[0-9]+)```
-  * GET a parameter value
-  * PUT for update a parameter value
-* ```/bank/(?P<bank>[0-9]+)/patch/(?P<patch>[0-9]+)/effect/(?P<effect>[0-9]+)```
-  * GET a effect
-  * PUT for update a effect
-* ```/bank/(?P<bank>[0-9]+)/patch/(?P<patch>[0-9]+)```
-  * GET a patch
-  * PUT for update a patch
 * ```/bank/(?P<bank>[0-9]+)```
   * GET a bank
   * PUT for update a bank
   * DELETE a bank
+* ```/bank/(?P<bank>[0-9]+)/patch/(?P<patch>[0-9]+)```
+  * GET a patch
+  * PUT for update a patch
+* ```/bank/(?P<bank>[0-9]+)/patch/(?P<patch>[0-9]+)/effect/(?P<effect>[0-9]+)```
+  * GET a effect
+  * DELETE for remove a effect
+* ```/bank/(?P<bank>[0-9]+)/patch/(?P<patch>[0-9]+)/effect/(?P<effect>[0-9]+)/param/(?P<param>[0-9]+)```
+  * GET a parameter value
+  * PUT for update a parameter value
 
 ## Save new
 
@@ -52,7 +52,6 @@
 ## To install
 
 ```
-# Do it
 sudo pip3 install virtualenv
 
 virtualenv PedalPi-WS
@@ -60,3 +59,9 @@ source ./PedalPi-WS/bin/activate
 
 pip3 install -r requirements.txt
 ```
+
+## To run
+
+```
+python3 init.py
+``` 

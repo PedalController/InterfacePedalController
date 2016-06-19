@@ -4,8 +4,8 @@ from application.controller.BanksController import BanksController
 
 from application.architecture.privatemethod import privatemethod
 
-from application.util.HandlerUtils import HandlerUtils
-from application.util.RestOverloading import register, verb
+from util.HandlerUtils import HandlerUtils
+from util.RestOverloading import register, verb
 
 
 class BankHandler(AbstractRequestHandler):
