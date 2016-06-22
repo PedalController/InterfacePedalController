@@ -2,7 +2,7 @@ from controller.PluginsController import PluginsController
 import tornado.web
 
 
-class EffectsHandler(tornado.web.RequestHandler):
+class PluginsHandler(tornado.web.RequestHandler):
     app = None
 
     def initialize(self, app):

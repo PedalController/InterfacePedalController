@@ -18,6 +18,7 @@
 * ```/bank/(?P<bank>[0-9]+)/patch/(?P<patch>[0-9]+)```
   * GET a patch
   * PUT for update a patch
+  * DELETE a patch
 * ```/bank/(?P<bank>[0-9]+)/patch/(?P<patch>[0-9]+)/effect/(?P<effect>[0-9]+)```
   * GET a effect
   * DELETE for remove a effect
@@ -65,3 +66,9 @@ pip3 install -r requirements.txt
 ```
 python3 init.py
 ``` 
+
+## Test
+
+I'm finding any...
+https://github.com/svanoort/pyresttest
+http://locust.io/
