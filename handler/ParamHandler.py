@@ -5,7 +5,7 @@ from application.controller.BanksController import BanksController
 from util.HandlerUtils import HandlerUtils
 
 
-class PatchHandler(AbstractRequestHandler):
+class ParamHandler(AbstractRequestHandler):
     app = None
 
     def initialize(self, app):

@@ -14,14 +14,16 @@ class BankHandler(AbstractRequestHandler):
     def get(self, bankIndex):
         try:
             bankIndex = int(bankIndex)
-            bank = self.controller.banks.getById(bankIndex)
+            bank = self.controller.banks[bankIndex]
 
             self.write(bank.json)
 
         except IndexError as error:
-            self.error(str(error))
+            return self.error(str(error))
+
         except Exception as error:
-            return self.send(404)
+            self.printError()
+            return self.send(500)
 
     def post(self):
         try:
@@ -30,36 +32,34 @@ class BankHandler(AbstractRequestHandler):
             self.created({"index": index})
 
         except IndexError as error:
-            self.error(str(error))
-        except KeyError as error:
-            return self.send(404)
+            return self.error(str(error))
+
         except Exception as error:
-            print(error)
+            self.printError()
             return self.send(500)
 
     def put(self, bankIndex):
         try:
             body = self.getRequestData()
             bankIndex = int(bankIndex)
-            bank = self.controller.banks.getById(bankIndex)
+            bank = self.controller.banks[bankIndex]
 
             self.controller.updateBank(bank, body)
 
             self.success()
 
         except IndexError as error:
-            self.error(str(error))
-        except KeyError as error:
-            return self.send(404)
+            return self.error(str(error))
+
         except Exception as error:
+            self.printError()
             return self.send(500)
 
-    def delete(self, bank):
-        bank = int(bank)
+    def delete(self, bankIndex):
+        bankIndex = int(bankIndex)
 
         try:
-            self.controller.deleteBank(self.controller.banks.getById(bank))
+            self.controller.deleteBank(self.controller.banks[bankIndex])
             self.success()
         except IndexError as error:
-            self.error(str(error))
-            return
+            return self.error(str(error))

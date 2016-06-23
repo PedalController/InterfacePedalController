@@ -24,23 +24,28 @@ def make_app(app):
         (r"/effects", PluginsHandler, dict(app=app)),
         (r"/effect/([^/]+)", PluginHandler, dict(app=app)),
 
-        # Read, update and delete
         (r"/banks", BanksHandler, dict(app=app)),
-        (r"/bank/(?P<bank>[0-9]+)/patch/(?P<patch>[0-9]+)/effect/(?P<effect>[0-9]+)/param/(?P<param>[0-9]+)",ParamHandler, dict(app=app)),
-        (r"/bank/(?P<bank>[0-9]+)/patch/(?P<patch>[0-9]+)/effect/(?P<effect>[0-9]+)", EffectHandler, dict(app=app)),
-        (r"/bank/(?P<bank>[0-9]+)/patch/(?P<patch>[0-9]+)", PatchHandler, dict(app=app)),
-        (r"/bank/(?P<bank>[0-9]+)", BankHandler, dict(app=app)),
 
-        # Save new
-        (r"/bank/(?P<bank>[0-9]+)/patch/(?P<patch>[0-9]+)/effect", EffectHandler, dict(app=app)),
-        (r"/bank/(?P<bank>[0-9]+)/patch", PatchHandler, dict(app=app)),
+        # Bank
         (r"/bank", BankHandler, dict(app=app)),
+        (r"/bank/(?P<bankIndex>[0-9]+)", BankHandler, dict(app=app)),
+
+        # Patch
+        (r"/bank/(?P<bankIndex>[0-9]+)/patch", PatchHandler, dict(app=app)),
+        (r"/bank/(?P<bankIndex>[0-9]+)/patch/(?P<patchIndex>[0-9]+)", PatchHandler, dict(app=app)),
+
+        # Effect
+        (r"/bank/(?P<bank>[0-9]+)/patch/(?P<patch>[0-9]+)/effect", EffectHandler, dict(app=app)),
+        (r"/bank/(?P<bankIndex>[0-9]+)/patch/(?P<patchIndex>[0-9]+)/effect/(?P<effectIndex>[0-9]+)", EffectHandler, dict(app=app)),
+
+        # Param
+        (r"/bank/(?P<bankIndex>[0-9]+)/patch/(?P<patchIndex>[0-9]+)/effect/(?P<effectIndex>[0-9]+)/param/(?P<paramIndex>[0-9]+)",ParamHandler, dict(app=app)),
 
         # Current
-        (r"/current/bank/(?P<bank>[0-9]+)", SetStatusHandler, dict(app=app)),
-        (r"/current/patch/(?P<patch>[0-9]+)", SetStatusHandler, dict(app=app)),
-        (r"/current/effect/(?P<effect>[0-9]+)", SetStatusHandler, dict(app=app)),
-        (r"/current/effect/(?P<effect>[0-9]+)/param/(?P<param>[0-9]+)", SetStatusHandler, dict(app=app)),
+        (r"/current/bank/(?P<bankIndex>[0-9]+)", SetStatusHandler, dict(app=app)),
+        (r"/current/patch/(?P<patchIndex>[0-9]+)", SetStatusHandler, dict(app=app)),
+        (r"/current/effect/(?P<effectIndex>[0-9]+)", SetStatusHandler, dict(app=app)),
+        (r"/current/effect/(?P<effectIndex>[0-9]+)/param/(?P<paramIndex>[0-9]+)", SetStatusHandler, dict(app=app)),
 
         # Connections
 

@@ -6,7 +6,21 @@ from .test import Test
 
 class BanksControllerTest(Test):
     address = 'http://localhost:3000/'
-    defaultBank = {}
+    defaultBank = {
+        "name": "REST - Default Bank",
+        "patches": [{
+            "name": "Example patch",
+            "effects": [],
+            "connections": []
+        }]
+    }
+
+    
+    def setUp(self):
+        try:
+            self.get('')
+        except requests.exceptions.ConnectionError:
+            self.fail("Server is down")
 
     ########################
     # CRUD
@@ -15,19 +29,14 @@ class BanksControllerTest(Test):
         return self.get('bank/{0}'.format(index))
 
     def createBank(self, data):
-        return self.post('bank/', data)
+        return self.post('bank', data)
 
     def updateBank(self, index, data):
-        return self.put('bank/{0}'.format(index), params=data)
+        return self.put('bank/{0}'.format(index), data)
 
     def deleteBank(self, index):
         return self.delete('bank/{0}'.format(index))
 
-    def setUp(self):
-        try:
-            self.get(self.address)
-        except requests.exceptions.ConnectionError:
-            self.fail("Server is down")
 
     ########################
     # Tests
@@ -37,27 +46,27 @@ class BanksControllerTest(Test):
         r = self.getBank(index)
 
         self.assertEqual(Test.SUCCESS, r.status_code)
-        self.assertEqual(self.defaultBank, r.json())
+        self.assertEqual(index, r.json()['index'])
 
         self.deleteBank(index)
 
     def test_post(self):
-        index = self.createBank(self.defaultBank).json()['index']
+        r = self.createBank(self.defaultBank)
         self.assertEqual(Test.CREATED, r.status_code)
 
+        index = r.json()['index']
         bankPersisted = self.getBank(index).json()
-        self.assertEqual(self.defaultBank, r.json())
+        self.assertEqual(index, bankPersisted['index'])
 
         self.deleteBank(index)
 
     def test_put(self):
-        self.fail(self.createBank(self.defaultBank).text)
         index = self.createBank(self.defaultBank).json()['index']
-        newName = 'New name'
+        newName = 'REST - Default Bank - New name'
 
-        bankCopy = dict()
-        bankCopy.update(self.defaultBank)
+        bankCopy = dict(self.defaultBank)
         bankCopy['name'] = newName
+        bankCopy['index'] = index
 
         r = self.updateBank(index, bankCopy)
         self.assertEqual(Test.UPDATED, r.status_code)
@@ -69,5 +78,3 @@ class BanksControllerTest(Test):
 
         r = self.delete('bank/{0}'.format(index))
         self.assertEqual(Test.DELETED, r.status_code)
-
-        self.deleteBank(index)
