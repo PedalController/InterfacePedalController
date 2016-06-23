@@ -1,2 +1,5 @@
 *.pyc
 PedalPi-WS
+PedalPi_Application.egg-info
+.coverage
+htmlcov/

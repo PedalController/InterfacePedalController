@@ -46,7 +46,7 @@ def make_app(app):
     ])
 
 if __name__ == "__main__":
-    app = make_app(Application("application/data/"))
+    app = make_app(Application(True, dataPatch="application/data/"))
     app.listen(3000)
 
     print("PedalController API localhost:3000")

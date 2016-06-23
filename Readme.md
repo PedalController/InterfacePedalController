@@ -1,40 +1,82 @@
-# WebService - Rest v0.1.2
+# WebService - Rest v0.2.0
 
-## Effects
+## Rest
 
-* /effects: 
- * GET. Get all effects instaled
-* /effect/([^/]+):
- * GET. Get ____
+### Auth
 
-## Read and update
+Not implemented
+
+### Plugins
+
+* ```/plugins```: 
+  * GET. Get all plugins effects instaled
+* ```/plugin/(?P<pluginUri>[^/]+)```:
+  * GET. Get specific plugin data by 
+  * Params
+    * **pluginUri**: URI of plugin required
+
+### Banks
 
 * ```/banks```
   *  GET all banks
-* ```/bank/(?P<bank>[0-9]+)```
-  * GET a bank
-  * PUT for update a bank
-  * DELETE a bank
-* ```/bank/(?P<bank>[0-9]+)/patch/(?P<patch>[0-9]+)```
-  * GET a patch
-  * PUT for update a patch
-* ```/bank/(?P<bank>[0-9]+)/patch/(?P<patch>[0-9]+)/effect/(?P<effect>[0-9]+)```
-  * GET a effect
-  * DELETE for remove a effect
-* ```/bank/(?P<bank>[0-9]+)/patch/(?P<patch>[0-9]+)/effect/(?P<effect>[0-9]+)/param/(?P<param>[0-9]+)```
-  * GET a parameter value
-  * PUT for update a parameter value
 
-## Save new
+### Bank
 
-* ```/bank/(?P<bank>[0-9]+)/patch/(?P<patch>[0-9]+)/effect```
-  * POST a new effect. The effect index is returned
-* ```/bank/(?P<bank>[0-9]+)/patch```
-  * POST a new patch. The patch index is returned
 * ```/bank```
-  * POST a new bank. The bank index is returned
-        
-## Current
+  * **POST** a new bank.
+  * Returns the new bank index
+* ```/bank/(?P<bankIndex>[0-9]+)```
+  * **GET** a bank
+  * **PUT** for update a bank
+  * **DELETE** a bank
+  * Params
+    * **bankIndex**
+
+### Patch
+
+* ```/bank/(?P<bankIndex>[0-9]+)/patch```
+  * **POST** a new patch.
+  * Returns the patch index
+  * Params
+    * **bankIndex**
+* ```/bank/(?P<bankIndex>[0-9]+)/patch/(?P<patchIndex>[0-9]+)```
+  * **GET** a patch
+  * **PUT** for update a patch
+  * Params
+    * **bankIndex**
+    * **patchIndex**
+
+### Effect
+
+* ```/bank/(?P<bankIndex>[0-9]+)/patch/(?P<patchIndex>[0-9]+)/effect```
+  * **POST** a new effect.
+  * Returns the effect index
+  * Params
+    * **bankIndex**
+    * **patchIndex**
+* ```/bank/(?P<bankIndex>[0-9]+)/patch/(?P<patchIndex>[0-9]+)/effect/(?P<effectIndex>[0-9]+)```
+  * **GET** a effect
+  * **DELETE** for remove a effect
+  * Params
+    * **bankIndex**
+    * **patchIndex**
+    * **effectIndex**
+
+### Param
+
+* ```/bank```
+  * **POST** a new bank.
+  * Returns the bank index
+* ```/bank/(?P<bankIndex>[0-9]+)/patch/(?P<patchIndex>[0-9]+)/effect/(?P<effectIndex>[0-9]+)/param/(?P<paramIndex>[0-9]+)```
+  * **GET** a parameter value
+  * **PUT** for update a parameter value
+  * Params
+    * **bankIndex**
+    * **patchIndex**
+    * **effectIndex**
+    * **paramIndex**
+
+### Current
 
 * ```/current/bank/(?P<bank>[0-9]+)```
  * PUT the current bank
@@ -45,9 +87,17 @@
 * ```/current/effect/(?P<effect>[0-9]+)/param/(?P<param>[0-9]+)```
  * PUT for set a parameter value for a effect of the current patch
 
-## Connections
-        
-## Peripheral
+### Connections
+
+Not implemented
+
+### Peripheral
+
+Not implemented
+
+### WebSocket
+
+Not implemented
 
 ## To install
 
@@ -65,3 +115,13 @@ pip3 install -r requirements.txt
 ```
 python3 init.py
 ``` 
+
+## To test Rest
+
+```
+# Run server
+coverage3 run --source=handler setup.py test
+coverage3 report
+coverage3 html
+firefox htmlcov/index.html
+```
