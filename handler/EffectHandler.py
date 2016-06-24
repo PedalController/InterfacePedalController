@@ -22,8 +22,10 @@ class EffectHandler(AbstractRequestHandler):
 
         except IndexError as error:
             return self.error(str(error))
+
         except Exception as error:
-            return self.send(404)
+            self.printError()
+            return self.send(500)
 
     def post(self, bankIndex, patchIndex):
         try:
@@ -36,10 +38,9 @@ class EffectHandler(AbstractRequestHandler):
 
         except IndexError as error:
             return self.error(str(error))
-        except KeyError as error:
-            return self.send(404)
+
         except Exception as error:
-            print(error)
+            self.printError()
             return self.send(500)
 
     def delete(self, bankIndex, patchIndex, effectIndex):
@@ -48,6 +49,11 @@ class EffectHandler(AbstractRequestHandler):
                 bankIndex, patchIndex, effectIndex
             )
             raise Exception("Not implemented")
-            self.success()
+            return self.success()
+
         except IndexError as error:
-            self.error(str(error))
+            return self.error(str(error))
+
+        except Exception:
+            self.printError()
+            return self.send(500)

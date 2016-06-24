@@ -44,6 +44,7 @@ Not implemented
 * ```/bank/(?P<bankIndex>[0-9]+)/patch/(?P<patchIndex>[0-9]+)```
   * **GET** a patch
   * **PUT** for update a patch
+  * **DELETE** a patch
   * Params
     * **bankIndex**
     * **patchIndex**

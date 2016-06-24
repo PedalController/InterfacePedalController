@@ -26,7 +26,8 @@ class ParamHandler(AbstractRequestHandler):
         except IndexError as error:
             return self.error(str(error))
         except Exception as error:
-            return self.send(404)
+            self.printError()
+            return self.send(500)
 
     def put(self, bankIndex, patchIndex, effectIndex, paramIndex):
         try:
@@ -35,20 +36,16 @@ class ParamHandler(AbstractRequestHandler):
             )
 
             body = self.getRequestData()
-            bank = self.controller.banks.getById(bank)
+            bank = self.controller.banks[bankIndex]
 
-            # Pensar em mudar isso aqui para mudar diretamente
-            # no banco e através de um observer, detectar a mudança
-            # e aplicar (persistir e chamar deviceController)
-            #self.controller.updateParam(
-            #    bank, patchNumber, effectNumber, paramNumber, body
-            #)
+            raise Exception("Not implemented")
+            return self.success()
 
         except IndexError as error:
             return self.error(str(error))
-        except KeyError as error:
-            return self.send(404)
+
         except Exception as error:
+            self.printError()
             return self.send(500)
 
-        self.success()
+       
