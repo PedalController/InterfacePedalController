@@ -1,6 +1,7 @@
 from handler.AbstractRequestHandler import AbstractRequestHandler
 
 from application.controller.BanksController import BanksController
+from application.controller.ParamController import ParamController
 
 from util.HandlerUtils import HandlerUtils
 
@@ -11,14 +12,15 @@ class ParamHandler(AbstractRequestHandler):
     def initialize(self, app):
         self.app = app
 
-        self.controller = self.app.controller(BanksController)
+        self.controller = self.app.controller(ParamController)
+        self.banksController = self.app.controller(BanksController)
 
     def get(self, bankIndex, patchIndex, effectIndex, paramIndex):
         try:
             bankIndex, patchIndex, effectIndex, paramIndex = HandlerUtils.toInt(
                 bankIndex, patchIndex, effectIndex, paramIndex
             )
-            bank = self.controller.banks.getById(bankIndex)
+            bank = self.banksController.banks[bankIndex]
 
             param = bank.getParam(patchIndex, effectIndex, paramIndex)
             return self.write(param)
@@ -35,10 +37,14 @@ class ParamHandler(AbstractRequestHandler):
                 bankIndex, patchIndex, effectIndex, paramIndex
             )
 
-            body = self.getRequestData()
-            bank = self.controller.banks[bankIndex]
+            bank = self.banksController.banks[bankIndex]
+            patch = bank.getPatch(patchIndex)
+            param = bank.getParam(patchIndex, effectIndex, paramIndex)
+            value = self.getRequestData()
 
-            raise Exception("Not implemented")
+            self.controller.updateValue(
+                bank, patch, param, value
+            )
             return self.success()
 
         except IndexError as error:
@@ -46,6 +52,4 @@ class ParamHandler(AbstractRequestHandler):
 
         except Exception as error:
             self.printError()
-            return self.send(500)
-
-       
+            return self.send(500)       

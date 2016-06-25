@@ -91,3 +91,21 @@ class RestFacade(object):
             patchIndex,
             effectIndex
         )
+
+    # **********************
+    # Param
+    # **********************
+    def getParam(self, bankIndex, patchIndex, effectIndex, paramIndex):
+        return self.get(self.urlParam(bankIndex, patchIndex, effectIndex, paramIndex))
+
+    def putParam(self, bankIndex, patchIndex, effectIndex, paramIndex, value):
+        url = self.urlParam(bankIndex, patchIndex, effectIndex, paramIndex)
+        return self.put(url, value)
+
+    def urlParam(self, bankIndex, patchIndex, effectIndex, paramIndex):
+        return 'bank/{0}/patch/{1}/effect/{2}/param/{3}'.format(
+            bankIndex,
+            patchIndex,
+            effectIndex,
+            paramIndex
+        )
