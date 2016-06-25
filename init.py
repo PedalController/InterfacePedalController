@@ -35,7 +35,7 @@ def make_app(app):
         (r"/bank/(?P<bankIndex>[0-9]+)/patch/(?P<patchIndex>[0-9]+)", PatchHandler, dict(app=app)),
 
         # Effect
-        (r"/bank/(?P<bank>[0-9]+)/patch/(?P<patch>[0-9]+)/effect", EffectHandler, dict(app=app)),
+        (r"/bank/(?P<bankIndex>[0-9]+)/patch/(?P<patchIndex>[0-9]+)/effect", EffectHandler, dict(app=app)),
         (r"/bank/(?P<bankIndex>[0-9]+)/patch/(?P<patchIndex>[0-9]+)/effect/(?P<effectIndex>[0-9]+)", EffectHandler, dict(app=app)),
 
         # Param

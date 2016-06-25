@@ -1,6 +1,7 @@
 from handler.AbstractRequestHandler import AbstractRequestHandler
 
 from application.controller.BanksController import BanksController
+from application.controller.EffectController import EffectController
 
 from util.HandlerUtils import HandlerUtils
 
@@ -11,14 +12,17 @@ class EffectHandler(AbstractRequestHandler):
     def initialize(self, app):
         self.app = app
 
-        self.controller = self.app.controller(BanksController)
+        self.controller = self.app.controller(EffectController)
+        self.banksController = self.app.controller(BanksController)
 
-    def get(self, bankIndex, patchIndex):
+    def get(self, bankIndex, patchIndex, effectIndex):
         try:
-            bankIndex, patchIndex = HandlerUtils.toInt(bankIndex, patchIndex)
-            bank = self.controller.banks.getById(bankIndex)
+            bankIndex, patchIndex, effectIndex = HandlerUtils.toInt(
+                bankIndex, patchIndex, effectIndex
+            )
+            bank = self.banksController.banks[bankIndex]
 
-            return self.write(bank.getPatch(patchIndex))
+            return self.write(bank.getEffect(patchIndex, effectIndex))
 
         except IndexError as error:
             return self.error(str(error))
@@ -31,8 +35,10 @@ class EffectHandler(AbstractRequestHandler):
         try:
             bankIndex, patchIndex = HandlerUtils.toInt(bankIndex, patchIndex)
             body = self.getRequestData()
-            bank = self.controller.banks.getById(bankIndex)
-            index = self.controller.addEffect(bank, patchIndex, body)
+
+            bank = self.banksController.banks[bankIndex]
+            patch = bank.patches[patchIndex]
+            index = self.controller.createEffect(bank, patch, body)
 
             return self.created({"index": index})
 
@@ -48,7 +54,11 @@ class EffectHandler(AbstractRequestHandler):
             bankIndex, patchIndex, effectIndex = HandlerUtils.toInt(
                 bankIndex, patchIndex, effectIndex
             )
-            raise Exception("Not implemented")
+
+            bank = self.banksController.banks[bankIndex]
+            patch = bank.patches[patchIndex]
+
+            self.controller.deleteEffect(bank, patch, effectIndex)
             return self.success()
 
         except IndexError as error:

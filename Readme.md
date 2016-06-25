@@ -116,6 +116,7 @@ pip3 install -r requirements.txt
 ## To run
 
 ```
+source ./PedalPi-WS/bin/activate
 python3 init.py
 ``` 
 

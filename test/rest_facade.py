@@ -52,7 +52,7 @@ class RestFacade(object):
 
     def deleteBank(self, index):
         return self.delete('bank/{0}'.format(index))
-    
+
     # **********************
     # Patch
     # **********************
@@ -67,3 +67,27 @@ class RestFacade(object):
 
     def deletePatch(self, bankIndex, patchIndex):
         return self.delete('bank/{0}/patch/{1}'.format(bankIndex, patchIndex))
+
+    # **********************
+    # Effect
+    # **********************
+    def getEffect(self, bankIndex, patchIndex, effectIndex):
+        return self.get(self.urlEffect(bankIndex, patchIndex, effectIndex))
+
+    def postEffect(self, bankIndex, patchIndex, data):
+        url = 'bank/{0}/patch/{1}/effect'.format(
+            bankIndex,
+            patchIndex
+        )
+
+        return self.post(url, data)
+
+    def deleteEffect(self, bankIndex, patchIndex, effectIndex):
+        return self.delete(self.urlEffect(bankIndex, patchIndex, effectIndex))
+    
+    def urlEffect(self, bankIndex, patchIndex, effectIndex):
+        return 'bank/{0}/patch/{1}/effect/{2}'.format(
+            bankIndex,
+            patchIndex,
+            effectIndex
+        )
