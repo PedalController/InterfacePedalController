@@ -16,6 +16,9 @@ from handler.PluginHandler import PluginHandler
 
 from handler.SetStatusHandler import SetStatusHandler
 
+from websocket.WebSocketConnectionHandler import WebSocketConnectionHandler
+
+
 from application.Application import Application
 
 
@@ -50,11 +53,15 @@ def make_app(app):
         # Connections
 
         # Peripheral
+
+        # WebSocket
+        (r"/ws/?$", WebSocketConnectionHandler),
     ])
 
 if __name__ == "__main__":
     app = make_app(Application(True, dataPatch="application/data/"))
     app.listen(3000)
 
-    print("PedalController API localhost:3000")
+    print("PedalController API REST      localhost:3000")
+    print("PedalController API WebSocket localhost:3000/ws")
     tornado.ioloop.IOLoop.current().start()
