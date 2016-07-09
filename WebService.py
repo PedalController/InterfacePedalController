@@ -1,11 +1,6 @@
 import tornado.ioloop
 import tornado.web
 
-from load_module import load_module
-
-load_module('application')
-
-from application.Application import Application
 from application.controller.NotificationController import NotificationController
 
 from handler.BanksHandler import BanksHandler

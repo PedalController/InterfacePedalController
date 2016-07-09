@@ -102,7 +102,12 @@ Not implemented
 
 View ```websocker/UpdatesObserverSocket``` for details
 
-## To install
+## Project configuration
+
+This project depends PedalPi/Application project.
+View PedalPi/PedalPi-Raspberry for effective use
+
+### To install
 
 ```
 sudo pip3 install virtualenv
@@ -113,7 +118,7 @@ source ./PedalPi-WS/bin/activate
 pip3 install -r requirements.txt
 ```
 
-## To run
+### To run
 
 ```
 source ./PedalPi-WS/bin/activate
