@@ -6,6 +6,7 @@ from load_module import load_module
 load_module('application')
 
 from application.Application import Application
+from application.controller.NotificationController import NotificationController
 
 from handler.BanksHandler import BanksHandler
 from handler.BankHandler import BankHandler
@@ -19,22 +20,30 @@ from handler.PluginHandler import PluginHandler
 from handler.SetStatusHandler import SetStatusHandler
 
 from websocket.WebSocketConnectionHandler import WebSocketConnectionHandler
+from websocket.UpdatesObserverSocket import UpdatesObserverSocket
 
 
 class WebService(object):
-    
+    application = None
+    handlers = None
+    observer = None
+
     def __init__(self, application):
         self.application = application
         self.handlers = []
-        
+
         self.registerHandlers()
-    
+
+        self.observer = UpdatesObserverSocket()
+        self.application.controller(NotificationController).register(self.observer)
+
     def prepare(self):
         return tornado.web.Application(self.handlers)
 
     def registerHandlers(self):
         self.forHandler(PluginsHandler) \
-            .register(r"/effects") \
+            .register(r"/effects")
+        self.forHandler(PluginHandler) \
             .register(r"/effect/([^/]+)")
 
         self.forHandler(BanksHandler).register(r"/banks")
@@ -80,6 +89,7 @@ class WebService(object):
         handler = (uri, classHandler, dict(app=self.application))
         self.handlers.append(handler)
 
+
 class HandlerRegister(object):
 
     def __init__(self, webService, handlerClass):
@@ -90,14 +100,3 @@ class HandlerRegister(object):
         self.ws.register(uri, self.handlerClass)
         return self
 
-if __name__ == "__main__":
-    application = Application(True, dataPatch="application/data/")
-    webService = WebService(application)
-   
-    app = webService.prepare()
-    app.listen(3000)
-
-    print("PedalController API REST      localhost:3000")
-    print("PedalController API WebSocket localhost:3000/ws")
-
-    tornado.ioloop.IOLoop.current().start()

@@ -10,7 +10,7 @@ load_module('application')
 from application.Application import Application
 from WebService import WebService
 
-application = Application(True, dataPatch="application/data/")
+application = Application(dataPatch="application/data/", test=True)
 webService = WebService(application)
 #physical = Physical(application)
    

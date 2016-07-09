@@ -14,5 +14,5 @@ class WebSocketConnections(object):
 
     @staticmethod
     def sendBroadcast(data):
-        for connection in connections:
+        for connection in WebSocketConnections.connections:
             connection.write_message(data)
