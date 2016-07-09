@@ -1,4 +1,3 @@
-import unittest
 import requests
 
 from .test import Test
@@ -15,7 +14,6 @@ class BankHanddlerTest(Test):
         }]
     }
 
-    
     def setUp(self):
         try:
             self.rest.get('')
@@ -53,7 +51,7 @@ class BankHanddlerTest(Test):
 
         r = self.rest.updateBank(index, bankCopy)
         self.assertEqual(Test.UPDATED, r.status_code)
-        
+
         self.rest.deleteBank(index)
 
     def test_delete(self):

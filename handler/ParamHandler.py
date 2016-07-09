@@ -22,8 +22,8 @@ class ParamHandler(AbstractRequestHandler):
             )
             bank = self.banksController.banks[bankIndex]
 
-            param = bank.getParam(patchIndex, effectIndex, paramIndex)
-            return self.write(param)
+            param = bank.patches[patchIndex].effects[effectIndex].params[paramIndex]
+            return self.write(param.json)
 
         except IndexError as error:
             return self.error(str(error))
@@ -38,18 +38,16 @@ class ParamHandler(AbstractRequestHandler):
             )
 
             bank = self.banksController.banks[bankIndex]
-            patch = bank.getPatch(patchIndex)
-            param = bank.getParam(patchIndex, effectIndex, paramIndex)
+            param = bank.patches[patchIndex].effects[effectIndex].params[paramIndex]
             value = self.getRequestData()
 
-            self.controller.updateValue(
-                bank, patch, param, value
-            )
+            self.controller.updateValue(param, value)
+
             return self.success()
 
         except IndexError as error:
             return self.error(str(error))
 
-        except Exception as error:
+        except Exception:
             self.printError()
-            return self.send(500)       
+            return self.send(500)

@@ -3,3 +3,4 @@ PedalPi-WS
 PedalPi_WebService.egg-info
 .coverage
 htmlcov/
+.idea/

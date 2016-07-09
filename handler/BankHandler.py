@@ -5,6 +5,7 @@ from application.controller.BanksController import BanksController
 
 class BankHandler(AbstractRequestHandler):
     app = None
+    controller = None
 
     def initialize(self, app):
         self.app = app
@@ -21,7 +22,7 @@ class BankHandler(AbstractRequestHandler):
         except IndexError as error:
             return self.error(str(error))
 
-        except Exception as error:
+        except Exception:
             self.printError()
             return self.send(500)
 
@@ -34,7 +35,7 @@ class BankHandler(AbstractRequestHandler):
         except IndexError as error:
             return self.error(str(error))
 
-        except Exception as error:
+        except Exception:
             self.printError()
             return self.send(500)
 
@@ -51,7 +52,7 @@ class BankHandler(AbstractRequestHandler):
         except IndexError as error:
             return self.error(str(error))
 
-        except Exception as error:
+        except Exception:
             self.printError()
             return self.send(500)
 
