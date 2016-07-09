@@ -20,25 +20,26 @@ class EffectHandler(AbstractRequestHandler):
             bankIndex, patchIndex, effectIndex = HandlerUtils.toInt(
                 bankIndex, patchIndex, effectIndex
             )
-            bank = self.banksController.banks[bankIndex]
 
-            return self.write(bank.getEffect(patchIndex, effectIndex))
+            effect = self.banksController.banks[bankIndex].patches[patchIndex].effects[effectIndex]
+
+            return self.write(effect.json)
 
         except IndexError as error:
             return self.error(str(error))
 
-        except Exception as error:
+        except Exception:
             self.printError()
             return self.send(500)
 
     def post(self, bankIndex, patchIndex):
         try:
             bankIndex, patchIndex = HandlerUtils.toInt(bankIndex, patchIndex)
-            body = self.getRequestData()
 
-            bank = self.banksController.banks[bankIndex]
-            patch = bank.patches[patchIndex]
-            index = self.controller.createEffect(bank, patch, body)
+            patch = self.banksController.banks[bankIndex].patches[patchIndex]
+            uri = self.getRequestData()
+
+            index = self.controller.createEffect(patch, uri)
 
             return self.created({"index": index})
 
@@ -55,10 +56,9 @@ class EffectHandler(AbstractRequestHandler):
                 bankIndex, patchIndex, effectIndex
             )
 
-            bank = self.banksController.banks[bankIndex]
-            patch = bank.patches[patchIndex]
+            effect = self.banksController.banks[bankIndex].patches[patchIndex].effects[effectIndex]
 
-            self.controller.deleteEffect(bank, patch, effectIndex)
+            self.controller.deleteEffect(effect)
             return self.success()
 
         except IndexError as error:

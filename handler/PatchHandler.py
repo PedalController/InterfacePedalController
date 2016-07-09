@@ -12,20 +12,22 @@ class PatchHandler(AbstractRequestHandler):
     def initialize(self, app):
         self.app = app
 
-        self.banksController = self.app.controller(BanksController)
         self.controller = self.app.controller(PatchController)
+        self.banksController = self.app.controller(BanksController)
 
     def get(self, bankIndex, patchIndex):
         try:
             bankIndex, patchIndex = HandlerUtils.toInt(bankIndex, patchIndex)
-            bank = self.banksController.banks[bankIndex]
 
-            return self.write(bank.getPatch(patchIndex))
+            bank = self.banksController.banks[bankIndex]
+            patch = bank.patches[patchIndex]
+
+            return self.write(patch.json)
 
         except IndexError as error:
             return self.error(str(error))
 
-        except Exception as error:
+        except Exception:
             self.printError()
             return self.send(500)
 
@@ -42,7 +44,7 @@ class PatchHandler(AbstractRequestHandler):
         except IndexError as error:
             return self.error(str(error))
 
-        except Exception as error:
+        except Exception:
             self.printError()
             return self.send(500)
 
@@ -50,17 +52,17 @@ class PatchHandler(AbstractRequestHandler):
         try:
             bankIndex, patchIndex = HandlerUtils.toInt(bankIndex, patchIndex)
 
-            body = self.getRequestData()
-            bank = self.banksController.banks[bankIndex]
+            patch = self.banksController.banks[bankIndex].patches[patchIndex]
+            data = self.getRequestData()
 
-            self.controller.updatePatch(bank, patchIndex, body)
+            self.controller.updatePatch(patch, data)
 
             return self.success()
 
         except IndexError as error:
             return self.error(str(error))
 
-        except Exception as error:
+        except Exception:
             self.printError()
             return self.send(500)
 
@@ -68,14 +70,14 @@ class PatchHandler(AbstractRequestHandler):
         try:
             bankIndex, patchIndex = HandlerUtils.toInt(bankIndex, patchIndex)
 
-            bank = self.banksController.banks[bankIndex]
-            self.controller.deletePatch(bank, patchIndex)
+            patch = self.banksController.banks[bankIndex].patches[patchIndex]
+            self.controller.deletePatch(patch)
 
             return self.success()
 
         except IndexError as error:
             return self.error(str(error))
             
-        except Exception as error:
+        except Exception:
             self.printError()
             return self.send(500)

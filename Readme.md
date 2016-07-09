@@ -100,7 +100,7 @@ Not implemented
 
 ### WebSocket
 
-Not implemented
+View ```websocker/UpdatesObserverSocket``` for details
 
 ## To install
 
