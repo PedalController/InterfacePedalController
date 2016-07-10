@@ -12,6 +12,7 @@ from handler.PatchHandler import PatchHandler
 from handler.PluginsHandler import PluginsHandler
 from handler.PluginHandler import PluginHandler
 
+from handler.CurrentHandler import CurrentHandler
 from handler.SetStatusHandler import SetStatusHandler
 
 from websocket.WebSocketConnectionHandler import WebSocketConnectionHandler
@@ -62,7 +63,11 @@ class WebService(object):
         self.forHandler(ParamHandler) \
             .register(r"/bank/(?P<bankIndex>[0-9]+)/patch/(?P<patchIndex>[0-9]+)/effect/(?P<effectIndex>[0-9]+)/param/(?P<paramIndex>[0-9]+)")
 
-        # Current
+        # Get current
+        self.forHandler(CurrentHandler) \
+            .register(r"/current/?$")
+
+        # Set current
         self.forHandler(SetStatusHandler) \
             .register(r"/current/bank/(?P<bankIndex>[0-9]+)") \
             .register(r"/current/patch/(?P<patchIndex>[0-9]+)") \

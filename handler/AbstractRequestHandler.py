@@ -1,5 +1,3 @@
-__author__ = 'SrMouraSilva'
-
 import tornado.web
 import json
 
