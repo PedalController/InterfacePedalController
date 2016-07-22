@@ -1,6 +1,7 @@
 language: python
 
 python:
+  - "2.7"
   - "3.4"
   - "3.5"
 
@@ -13,7 +14,7 @@ install:
   - pip3 install coveralls
 
 script:
-  - git clone git@github.com:PedalPi/PedalPi-Raspberry.git PedalPi
+  - git clone https://github.com/PedalPi/PedalPi-Raspberry.git PedalPi
   - git checkout
   - cd PedalPi
   - pip3 install -r requirements.txt
