@@ -4,7 +4,7 @@ import requests
 from .test import Test
 
 
-class ParamHanddlerTest(Test):
+class ParamHandlerTest(Test):
     address = 'http://localhost:3000/'
     
     def setUp(self):

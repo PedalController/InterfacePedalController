@@ -77,7 +77,7 @@ class PatchHandler(AbstractRequestHandler):
 
         except IndexError as error:
             return self.error(str(error))
-            
+
         except Exception:
             self.printError()
             return self.send(500)

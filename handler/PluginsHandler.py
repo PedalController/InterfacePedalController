@@ -1,8 +1,8 @@
 from controller.PluginsController import PluginsController
-import tornado.web
+from handler.AbstractRequestHandler import AbstractRequestHandler
 
 
-class PluginsHandler(tornado.web.RequestHandler):
+class PluginsHandler(AbstractRequestHandler):
     app = None
 
     def initialize(self, app):

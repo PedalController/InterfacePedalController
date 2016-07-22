@@ -1,8 +1,12 @@
 import tornado.web
 import json
+from tornado_cors import CorsMixin
 
 
-class AbstractRequestHandler(tornado.web.RequestHandler):
+class AbstractRequestHandler(CorsMixin, tornado.web.RequestHandler):
+    CORS_ORIGIN = '*'
+    CORS_CREDENTIALS = True
+    CORS_MAX_AGE = 21600
 
     def getRequestData(self):
         return json.loads(self.request.body.decode('utf-8'))

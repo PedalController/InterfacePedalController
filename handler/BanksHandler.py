@@ -1,9 +1,9 @@
-import tornado.web
+from handler.AbstractRequestHandler import AbstractRequestHandler
 
 from application.controller.BanksController import BanksController
 
 
-class BanksHandler(tornado.web.RequestHandler):
+class BanksHandler(AbstractRequestHandler):
     app = None
 
     def initialize(self, app):

@@ -1,7 +1,7 @@
-import tornado.web
+from handler.AbstractRequestHandler import AbstractRequestHandler
 
 
-class PluginHandler(tornado.web.RequestHandler):
+class PluginHandler(AbstractRequestHandler):
     app = None
 
     def initialize(self, app):

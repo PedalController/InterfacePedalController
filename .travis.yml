@@ -2,6 +2,7 @@ language: python
 
 python:
   - "3.4"
+  - "3.5"
 
 sudo: required
 
@@ -12,10 +13,14 @@ install:
   - pip3 install coveralls
 
 script:
-  - python3 start.py &
+  - git clone git@github.com:PedalPi/PedalPi-Raspberry.git PedalPi
+  - git checkout
+  - cd PedalPi
+  - pip3 install -r requirements.txt
+  - cd ..
+  - python3 PedalPi/start.py &
+  - sleep 10
   - coverage3 run --source=handler setup.py test
-  - coveralls
-  - bash <(curl -s https://codecov.io/bash)
 
 after_success:
   - coveralls
