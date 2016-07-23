@@ -5,7 +5,6 @@ from controller.CurrentController import CurrentController
 
 class CurrentHandler(AbstractRequestHandler):
     app = None
-
     controller = None
 
     def initialize(self, app):

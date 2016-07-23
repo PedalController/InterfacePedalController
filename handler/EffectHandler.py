@@ -39,9 +39,10 @@ class EffectHandler(AbstractRequestHandler):
             patch = self.banksController.banks[bankIndex].patches[patchIndex]
             uri = self.getRequestData()
 
-            index = self.controller.createEffect(patch, uri)
+            effectIndex = self.controller.createEffect(patch, uri)
+            effect = self.banksController.banks[bankIndex].patches[patchIndex].effects[effectIndex]
 
-            return self.created({"index": index})
+            return self.created({"index": effectIndex, "effect": effect.json})
 
         except IndexError as error:
             return self.error(str(error))

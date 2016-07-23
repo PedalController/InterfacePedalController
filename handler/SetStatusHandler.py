@@ -1,4 +1,4 @@
-import tornado.web
+from handler.AbstractRequestHandler import AbstractRequestHandler
 
 from architecture.privatemethod import privatemethod
 
@@ -8,7 +8,7 @@ from util.HandlerUtils import HandlerUtils
 from util.RestOverloading import register, verb
 
 
-class SetStatusHandler(tornado.web.RequestHandler):
+class SetStatusHandler(AbstractRequestHandler):
     app = None
 
     def initialize(self, app):
@@ -23,21 +23,16 @@ class SetStatusHandler(tornado.web.RequestHandler):
 
         except IndexError as error:
             return self.error(str(error))
-        '''
         except Exception as error:
-            print(error)
-            return self.send(404)
-        '''
+            self.printError(error)
+            return self.send(500)
 
     @verb('put', 'SetStatusHandler')
-    def putBank(self, bank):
-        bank = int(bank)
-        self.controller.setBank(bank)
+    def putCurrentPatch(self, bankIndex, patchIndex):
+        bankIndex, patchIndex = HandlerUtils.toInt(bankIndex, patchIndex)
 
-    @verb('put', 'SetStatusHandler')
-    def putPatch(self, patch):
-        patch = int(patch)
-        self.controller.setPatch(patch)
+        self.controller.setBank(bankIndex)
+        self.controller.setPatch(patchIndex)
 
     @verb('put', 'SetStatusHandler')
     def putStatusEffect(self, effect):
@@ -48,21 +43,3 @@ class SetStatusHandler(tornado.web.RequestHandler):
     def putParam(self, effect, param):
         effect, param = HandlerUtils.toInt(effect, param)
         self.controller.setEffectParam(effect, param)
-
-    @privatemethod
-    def success(self):
-        self.send(204)
-
-    @privatemethod
-    def created(self, message):
-        self.send(201, message)
-
-    @privatemethod
-    def error(self, message):
-        self.send(400, {"error": message})
-
-    @privatemethod
-    def send(self, status, message=None):
-        self.clear()
-        self.set_status(status)
-        self.finish(message)

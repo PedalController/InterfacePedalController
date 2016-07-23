@@ -10,9 +10,9 @@ Not implemented
 
 ### Plugins
 
-* ```/plugins```: 
+* ```/effects```: 
   * **GET** all plugins effects instaled
-* ```/plugin/(?P<pluginUri>[^/]+)```:
+* ```/effect/(?P<pluginUri>[^/]+)```:
   * **GET** specific plugin data by 
   * Params
     * **pluginUri**: URI of plugin required
@@ -81,15 +81,12 @@ Not implemented
 
 ### Current
 
-* ```/current/```
+* ```/current```
   * **GET** the current _bankIndex_ and the current _patchIndex_
-
-* ```/current/bank/(?P<bank>[0-9]+)```
-  * **PUT** the current bank
-* ```/current/patch/(?P<patch>[0-9]+)```
-  * **PUT** the current patch
+* ```/current/bank/(?P<bankIndex>[0-9]+)/patch/(?P<patchIndex>[0-9]+)```
+  * **PUT** the current _bankIndex_ and the current _patchIndex_
 * ```/current/effect/(?P<effect>[0-9]+)```
-  * **PUT** for toggle effect status (actived for bypassed or bypassed for actived) of the current patch
+  * **PUT** for toggle effect status (active for bypassed or bypassed for active) of the current patch
 * ```/current/effect/(?P<effect>[0-9]+)/param/(?P<param>[0-9]+)```
   * **PUT** for set a parameter value for a effect of the current patch
 

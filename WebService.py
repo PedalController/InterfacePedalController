@@ -64,13 +64,13 @@ class WebService(object):
             .register(r"/bank/(?P<bankIndex>[0-9]+)/patch/(?P<patchIndex>[0-9]+)/effect/(?P<effectIndex>[0-9]+)/param/(?P<paramIndex>[0-9]+)")
 
         # Get current
+
         self.forHandler(CurrentHandler) \
-            .register(r"/current/?$")
+            .register(r"/current")
 
         # Set current
         self.forHandler(SetStatusHandler) \
-            .register(r"/current/bank/(?P<bankIndex>[0-9]+)") \
-            .register(r"/current/patch/(?P<patchIndex>[0-9]+)") \
+            .register(r"/current/bank/(?P<bankIndex>[0-9]+)/patch/(?P<patchIndex>[0-9]+)") \
             .register(r"/current/effect/(?P<effectIndex>[0-9]+)") \
             .register(r"/current/effect/(?P<effectIndex>[0-9]+)/param/(?P<paramIndex>[0-9]+)")
 
