@@ -1,7 +1,5 @@
 from handler.AbstractRequestHandler import AbstractRequestHandler
 
-from architecture.privatemethod import privatemethod
-
 from controller.CurrentController import CurrentController
 
 from util.HandlerUtils import HandlerUtils
@@ -24,7 +22,7 @@ class SetStatusHandler(AbstractRequestHandler):
         except IndexError as error:
             return self.error(str(error))
         except Exception as error:
-            self.printError(error)
+            self.printError()
             return self.send(500)
 
     @verb('put', 'SetStatusHandler')

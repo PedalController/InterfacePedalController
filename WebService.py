@@ -15,6 +15,8 @@ from handler.PluginHandler import PluginHandler
 from handler.CurrentHandler import CurrentHandler
 from handler.SetStatusHandler import SetStatusHandler
 
+from handler.SwapPatchHandler import SwapPatchHandler
+
 from websocket.WebSocketConnectionHandler import WebSocketConnectionHandler
 from websocket.UpdatesObserverSocket import UpdatesObserverSocket
 
@@ -73,6 +75,10 @@ class WebService(object):
             .register(r"/current/bank/(?P<bankIndex>[0-9]+)/patch/(?P<patchIndex>[0-9]+)") \
             .register(r"/current/effect/(?P<effectIndex>[0-9]+)") \
             .register(r"/current/effect/(?P<effectIndex>[0-9]+)/param/(?P<paramIndex>[0-9]+)")
+
+        # Swap
+        self.forHandler(SwapPatchHandler) \
+            .register(r"/swap/effect/bank/(?P<bankIndex>[0-9]+)/patch/(?P<patchIndex>[0-9]+)/effect-a/(?P<effectAIndex>[0-9]+)/effect-b/(?P<effectBIndex>[0-9]+)")
 
         # Connections
 
