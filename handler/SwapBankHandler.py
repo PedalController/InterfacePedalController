@@ -6,25 +6,23 @@ from application.controller.BanksController import BanksController
 from util.HandlerUtils import HandlerUtils
 
 
-class SwapPatchHandler(AbstractRequestHandler):
+class SwapBankHandler(AbstractRequestHandler):
     app = None
+    controller = None
 
     def initialize(self, app):
         self.app = app
-
         self.controller = self.app.controller(BanksController)
 
-    def put(self, bankIndex, patchAIndex, patchBIndex):
+    def put(self, bankAIndex, bankBIndex):
         try:
-            bankIndex, patchAIndex, patchBIndex = HandlerUtils.toInt(
-                bankIndex, patchAIndex, patchBIndex
-            )
+            bankAIndex, bankBIndex = HandlerUtils.toInt(bankAIndex, bankBIndex)
 
-            patches = self.controller.banks[bankIndex].patches
-            patchA = patches[patchAIndex]
-            patchB = patches[patchBIndex]
+            banks = self.controller.banks
+            bankA = banks[bankAIndex]
+            bankB = banks[bankBIndex]
 
-            self.controller.swapPatches(patchA, patchB)
+            self.controller.swapBanks(bankA, bankB)
 
             return self.success()
 
