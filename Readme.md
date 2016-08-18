@@ -82,7 +82,9 @@ Not implemented
 ### Current
 
 * ```/current```
-  * **GET** the current _bankIndex_ and the current _patchIndex_
+  * **GET** the current _bank index_ and the current _patch index_
+* ```/current/data```
+  * **GET** the current _bank data_ and the current _patch index_
 * ```/current/bank/(?P<bankIndex>[0-9]+)/patch/(?P<patchIndex>[0-9]+)```
   * **PUT** the current _bankIndex_ and the current _patchIndex_
 * ```/current/effect/(?P<effect>[0-9]+)```

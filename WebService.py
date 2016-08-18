@@ -13,6 +13,7 @@ from handler.PluginsHandler import PluginsHandler
 from handler.PluginHandler import PluginHandler
 
 from handler.CurrentHandler import CurrentHandler
+from handler.CurrentDataHandler import CurrentDataHandler
 from handler.SetStatusHandler import SetStatusHandler
 
 from handler.SwapBankHandler import SwapBankHandler
@@ -68,9 +69,10 @@ class WebService(object):
             .register(r"/bank/(?P<bankIndex>[0-9]+)/patch/(?P<patchIndex>[0-9]+)/effect/(?P<effectIndex>[0-9]+)/param/(?P<paramIndex>[0-9]+)")
 
         # Get current
-
         self.forHandler(CurrentHandler) \
             .register(r"/current")
+        self.forHandler(CurrentDataHandler) \
+            .register(r"/current/data")
 
         # Set current
         self.forHandler(SetStatusHandler) \
