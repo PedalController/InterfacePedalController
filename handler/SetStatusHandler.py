@@ -8,6 +8,7 @@ from util.RestOverloading import register, verb
 
 class SetStatusHandler(AbstractRequestHandler):
     app = None
+    controller = None
 
     def initialize(self, app):
         self.app = app
@@ -33,11 +34,11 @@ class SetStatusHandler(AbstractRequestHandler):
         self.controller.setPatch(patchIndex)
 
     @verb('put', 'SetStatusHandler')
-    def putStatusEffect(self, effect):
-        effect = int(effect)
-        self.controller.toggleStatusEffect(effect)
+    def putStatusEffect(self, effectIndex):
+        effectIndex = int(effectIndex)
+        self.controller.toggleStatusEffect(effectIndex)
 
     @verb('put', 'SetStatusHandler')
-    def putParam(self, effect, param):
-        effect, param = HandlerUtils.toInt(effect, param)
-        self.controller.setEffectParam(effect, param)
+    def putParam(self, effectIndex, paramIndex):
+        effectIndex, paramIndex = HandlerUtils.toInt(effectIndex, paramIndex)
+        self.controller.setEffectParam(effectIndex, paramIndex)
