@@ -2,17 +2,20 @@
 
 
 class WebSocketConnections(object):
-    connections = []
+    connections = dict()
 
     @staticmethod
-    def register(connection):
-        WebSocketConnections.connections.append(connection)
+    def register(token, connection):
+        WebSocketConnections.connections[connection] = token
 
     @staticmethod
     def unregister(connection):
-        WebSocketConnections.connections.remove(connection)
+        del WebSocketConnections.connections[connection]
 
     @staticmethod
-    def sendBroadcast(data):
+    def sendBroadcast(data, token=''):
         for connection in WebSocketConnections.connections:
-            connection.write_message(data)
+            connection_token = WebSocketConnections.connections[connection]
+
+            if token == '' or token != connection_token:
+                connection.write_message(data)

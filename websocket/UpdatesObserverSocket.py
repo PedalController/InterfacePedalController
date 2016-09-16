@@ -21,7 +21,7 @@ class UpdatesObserverSocket(UpdatesObserver):
     def onBankUpdate(self, bank, updateType):
         self.send({
             'type': 'BANK',
-            'updateType': updateType,
+            'updateType': updateType.name,
             'bank': bank.index,
             'value': bank.json
         })
@@ -31,7 +31,7 @@ class UpdatesObserverSocket(UpdatesObserver):
 
         self.send({
             'type': 'PATCH',
-            'updateType': updateType,
+            'updateType': updateType.name,
             'bank': bank.index,
             'patch': patch.index,
             'value': patch.json
@@ -43,7 +43,7 @@ class UpdatesObserverSocket(UpdatesObserver):
 
         self.send({
             'type': 'EFFECT',
-            'updateType': updateType,
+            'updateType': updateType.name,
             'bank': bank.index,
             'patch': patch.index,
             'effect': effect.index,

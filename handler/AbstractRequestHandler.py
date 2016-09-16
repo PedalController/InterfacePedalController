@@ -7,6 +7,7 @@ class AbstractRequestHandler(CorsMixin, tornado.web.RequestHandler):
     CORS_ORIGIN = '*'
     CORS_CREDENTIALS = True
     CORS_MAX_AGE = 21600
+    CORS_HEADERS = 'Content-Type, x-xsrf-token'
 
     def getRequestData(self):
         return json.loads(self.request.body.decode('utf-8'))
@@ -29,3 +30,12 @@ class AbstractRequestHandler(CorsMixin, tornado.web.RequestHandler):
         self.clear()
         self.set_status(status)
         self.finish(message)
+
+    @property
+    def token(self):
+        token = self.request.headers.get('x-xsrf-token')
+
+        if token is None:
+            return ''
+        else:
+            return token

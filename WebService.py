@@ -96,21 +96,20 @@ class WebService(object):
         self.forHandler(WebSocketConnectionHandler) \
             .register(r"/ws/?$")
 
-    def forHandler(self, handlerClass):
-        return HandlerRegister(self, handlerClass)
+    def forHandler(self, handler_class):
+        return HandlerRegister(self, handler_class)
 
-    def register(self, uri, classHandler):
-        handler = (uri, classHandler, dict(app=self.application))
+    def register(self, uri, class_handler):
+        handler = (uri, class_handler, dict(app=self.application))
         self.handlers.append(handler)
 
 
 class HandlerRegister(object):
 
-    def __init__(self, webService, handlerClass):
-        self.ws = webService
-        self.handlerClass = handlerClass
-    
-    def register(self, uri):
-        self.ws.register(uri, self.handlerClass)
-        return self
+    def __init__(self, web_service, handler_class):
+        self.web_service = web_service
+        self.handler_class = handler_class
 
+    def register(self, uri):
+        self.web_service.register(uri, self.handler_class)
+        return self
