@@ -13,9 +13,9 @@ class WebSocketConnections(object):
         del WebSocketConnections.connections[connection]
 
     @staticmethod
-    def sendBroadcast(data, token=''):
+    def sendBroadcast(data, token=None):
         for connection in WebSocketConnections.connections:
             connection_token = WebSocketConnections.connections[connection]
 
-            if token == '' or token != connection_token:
+            if token is None or token != connection_token:
                 connection.write_message(data)

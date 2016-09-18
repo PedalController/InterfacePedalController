@@ -35,7 +35,4 @@ class AbstractRequestHandler(CorsMixin, tornado.web.RequestHandler):
     def token(self):
         token = self.request.headers.get('x-xsrf-token')
 
-        if token is None:
-            return ''
-        else:
-            return token
+        return '' if token is None else token

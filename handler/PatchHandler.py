@@ -37,7 +37,7 @@ class PatchHandler(AbstractRequestHandler):
             body = self.getRequestData()
 
             bank = self.banksController.banks.banks[bankIndex]
-            index = self.controller.createPatch(bank, body)
+            index = self.controller.createPatch(bank, body, self.token)
 
             return self.created({"index": index})
 
@@ -55,7 +55,7 @@ class PatchHandler(AbstractRequestHandler):
             patch = self.banksController.banks[bankIndex].patches[patchIndex]
             data = self.getRequestData()
 
-            self.controller.updatePatch(patch, data)
+            self.controller.updatePatch(patch, data, self.token)
 
             return self.success()
 
@@ -71,7 +71,7 @@ class PatchHandler(AbstractRequestHandler):
             bankIndex, patchIndex = HandlerUtils.toInt(bankIndex, patchIndex)
 
             patch = self.banksController.banks[bankIndex].patches[patchIndex]
-            self.controller.deletePatch(patch)
+            self.controller.deletePatch(patch, self.token)
 
             return self.success()
 

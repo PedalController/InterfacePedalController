@@ -41,7 +41,7 @@ class ParamHandler(AbstractRequestHandler):
             param = bank.patches[patchIndex].effects[effectIndex].params[paramIndex]
             value = self.getRequestData()
 
-            self.controller.updateValue(param, value)
+            self.controller.updateValue(param, value, self.token)
 
             return self.success()
 

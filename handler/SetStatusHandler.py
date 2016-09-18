@@ -30,13 +30,16 @@ class SetStatusHandler(AbstractRequestHandler):
     def putCurrentPatch(self, bankIndex, patchIndex):
         bankIndex, patchIndex = HandlerUtils.toInt(bankIndex, patchIndex)
 
-        self.controller.setBank(bankIndex)
-        self.controller.setPatch(patchIndex)
+        bankChangedAndPatchNotChanged = self.controller.bankNumber != bankIndex \
+                                    and self.controller.patchNumber == patchIndex
+
+        self.controller.setBank(bankIndex, notify=bankChangedAndPatchNotChanged, token=self.token)
+        self.controller.setPatch(patchIndex, token=self.token)
 
     @verb('put', 'SetStatusHandler')
     def putStatusEffect(self, effectIndex):
         effectIndex = int(effectIndex)
-        self.controller.toggleStatusEffect(effectIndex)
+        self.controller.toggleStatusEffect(effectIndex, self.token)
 
     @verb('put', 'SetStatusHandler')
     def putParam(self, effectIndex, paramIndex):
