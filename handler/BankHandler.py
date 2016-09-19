@@ -29,7 +29,7 @@ class BankHandler(AbstractRequestHandler):
     def post(self):
         try:
             body = self.getRequestData()
-            index = self.controller.createBank(body)
+            index = self.controller.createBank(body, self.token)
             self.created({"index": index})
 
         except IndexError as error:
@@ -45,7 +45,7 @@ class BankHandler(AbstractRequestHandler):
             bankIndex = int(bankIndex)
             bank = self.controller.banks[bankIndex]
 
-            self.controller.updateBank(bank, body)
+            self.controller.updateBank(bank, body, self.token)
 
             self.success()
 
@@ -60,7 +60,7 @@ class BankHandler(AbstractRequestHandler):
         bankIndex = int(bankIndex)
 
         try:
-            self.controller.deleteBank(self.controller.banks[bankIndex])
+            self.controller.deleteBank(self.controller.banks[bankIndex], self.token)
             self.success()
         except IndexError as error:
             return self.error(str(error))
