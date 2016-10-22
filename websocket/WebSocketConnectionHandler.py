@@ -17,7 +17,7 @@ class WebSocketConnectionHandler(websocket.WebSocketHandler):
         print("WebSocket opened")
         token = str(uuid.uuid4())
         WebSocketConnections.register(token, self)
-        self.write_message(json.dumps({'type':'TOKEN', 'value':token}))
+        self.write_message(json.dumps({'type': 'TOKEN', 'value': token}))
 
     def on_message(self, message):
         self.write_message(json.dumps({'error': 'Use REST api for send data'}))

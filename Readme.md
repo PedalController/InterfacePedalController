@@ -109,23 +109,13 @@ View ```websocker/UpdatesObserverSocket``` for details
 This project depends PedalPi/Application project.
 View PedalPi/PedalPi-Raspberry for effective use
 
-### To install
+### To change Rest documentation
 
+
+```bash
+npm install -g api-designer
+api-designer
 ```
-sudo pip3 install virtualenv
-
-virtualenv PedalPi-WS
-source ./PedalPi-WS/bin/activate
-
-pip3 install -r requirements.txt
-```
-
-### To run
-
-```
-source ./PedalPi-WS/bin/activate
-python3 init.py
-``` 
 
 ## To test Rest
 
