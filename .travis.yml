@@ -13,12 +13,11 @@ install:
   - pip3 install coveralls
 
 script:
-  - git clone https://github.com/PedalPi/PedalPi-Raspberry.git PedalPi
-  - git checkout baaff54
+  - git clone --recursive https://github.com/PedalPi/PedalPi-Raspberry.git PedalPi --depth=1
   - cd PedalPi
   - pip3 install -r requirements.txt
+  - python3 start.py &
   - cd ..
-  - python3 PedalPi/start.py &
   - sleep 10
   - coverage3 run --source=handler setup.py test
 
