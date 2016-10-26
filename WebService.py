@@ -1,7 +1,7 @@
 import tornado.ioloop
 import tornado.web
 
-from application.controller.NotificationController import NotificationController
+from application.architecture.Component import Component
 
 from handler.BanksHandler import BanksHandler
 from handler.BankHandler import BankHandler
@@ -24,24 +24,35 @@ from websocket.WebSocketConnectionHandler import WebSocketConnectionHandler
 from websocket.UpdatesObserverSocket import UpdatesObserverSocket
 
 
-class WebService(object):
-    application = None
-    handlers = None
-    observer = None
+class WebService(Component):
+    """
+    Exposes the :class:`Application` features in a _façade_ REST and
+    notifies changes in a WebSocket connection.
 
-    def __init__(self, application):
-        self.application = application
+    For more details, see http://pedalpi.github.io/WebService.
+    """
+
+    def __init__(self, application, port):
+        super().__init__(application)
+
         self.handlers = []
+        self.observer = None
+        self.ws_app = None
+        self.port = port
 
-        self.registerHandlers()
+    def init(self):
+        self.register_handlers()
 
         self.observer = UpdatesObserverSocket()
-        self.application.controller(NotificationController).register(self.observer)
+        self.register_observer(self.observer)
 
-    def prepare(self):
-        return tornado.web.Application(self.handlers)
+        self.ws_app = self.prepare()
+        self.ws_app.listen(self.port)
 
-    def registerHandlers(self):
+        print("WebService - PedalPi API REST      localhost:" + str(self.port))
+        print("WebService - PedalPi API WebSocket localhost:" + str(self.port) + "/ws")
+
+    def register_handlers(self):
         self.forHandler(PluginsHandler) \
             .register(r"/effects")
         self.forHandler(PluginHandler) \
@@ -102,6 +113,9 @@ class WebService(object):
     def register(self, uri, class_handler):
         handler = (uri, class_handler, dict(app=self.application))
         self.handlers.append(handler)
+
+    def prepare(self):
+        return tornado.web.Application(self.handlers)
 
 
 class HandlerRegister(object):
