@@ -104,10 +104,15 @@ Not implemented
 
 View ```websocker/UpdatesObserverSocket``` for details
 
+## Applications 
+
+This code disposes the Application features in a WebService. These projects uses it for control.
+
+* [Apk](https://github.com/Apk): App controller for smart devices and navigators.
+
 ## Project configuration
 
-This project depends PedalPi/Application project.
-View PedalPi/PedalPi-Raspberry for effective use
+This project requires [PedalPi/Application](http://github.com/PedalPi/Application) project. See the [Application documentation](http://pedalpi-application.readthedocs.io/en/latest/#extending) for mode details.
 
 ### To change Rest documentation
 
