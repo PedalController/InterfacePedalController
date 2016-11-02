@@ -2,6 +2,15 @@
 
 [![Build Status](https://travis-ci.org/PedalPi/WebService.svg?branch=master)](https://travis-ci.org/PedalPi/WebService) [![Code Health](https://landscape.io/github/PedalPi/WebService/master/landscape.svg?style=flat)](https://landscape.io/github/PedalPi/WebService/master) [![codecov](https://codecov.io/gh/PedalPi/WebService/branch/master/graph/badge.svg)](https://codecov.io/gh/PedalPi/WebService)
 
+
+## Use
+
+This project requires [PedalPi/Application](http://github.com/PedalPi/Application) project. See the [Application documentation](http://pedalpi-application.readthedocs.io/en/latest/#extending) for mode details.
+
+This project requires dependencies too, like `Tornado` and `Requests` (for tests). For the full list, see [`requirements.txt`](https://github.com/PedalPi/WebService/blob/master/requirements.txt)
+
+For a `config.py` example, see [`test/config.py`](https://github.com/PedalPi/WebService/blob/master/test/config.py)
+
 ## Rest
 
 ### Auth
@@ -112,10 +121,7 @@ This code disposes the Application features in a WebService. These projects uses
 
 ## Project configuration
 
-This project requires [PedalPi/Application](http://github.com/PedalPi/Application) project. See the [Application documentation](http://pedalpi-application.readthedocs.io/en/latest/#extending) for mode details.
-
-### To change Rest documentation
-
+### Others
 
 ```bash
 npm install -g api-designer
@@ -124,7 +130,9 @@ api-designer
 
 ## To test Rest
 
-```
+After started the a `Application` with `WebService` component, excute: 
+
+```bash
 # Run server
 coverage3 run --source=handler setup.py test
 coverage3 report
