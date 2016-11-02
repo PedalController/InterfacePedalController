@@ -109,3 +109,18 @@ class RestFacade(object):
             effectIndex,
             paramIndex
         )
+
+    # **********************
+    # ComponentData
+    # **********************
+    def getComponentData(self, key):
+        return self.get(self.urlComponentData(key))
+
+    def postComponentData(self, key, data):
+        return self.post(self.urlComponentData(key), data)
+
+    def deleteComponentData(self, key):
+        return self.delete(self.urlComponentData(key))
+
+    def urlComponentData(self, key):
+        return 'data/{0}'.format(key)

@@ -3,6 +3,7 @@ language: python
 python:
   - "3.4"
   - "3.5"
+  - "nightly"
 
 sudo: required
 
@@ -10,15 +11,16 @@ before_install:
   - git submodule update --init --recursive
 
 install:
-  - pip3 install coveralls
+  - pip3 install -r requirements.txt
 
 script:
-  - git clone --recursive https://github.com/PedalPi/PedalPi-Raspberry.git PedalPi --depth=1
-  - cd PedalPi
-  - pip3 install -r requirements.txt
-  - python3 start.py &
   - cd ..
-  - sleep 10
+  - mv WebService webservice
+  - mv webservice/test/config.py config.py
+  - git clone --recursive https://github.com/PedalPi/Application.git application --depth=1
+  - python3 config.py &
+  - sleep 5
+  - cd webservice
   - coverage3 run --source=handler setup.py test
 
 after_success:
