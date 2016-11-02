@@ -72,34 +72,34 @@ description:
               put:
                 description: Update the param value
 
-        /data/{key}:
-          description: |
-            Not implemented yet.
-            Save consumer and manage data in valid json-format.
-          uriParameters:
-            key:
-              description: Key idenfier. Util then more one application saves data in patch
-          get:
-            description:
-              Get the patch data based in key sended
-            responses:
-              200:
-                body:
-                  application/json:
-                    examples:
-                      Empty: {}
-                      Any content: {any-key: any-data}
+/data/{key}:
+  description: |
+    Not implemented yet.
+    Save consumer and manage data in valid json-format.
+  uriParameters:
+    key:
+      description: Key idenfier. Util then more one application saves data in patch
+  get:
+    description:
+      Get the patch data based in key sended
+    responses:
+      200:
+        body:
+          application/json:
+            examples:
+              Empty: {}
+              Any content: {any-key: any-data}
 
-          post:
-            description:
-              Saves the patch data. If exists a data in key defined, will be overrided
-            body:
-              application/json:
-                example: {any-key: any-data}
+  post:
+    description:
+      Saves the patch data. If exists a data in key defined, will be overrided
+    body:
+      application/json:
+        example: {any-key: any-data}
 
-          delete:
-            description:
-              Removes the patch data for the key defined
+  delete:
+    description:
+      Removes the patch data for the key defined
 
 /current:
   description: Manage the current patch

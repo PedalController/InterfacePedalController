@@ -4,7 +4,6 @@ from controller.CurrentController import CurrentController
 from controller.BanksController import BanksController
 
 
-
 class CurrentDataHandler(AbstractRequestHandler):
     app = None
     controller = None

@@ -20,6 +20,8 @@ from handler.SwapBankHandler import SwapBankHandler
 from handler.SwapPatchHandler import SwapPatchHandler
 from handler.SwapEffectHandler import SwapEffectHandler
 
+from handler.ComponentDataHandler import ComponentDataHandler
+
 from websocket.WebSocketConnectionHandler import WebSocketConnectionHandler
 from websocket.UpdatesObserverSocket import UpdatesObserverSocket
 
@@ -102,6 +104,10 @@ class WebService(Component):
         # Connections
 
         # Peripheral
+
+        # ComponentDataHandler
+        self.forHandler(ComponentDataHandler) \
+            .register(r"/data/(?P<key>[a-zA-Z\-0-9:]+)") \
 
         # WebSocket
         self.forHandler(WebSocketConnectionHandler) \
