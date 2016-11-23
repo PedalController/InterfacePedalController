@@ -1,6 +1,6 @@
-from handler.AbstractRequestHandler import AbstractRequestHandler
+from handler.abstract_request_handler import AbstractRequestHandler
 
-from controller.CurrentController import CurrentController
+from application.controller.current_controller import CurrentController
 
 
 class CurrentHandler(AbstractRequestHandler):

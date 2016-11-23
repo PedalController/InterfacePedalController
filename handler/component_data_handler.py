@@ -1,6 +1,6 @@
-from handler.AbstractRequestHandler import AbstractRequestHandler
+from handler.abstract_request_handler import AbstractRequestHandler
 
-from controller.ComponentDataController import ComponentDataController
+from application.controller.component_data_controller import ComponentDataController
 
 
 class ComponentDataHandler(AbstractRequestHandler):

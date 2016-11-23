@@ -1,10 +1,9 @@
 import sys
 import tornado
 
-sys.path.append('application')
 sys.path.append('webservice')
 
-from application.Application import Application
+from application.application import Application
 from webservice.WebService import WebService
 
 address = 'localhost'

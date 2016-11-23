@@ -1,7 +1,7 @@
-from handler.AbstractRequestHandler import AbstractRequestHandler
+from handler.abstract_request_handler import AbstractRequestHandler
 
-from application.controller.BanksController import BanksController
-from application.controller.ParamController import ParamController
+from application.controller.banks_controller import BanksController
+from application.controller.param_controller import ParamController
 
 from util.HandlerUtils import HandlerUtils
 

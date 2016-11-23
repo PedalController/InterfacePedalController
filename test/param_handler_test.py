@@ -3,7 +3,7 @@ import requests
 
 from .test import Test
 
-
+'''
 class ParamHandlerTest(Test):
     address = 'http://localhost:3000/'
     
@@ -38,3 +38,4 @@ class ParamHandlerTest(Test):
 
         # Restoring
         r = self.rest.putParam(bankIndex, patchIndex, effectIndex, paramIndex, originalValue)
+'''

@@ -1,7 +1,7 @@
-from handler.AbstractRequestHandler import AbstractRequestHandler
+from handler.abstract_request_handler import AbstractRequestHandler
 
-from controller.CurrentController import CurrentController
-from controller.BanksController import BanksController
+from application.controller.banks_controller import BanksController
+from application.controller.current_controller import CurrentController
 
 
 class CurrentDataHandler(AbstractRequestHandler):

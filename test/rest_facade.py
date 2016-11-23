@@ -41,16 +41,16 @@ class RestFacade(object):
     # **********************
     # Bank
     # **********************
-    def getBank(self, index):
+    def get_bank(self, index):
         return self.get('bank/{0}'.format(index))
 
-    def createBank(self, data):
-        return self.post('bank', data)
+    def create_bank(self, bank):
+        return self.post('bank', bank.json)
 
-    def updateBank(self, index, data):
-        return self.put('bank/{0}'.format(index), data)
+    def update_bank(self, bank):
+        return self.put('bank/{0}'.format(bank.index), bank.json)
 
-    def deleteBank(self, index):
+    def delete_bank(self, index):
         return self.delete('bank/{0}'.format(index))
 
     # **********************

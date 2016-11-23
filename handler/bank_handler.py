@@ -1,16 +1,22 @@
-from handler.AbstractRequestHandler import AbstractRequestHandler
+from handler.abstract_request_handler import AbstractRequestHandler
 
-from application.controller.BanksController import BanksController
+from application.controller.banks_controller import BanksController
+from application.controller.device_controller import DeviceController
+
+from pluginsmanager.util.persistence import Persistence
 
 
 class BankHandler(AbstractRequestHandler):
     app = None
     controller = None
+    decoder = None
 
     def initialize(self, app):
         self.app = app
 
         self.controller = self.app.controller(BanksController)
+        sys_effect = self.app.controller(DeviceController).sys_effect
+        self.decoder = Persistence(sys_effect)
 
     def get(self, bankIndex):
         try:
@@ -28,8 +34,11 @@ class BankHandler(AbstractRequestHandler):
 
     def post(self):
         try:
-            body = self.getRequestData()
-            index = self.controller.createBank(body, self.token)
+            json = self.getRequestData()
+            bank = self.decoder.read(json)
+
+            index = self.controller.create(bank, self.token)
+
             self.created({"index": index})
 
         except IndexError as error:
@@ -41,11 +50,13 @@ class BankHandler(AbstractRequestHandler):
 
     def put(self, bankIndex):
         try:
-            body = self.getRequestData()
+            json = self.getRequestData()
             bankIndex = int(bankIndex)
-            bank = self.controller.banks[bankIndex]
 
-            self.controller.updateBank(bank, body, self.token)
+            new_bank = self.decoder.read(json)
+            old_bank = self.controller.banks[bankIndex]
+
+            self.controller.replace(old_bank, new_bank, self.token)
 
             self.success()
 
@@ -60,7 +71,7 @@ class BankHandler(AbstractRequestHandler):
         bankIndex = int(bankIndex)
 
         try:
-            self.controller.deleteBank(self.controller.banks[bankIndex], self.token)
+            self.controller.delete(self.controller.banks[bankIndex], self.token)
             self.success()
         except IndexError as error:
             return self.error(str(error))

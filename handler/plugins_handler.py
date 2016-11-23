@@ -1,5 +1,6 @@
-from controller.PluginsController import PluginsController
-from handler.AbstractRequestHandler import AbstractRequestHandler
+from handler.abstract_request_handler import AbstractRequestHandler
+
+from application.controller.plugins_controller import PluginsController
 
 
 class PluginsHandler(AbstractRequestHandler):

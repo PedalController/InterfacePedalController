@@ -1,18 +1,11 @@
 import requests
 
 from .test import Test
+from pluginsmanager.model.bank import Bank
 
 
-class BankHanddlerTest(Test):
+class BankHandlerTest(Test):
     address = 'http://localhost:3000/'
-    defaultBank = {
-        "name": "REST - Default Bank",
-        "patches": [{
-            "name": "Example patch",
-            "effects": [],
-            "connections": []
-        }]
-    }
 
     def setUp(self):
         try:
@@ -20,42 +13,54 @@ class BankHanddlerTest(Test):
         except requests.exceptions.ConnectionError:
             self.fail("Server is down")
 
+    @property
+    def default_bank(self):
+        return Bank('REST - Default Bank')
+
     ########################
     # Tests
     ########################
     def test_get(self):
-        index = self.rest.createBank(self.defaultBank).json()['index']
-        r = self.rest.getBank(index)
+        bank = self.default_bank
+        bank.index = self.rest.create_bank(bank).json()['index']
 
-        self.assertEqual(Test.SUCCESS, r.status_code)
-        self.assertEqual(index, r.json()['index'])
+        response = self.rest.get_bank(bank.index)
 
-        self.rest.deleteBank(index)
+        self.assertEqual(Test.SUCCESS, response.status_code)
+        self.assertEqual(bank.json, response.json())
+
+        self.rest.delete_bank(bank.index)
 
     def test_post(self):
-        r = self.rest.createBank(self.defaultBank)
-        self.assertEqual(Test.CREATED, r.status_code)
+        bank = self.default_bank
 
-        index = r.json()['index']
-        bankPersisted = self.rest.getBank(index).json()
-        self.assertEqual(index, bankPersisted['index'])
+        response = self.rest.create_bank(bank)
+        self.assertEqual(Test.CREATED, response.status_code)
 
-        self.rest.deleteBank(index)
+        bank.index = response.json()['index']
+
+        persisted = self.rest.get_bank(bank.index).json()
+        self.assertEqual(bank.json, persisted)
+
+        self.rest.delete_bank(bank.index)
 
     def test_put(self):
-        index = self.rest.createBank(self.defaultBank).json()['index']
-        newName = 'REST - Default Bank - New name'
+        bank = self.default_bank
+        bank.index = self.rest.create_bank(bank).json()['index']
 
-        bankCopy = self.rest.getBank(index).json()
-        bankCopy['name'] = newName
+        bank.name = 'REST - Default Bank - New name'
 
-        r = self.rest.updateBank(index, bankCopy)
-        self.assertEqual(Test.UPDATED, r.status_code)
+        response = self.rest.update_bank(bank)
+        self.assertEqual(Test.UPDATED, response.status_code)
 
-        self.rest.deleteBank(index)
+        get_bank = self.rest.get_bank(bank.index)
+
+        self.assertEqual(bank.json, get_bank.json())
+
+        self.rest.delete_bank(bank.index)
 
     def test_delete(self):
-        index = self.rest.createBank(self.defaultBank).json()['index']
+        index = self.rest.create_bank(self.default_bank).json()['index']
 
-        r = self.rest.deleteBank(index)
+        r = self.rest.delete_bank(index)
         self.assertEqual(Test.DELETED, r.status_code)

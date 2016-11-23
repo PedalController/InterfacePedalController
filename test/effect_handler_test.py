@@ -1,9 +1,8 @@
-import unittest
 import requests
 
 from .test import Test
 
-
+'''
 class EffectHanddlerTest(Test):
     address = 'http://localhost:3000/'
     
@@ -43,3 +42,4 @@ class EffectHanddlerTest(Test):
 
         r = self.rest.deleteEffect(bankIndex, patchIndex, effectIndex)
         self.assertEqual(Test.DELETED, r.status_code)
+'''

@@ -1,26 +1,25 @@
 import tornado.ioloop
 import tornado.web
 
-from application.architecture.Component import Component
+from application.component.component import Component
 
-from handler.BanksHandler import BanksHandler
-from handler.BankHandler import BankHandler
-from handler.EffectHandler import EffectHandler
-from handler.ParamHandler import ParamHandler
-from handler.PatchHandler import PatchHandler
+from handler.banks_handler import BanksHandler
+from handler.bank_handler import BankHandler
+from handler.effect_handler import EffectHandler
+from handler.param_handler import ParamHandler
+from handler.patch_handler import PatchHandler
 
-from handler.PluginsHandler import PluginsHandler
-from handler.PluginHandler import PluginHandler
+from handler.plugins_handler import PluginsHandler
+from handler.plugin_handler import PluginHandler
 
-from handler.CurrentHandler import CurrentHandler
-from handler.CurrentDataHandler import CurrentDataHandler
-from handler.SetStatusHandler import SetStatusHandler
+from handler.current_handler import CurrentHandler
+from handler.current_data_handler import CurrentDataHandler
+from handler.set_status_handler import SetStatusHandler
 
-from handler.SwapBankHandler import SwapBankHandler
-from handler.SwapPatchHandler import SwapPatchHandler
-from handler.SwapEffectHandler import SwapEffectHandler
+from handler.swap_bank_handler import SwapBankHandler
+from handler.swap_patch_handler import SwapPatchHandler
 
-from handler.ComponentDataHandler import ComponentDataHandler
+from handler.component_data_handler import ComponentDataHandler
 
 from websocket.WebSocketConnectionHandler import WebSocketConnectionHandler
 from websocket.UpdatesObserverSocket import UpdatesObserverSocket
@@ -98,8 +97,6 @@ class WebService(Component):
             .register(r"/swap/bank-a/(?P<bankAIndex>[0-9]+)/bank-b/(?P<bankBIndex>[0-9]+)")
         self.forHandler(SwapPatchHandler) \
             .register(r"/swap/patch/bank/(?P<bankIndex>[0-9]+)/patch-a/(?P<patchAIndex>[0-9]+)/patch-b/(?P<patchBIndex>[0-9]+)")
-        self.forHandler(SwapEffectHandler) \
-            .register(r"/swap/effect/bank/(?P<bankIndex>[0-9]+)/patch/(?P<patchIndex>[0-9]+)/effect-a/(?P<effectAIndex>[0-9]+)/effect-b/(?P<effectBIndex>[0-9]+)")
 
         # Connections
 
