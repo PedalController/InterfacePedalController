@@ -59,7 +59,7 @@ class EffectHandler(AbstractRequestHandler):
 
             effect = self.banksController.banks[bankIndex].patches[patchIndex].effects[effectIndex]
 
-            self.controller.deleteEffect(effect)
+            self.controller.delete_effect(effect)
             return self.success()
 
         except IndexError as error:

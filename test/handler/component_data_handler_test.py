@@ -1,6 +1,6 @@
 import requests
 
-from .test import Test
+from .handler_test import Test
 
 
 class ComponentDataHandlerTest(Test):

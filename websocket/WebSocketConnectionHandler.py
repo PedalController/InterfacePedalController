@@ -4,6 +4,7 @@ from tornado import websocket
 import json
 import uuid
 
+
 class WebSocketConnectionHandler(websocket.WebSocketHandler):
 
     def initialize(self, app):

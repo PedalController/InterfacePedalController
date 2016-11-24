@@ -41,8 +41,8 @@ class RestFacade(object):
     # **********************
     # Bank
     # **********************
-    def get_bank(self, index):
-        return self.get('bank/{0}'.format(index))
+    def get_bank(self, bank):
+        return self.get('bank/{0}'.format(bank.index))
 
     def create_bank(self, bank):
         return self.post('bank', bank.json)
@@ -50,46 +50,58 @@ class RestFacade(object):
     def update_bank(self, bank):
         return self.put('bank/{0}'.format(bank.index), bank.json)
 
-    def delete_bank(self, index):
-        return self.delete('bank/{0}'.format(index))
+    def delete_bank(self, bank):
+        return self.delete('bank/{0}'.format(bank.index))
 
     # **********************
     # Patch
     # **********************
-    def getPatch(self, bankIndex, patchIndex):
-        return self.get('bank/{0}/patch/{1}'.format(bankIndex, patchIndex))
+    def get_patch(self, bank, patch_index):
+        return self.get('bank/{0}/patch/{1}'.format(bank.index, patch_index))
 
-    def createPatch(self, bankIndex, data):
-        return self.post('bank/{0}/patch'.format(bankIndex), data)
+    def create_patch(self, patch):
+        bank_index = patch.bank.index
+        return self.post('bank/{0}/patch'.format(bank_index), patch.json)
 
-    def updatePatch(self, bankIndex, patchIndex, data):
-        return self.put('bank/{0}/patch/{1}'.format(bankIndex, patchIndex), data)
+    def update_patch(self, patch):
+        bank_index = patch.bank.index
+        patch_index = patch.bank.patches.index(patch)
+        return self.put('bank/{0}/patch/{1}'.format(bank_index, patch_index), patch.json)
 
-    def deletePatch(self, bankIndex, patchIndex):
-        return self.delete('bank/{0}/patch/{1}'.format(bankIndex, patchIndex))
+    def delete_patch(self, patch):
+        bank_index = patch.bank.index
+        patch_index = patch.bank.patches.index(patch)
+        return self.delete('bank/{0}/patch/{1}'.format(bank_index, patch_index))
 
     # **********************
     # Effect
     # **********************
-    def getEffect(self, bankIndex, patchIndex, effectIndex):
-        return self.get(self.urlEffect(bankIndex, patchIndex, effectIndex))
+    def get_effect(self, patch, effect_index):
+        bank_index = patch.bank.index
+        patch_index = patch.bank.patches.index(patch)
+        return self.get(self._url_effect(bank_index, patch_index, effect_index))
 
-    def postEffect(self, bankIndex, patchIndex, data):
-        url = 'bank/{0}/patch/{1}/effect'.format(
-            bankIndex,
-            patchIndex
-        )
+    def post_effect(self, patch, effect):
+        patch_index = patch.bank.patches.index(patch)
+        bank_index = patch.bank.patches.index(patch)
 
-        return self.post(url, data)
+        url = 'bank/{0}/patch/{1}/effect'.format(bank_index, patch_index)
+        return self.post(url, effect.json)
 
-    def deleteEffect(self, bankIndex, patchIndex, effectIndex):
-        return self.delete(self.urlEffect(bankIndex, patchIndex, effectIndex))
+    def delete_effect(self, effect):
+        patch = effect.patch
+
+        effect_index = patch.effects.index(effect)
+        patch_index = patch.bank.patches.index(patch)
+        bank_index = patch.bank.index
+
+        return self.delete(self._url_effect(bank_index, patch_index, effect_index))
     
-    def urlEffect(self, bankIndex, patchIndex, effectIndex):
+    def _url_effect(self, bank_index, patch_index, effect_index):
         return 'bank/{0}/patch/{1}/effect/{2}'.format(
-            bankIndex,
-            patchIndex,
-            effectIndex
+            bank_index,
+            patch_index,
+            effect_index
         )
 
     # **********************

@@ -33,7 +33,7 @@ class UpdatesObserverSocket(UpdatesObserver):
             'type': 'PATCH',
             'updateType': update_type.name,
             'bank': bank.index,
-            'patch': patch.index,
+            'patch': bank.patches.index(patch),
             'value': patch.json
         }, token)
 

@@ -1,35 +1,18 @@
-import requests
-
-from .test import Test
-from pluginsmanager.model.bank import Bank
+from .handler_test import Test
 
 
 class BankHandlerTest(Test):
-    address = 'http://localhost:3000/'
 
-    def setUp(self):
-        try:
-            self.rest.get('')
-        except requests.exceptions.ConnectionError:
-            self.fail("Server is down")
-
-    @property
-    def default_bank(self):
-        return Bank('REST - Default Bank')
-
-    ########################
-    # Tests
-    ########################
     def test_get(self):
         bank = self.default_bank
         bank.index = self.rest.create_bank(bank).json()['index']
 
-        response = self.rest.get_bank(bank.index)
+        response = self.rest.get_bank(bank)
 
         self.assertEqual(Test.SUCCESS, response.status_code)
         self.assertEqual(bank.json, response.json())
 
-        self.rest.delete_bank(bank.index)
+        self.rest.delete_bank(bank)
 
     def test_post(self):
         bank = self.default_bank
@@ -39,10 +22,10 @@ class BankHandlerTest(Test):
 
         bank.index = response.json()['index']
 
-        persisted = self.rest.get_bank(bank.index).json()
+        persisted = self.rest.get_bank(bank).json()
         self.assertEqual(bank.json, persisted)
 
-        self.rest.delete_bank(bank.index)
+        self.rest.delete_bank(bank)
 
     def test_put(self):
         bank = self.default_bank
@@ -53,14 +36,15 @@ class BankHandlerTest(Test):
         response = self.rest.update_bank(bank)
         self.assertEqual(Test.UPDATED, response.status_code)
 
-        get_bank = self.rest.get_bank(bank.index)
+        get_bank = self.rest.get_bank(bank)
 
         self.assertEqual(bank.json, get_bank.json())
 
-        self.rest.delete_bank(bank.index)
+        self.rest.delete_bank(bank)
 
     def test_delete(self):
-        index = self.rest.create_bank(self.default_bank).json()['index']
+        bank = self.default_bank
+        bank.index = self.rest.create_bank(bank).json()['index']
 
-        r = self.rest.delete_bank(index)
+        r = self.rest.delete_bank(bank)
         self.assertEqual(Test.DELETED, r.status_code)
