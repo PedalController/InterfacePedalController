@@ -1,3 +1,4 @@
+import uuid
 import unittest
 import requests
 
@@ -7,7 +8,7 @@ from pluginsmanager.model.bank import Bank
 from pluginsmanager.model.patch import Patch
 
 from pluginsmanager.model.lv2.lv2_effect_builder import Lv2EffectBuilder
-import uuid
+
 
 class Test(unittest.TestCase):
     address = 'http://localhost:3000/'
@@ -31,15 +32,15 @@ class Test(unittest.TestCase):
     @property
     def default_bank(self):
         bank = Bank('REST - Default Bank' + str(uuid.uuid4()))
-        patch = Patch('REST - Default Patch')
+        pedalboard = Patch('REST - Default Patch')
 
         reverb = self.plugins_builder.build('http://calf.sourceforge.net/plugins/Reverb')
         reverb2 = self.plugins_builder.build('http://calf.sourceforge.net/plugins/Reverb')
 
-        bank.append(patch)
+        bank.append(pedalboard)
 
-        patch.append(reverb)
-        patch.append(reverb2)
+        pedalboard.append(reverb)
+        pedalboard.append(reverb2)
 
         reverb.outputs[0].connect(reverb2.inputs[0])
 

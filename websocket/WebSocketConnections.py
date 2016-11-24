@@ -13,7 +13,7 @@ class WebSocketConnections(object):
         del WebSocketConnections.connections[connection]
 
     @staticmethod
-    def sendBroadcast(data, token=None):
+    def send_broadcast(data, token=None):
         for connection in WebSocketConnections.connections:
             connection_token = WebSocketConnections.connections[connection]
 

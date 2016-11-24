@@ -14,7 +14,7 @@ class ComponentDataHandler(AbstractRequestHandler):
         self.send(200, self.controller[key])
 
     def post(self, key):
-        self.controller[key] = self.getRequestData()
+        self.controller[key] = self.request_data
 
         self.success()
 

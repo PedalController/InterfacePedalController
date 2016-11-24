@@ -54,85 +54,93 @@ class RestFacade(object):
         return self.delete('bank/{0}'.format(bank.index))
 
     # **********************
-    # Patch
+    # Pedalboard
     # **********************
-    def get_patch(self, bank, patch_index):
-        return self.get('bank/{0}/patch/{1}'.format(bank.index, patch_index))
+    def get_pedalboard(self, pedalboard):
+        bank_index = pedalboard.bank.index
+        pedalboard_index = pedalboard.bank.patches.index(pedalboard)
+        return self.get('bank/{0}/pedalboard/{1}'.format(bank_index, pedalboard_index))
 
-    def create_patch(self, patch):
-        bank_index = patch.bank.index
-        return self.post('bank/{0}/patch'.format(bank_index), patch.json)
+    def create_pedalboard(self, pedalboard):
+        bank_index = pedalboard.bank.index
+        return self.post('bank/{0}/pedalboard'.format(bank_index), pedalboard.json)
 
-    def update_patch(self, patch):
-        bank_index = patch.bank.index
-        patch_index = patch.bank.patches.index(patch)
-        return self.put('bank/{0}/patch/{1}'.format(bank_index, patch_index), patch.json)
+    def update_pedalboard(self, pedalboard):
+        bank_index = pedalboard.bank.index
+        pedalboard_index = pedalboard.bank.patches.index(pedalboard)
+        return self.put('bank/{0}/pedalboard/{1}'.format(bank_index, pedalboard_index), pedalboard.json)
 
-    def delete_patch(self, patch):
+    def delete_pedalboard(self, patch):
         bank_index = patch.bank.index
-        patch_index = patch.bank.patches.index(patch)
-        return self.delete('bank/{0}/patch/{1}'.format(bank_index, patch_index))
+        pedalboard_index = patch.bank.patches.index(patch)
+        return self.delete('bank/{0}/pedalboard/{1}'.format(bank_index, pedalboard_index))
 
     # **********************
     # Effect
     # **********************
-    def get_effect(self, patch, effect_index):
+    def get_effect(self, effect):
+        return self.get(self._url_effect(effect))
+
+    def post_effect(self, patch, uri):
+        pedalboard_index = patch.bank.patches.index(patch)
         bank_index = patch.bank.index
-        patch_index = patch.bank.patches.index(patch)
-        return self.get(self._url_effect(bank_index, patch_index, effect_index))
 
-    def post_effect(self, patch, effect):
-        patch_index = patch.bank.patches.index(patch)
-        bank_index = patch.bank.patches.index(patch)
-
-        url = 'bank/{0}/patch/{1}/effect'.format(bank_index, patch_index)
-        return self.post(url, effect.json)
+        url = 'bank/{0}/pedalboard/{1}/effect'.format(bank_index, pedalboard_index)
+        return self.post(url, uri)
 
     def delete_effect(self, effect):
-        patch = effect.patch
-
-        effect_index = patch.effects.index(effect)
-        patch_index = patch.bank.patches.index(patch)
-        bank_index = patch.bank.index
-
-        return self.delete(self._url_effect(bank_index, patch_index, effect_index))
+        return self.delete(self._url_effect(effect))
     
-    def _url_effect(self, bank_index, patch_index, effect_index):
-        return 'bank/{0}/patch/{1}/effect/{2}'.format(
+    def _url_effect(self, effect):
+        pedalboard = effect.patch
+
+        bank_index = pedalboard.bank.index
+        pedalboard_index = pedalboard.bank.patches.index(pedalboard)
+        effect_index = pedalboard.effects.index(effect)
+
+        return 'bank/{0}/pedalboard/{1}/effect/{2}'.format(
             bank_index,
-            patch_index,
+            pedalboard_index,
             effect_index
         )
 
     # **********************
     # Param
     # **********************
-    def getParam(self, bankIndex, patchIndex, effectIndex, paramIndex):
-        return self.get(self.urlParam(bankIndex, patchIndex, effectIndex, paramIndex))
+    def get_param(self, param):
+        return self.get(self._url_param(param))
 
-    def putParam(self, bankIndex, patchIndex, effectIndex, paramIndex, value):
-        url = self.urlParam(bankIndex, patchIndex, effectIndex, paramIndex)
-        return self.put(url, value)
+    def put_param(self, param):
+        url = self._url_param(param)
+        return self.put(url, param.value)
 
-    def urlParam(self, bankIndex, patchIndex, effectIndex, paramIndex):
-        return 'bank/{0}/patch/{1}/effect/{2}/param/{3}'.format(
-            bankIndex,
-            patchIndex,
-            effectIndex,
-            paramIndex
+    def _url_param(self, param):
+        effect = param.effect
+        pedalboard = effect.patch
+
+        bank_index = pedalboard.bank.index
+        pedalboard_index = pedalboard.bank.patches.index(pedalboard)
+        effect_index = pedalboard.effects.index(effect)
+        param_index = effect.params.index(param)
+
+        return 'bank/{0}/pedalboard/{1}/effect/{2}/param/{3}'.format(
+            bank_index,
+            pedalboard_index,
+            effect_index,
+            param_index
         )
 
     # **********************
     # ComponentData
     # **********************
-    def getComponentData(self, key):
-        return self.get(self.urlComponentData(key))
+    def get_component_data(self, key):
+        return self.get(self._url_component_data(key))
 
-    def postComponentData(self, key, data):
-        return self.post(self.urlComponentData(key), data)
+    def post_component_data(self, key, data):
+        return self.post(self._url_component_data(key), data)
 
-    def deleteComponentData(self, key):
-        return self.delete(self.urlComponentData(key))
+    def delete_component_data(self, key):
+        return self.delete(self._url_component_data(key))
 
-    def urlComponentData(self, key):
+    def _url_component_data(self, key):
         return 'data/{0}'.format(key)

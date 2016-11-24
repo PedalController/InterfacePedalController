@@ -5,22 +5,22 @@ from application.controller.banks_controller import BanksController, BankError
 from util.handler_utils import integer
 
 
-class SwapBankHandler(AbstractRequestHandler):
+class SwapPedalboardHandler(AbstractRequestHandler):
     app = None
-    controller = None
 
     def initialize(self, app):
         self.app = app
+
         self.controller = self.app.controller(BanksController)
 
-    @integer('bank_a_index', 'bank_b_index')
-    def put(self, bank_a_index, bank_b_index):
+    @integer('bank_index', 'pedalboard_a_index', 'pedalboard_b_index')
+    def put(self, bank_index, pedalboard_a_index, pedalboard_b_index):
         try:
-            banks = self.controller.banks
-            bank_a = banks[bank_a_index]
-            bank_b = banks[bank_b_index]
+            pedalboards = self.controller.banks[bank_index].patches
+            pedalboard_a = pedalboards[pedalboard_a_index]
+            pedalboard_b = pedalboards[pedalboard_b_index]
 
-            self.controller.swapBanks(bank_a, bank_b, self.token)
+            self.controller.swapPatches(pedalboard_a, pedalboard_b)
 
             return self.success()
 

@@ -2,8 +2,18 @@ from handler.abstract_request_handler import AbstractRequestHandler
 
 from application.controller.current_controller import CurrentController
 
-from util.HandlerUtils import HandlerUtils
 from util.RestOverloading import register, verb
+
+
+class HandlerUtils(object):
+    @staticmethod
+    def toInt(*params):
+        data = []
+        for element in params:
+            value = int(element) if element is not None else None
+            data.append(value)
+
+        return data
 
 
 class SetStatusHandler(AbstractRequestHandler):
@@ -23,7 +33,7 @@ class SetStatusHandler(AbstractRequestHandler):
         except IndexError as error:
             return self.error(str(error))
         except Exception as error:
-            self.printError()
+            self.print_error()
             return self.send(500)
 
     @verb('put', 'SetStatusHandler')

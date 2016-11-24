@@ -4,15 +4,16 @@ from application.controller.banks_controller import BanksController
 from application.controller.device_controller import DeviceController
 from application.controller.patch_controller import PatchController
 
-from util.HandlerUtils import HandlerUtils
+from util.handler_utils import integer
 
 from pluginsmanager.util.persistence import PatchReader
 
 
-class PatchHandler(AbstractRequestHandler):
+class PedalboardHandler(AbstractRequestHandler):
     app = None
     controller = None
     banks = None
+    decode = None
 
     def initialize(self, app):
         self.app = app
@@ -22,30 +23,29 @@ class PatchHandler(AbstractRequestHandler):
 
         self.decode = PatchReader(self.app.controller(DeviceController).sys_effect)
 
-    def get(self, bankIndex, patchIndex):
+    @integer('bank_index', 'pedalboard_index')
+    def get(self, bank_index, pedalboard_index):
         try:
-            bankIndex, patchIndex = HandlerUtils.toInt(bankIndex, patchIndex)
+            bank = self.banks.banks[bank_index]
+            pedalboard = bank.patches[pedalboard_index]
 
-            bank = self.banks.banks[bankIndex]
-            patch = bank.patches[patchIndex]
-
-            return self.write(patch.json)
+            return self.write(pedalboard.json)
 
         except IndexError as error:
             return self.error(str(error))
 
         except Exception:
-            self.printError()
+            self.print_error()
             return self.send(500)
 
-    def post(self, bankIndex):
+    @integer('bank_index')
+    def post(self, bank_index):
         try:
-            bankIndex = int(bankIndex)
-            patch = self.decode.read(self.getRequestData())
+            pedalboard = self.decode.read(self.request_data)
 
-            bank = self.banks.banks[bankIndex]
-            bank.append(patch)
-            self.controller.created(patch, self.token)
+            bank = self.banks.banks[bank_index]
+            bank.append(pedalboard)
+            self.controller.created(pedalboard, self.token)
 
             return self.created({"index": len(bank.patches) - 1})
 
@@ -53,17 +53,16 @@ class PatchHandler(AbstractRequestHandler):
             return self.error(str(error))
 
         except Exception:
-            self.printError()
+            self.print_error()
             return self.send(500)
 
-    def put(self, bankIndex, patchIndex):
+    @integer('bank_index', 'pedalboard_index')
+    def put(self, bank_index, pedalboard_index):
         try:
-            bankIndex, patchIndex = HandlerUtils.toInt(bankIndex, patchIndex)
+            old_pedalboard = self.banks.banks[bank_index].patches[pedalboard_index]
+            new_pedalboard = self.decode.read(self.request_data)
 
-            old_patch = self.banks.banks[bankIndex].patches[patchIndex]
-            new_patch = self.decode.read(self.getRequestData())
-
-            self.controller.replace(old_patch, new_patch, self.token)
+            self.controller.replace(old_pedalboard, new_pedalboard, self.token)
 
             return self.success()
 
@@ -71,14 +70,13 @@ class PatchHandler(AbstractRequestHandler):
             return self.error(str(error))
 
         except Exception:
-            self.printError()
+            self.print_error()
             return self.send(500)
 
-    def delete(self, bankIndex, patchIndex):
+    @integer('bank_index', 'pedalboard_index')
+    def delete(self, bank_index, pedalboard_index):
         try:
-            bankIndex, patchIndex = HandlerUtils.toInt(bankIndex, patchIndex)
-
-            patch = self.banks.banks[bankIndex].patches[patchIndex]
+            patch = self.banks.banks[bank_index].patches[pedalboard_index]
             self.controller.delete(patch, self.token)
 
             return self.success()
@@ -87,5 +85,5 @@ class PatchHandler(AbstractRequestHandler):
             return self.error(str(error))
 
         except Exception:
-            self.printError()
+            self.print_error()
             return self.send(500)

@@ -2,26 +2,28 @@ from handler.abstract_request_handler import AbstractRequestHandler
 
 from application.controller.banks_controller import BanksController
 from application.controller.effect_controller import EffectController
+from application.controller.plugins_controller import PluginsController
 
-from util.HandlerUtils import HandlerUtils
+from util.handler_utils import integer
 
 
 class EffectHandler(AbstractRequestHandler):
     app = None
+    controller = None
+    banks = None
+    plugins = None
 
     def initialize(self, app):
         self.app = app
 
         self.controller = self.app.controller(EffectController)
-        self.banksController = self.app.controller(BanksController)
+        self.banks = self.app.controller(BanksController)
+        self.plugins = self.app.controller(PluginsController)
 
-    def get(self, bankIndex, patchIndex, effectIndex):
+    @integer('bank_index', 'pedalboard_index', 'effect_index')
+    def get(self, bank_index, pedalboard_index, effect_index):
         try:
-            bankIndex, patchIndex, effectIndex = HandlerUtils.toInt(
-                bankIndex, patchIndex, effectIndex
-            )
-
-            effect = self.banksController.banks[bankIndex].patches[patchIndex].effects[effectIndex]
+            effect = self.banks.banks[bank_index].patches[pedalboard_index].effects[effect_index]
 
             return self.write(effect.json)
 
@@ -29,42 +31,40 @@ class EffectHandler(AbstractRequestHandler):
             return self.error(str(error))
 
         except Exception:
-            self.printError()
+            self.print_error()
             return self.send(500)
 
-    def post(self, bankIndex, patchIndex):
+    @integer('bank_index', 'pedalboard_index')
+    def post(self, bank_index, pedalboard_index):
         try:
-            bankIndex, patchIndex = HandlerUtils.toInt(bankIndex, patchIndex)
+            pedalboard = self.banks.banks[bank_index].patches[pedalboard_index]
+            uri = self.request_data
 
-            patch = self.banksController.banks[bankIndex].patches[patchIndex]
-            uri = self.getRequestData()
+            effect = self.plugins.lv2_effect(uri)
+            pedalboard.append(effect)
+            self.controller.created(effect, self.token)
+            effect_index = len(pedalboard.effects) - 1
 
-            effectIndex = self.controller.createEffect(patch, uri)
-            effect = self.banksController.banks[bankIndex].patches[patchIndex].effects[effectIndex]
-
-            return self.created({"index": effectIndex, "effect": effect.json})
+            return self.created({"index": effect_index, "effect": effect.json})
 
         except IndexError as error:
             return self.error(str(error))
 
-        except Exception as error:
-            self.printError()
+        except Exception:
+            self.print_error()
             return self.send(500)
 
-    def delete(self, bankIndex, patchIndex, effectIndex):
+    @integer('bank_index', 'pedalboard_index', 'effect_index')
+    def delete(self, bank_index, pedalboard_index, effect_index):
         try:
-            bankIndex, patchIndex, effectIndex = HandlerUtils.toInt(
-                bankIndex, patchIndex, effectIndex
-            )
+            effect = self.banks.banks[bank_index].patches[pedalboard_index].effects[effect_index]
 
-            effect = self.banksController.banks[bankIndex].patches[patchIndex].effects[effectIndex]
-
-            self.controller.delete_effect(effect)
+            self.controller.delete(effect, self.token)
             return self.success()
 
         except IndexError as error:
             return self.error(str(error))
 
         except Exception:
-            self.printError()
+            self.print_error()
             return self.send(500)

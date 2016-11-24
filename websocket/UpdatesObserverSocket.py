@@ -6,7 +6,7 @@ from websocket.WebSocketConnections import WebSocketConnections
 class UpdatesObserverSocket(UpdatesObserver):
 
     def send(self, json_data, token=None):
-        WebSocketConnections.sendBroadcast(json_data, token)
+        WebSocketConnections.send_broadcast(json_data, token)
 
     def on_current_patch_change(self, patch, token=None):
         bank = patch.bank
@@ -18,7 +18,7 @@ class UpdatesObserverSocket(UpdatesObserver):
             'value': patch.json
         }, token)
 
-    def on_bank_updated(self, bank, update_type, token=None):
+    def on_bank_updated(self, bank, update_type, token=None, **kwargs):
         self.send({
             'type': 'BANK',
             'updateType': update_type.name,
@@ -26,27 +26,30 @@ class UpdatesObserverSocket(UpdatesObserver):
             'value': bank.json
         }, token)
 
-    def on_patch_updated(self, patch, update_type, token=None):
-        bank = patch.bank
+    def on_patch_updated(self, patch, update_type, token=None, **kwargs):
+        bank = kwargs['origin']
+        patch_index = kwargs['index']
 
         self.send({
             'type': 'PATCH',
             'updateType': update_type.name,
             'bank': bank.index,
-            'patch': bank.patches.index(patch),
+            'patch': patch_index,
             'value': patch.json
         }, token)
 
-    def on_effect_updated(self, effect, update_type, token=None):
-        bank = effect.patch.bank
-        patch = effect.patch
+    def on_effect_updated(self, effect, update_type, token=None, **kwargs):
+        patch = kwargs['origin']
+        bank = patch.bank
+        effect_index = kwargs['index']
+        patch_index = bank.patches.index(patch)
 
         self.send({
             'type': 'EFFECT',
             'updateType': update_type.name,
             'bank': bank.index,
-            'patch': patch.index,
-            'effect': effect.index,
+            'patch': patch_index,
+            'effect': effect_index,
             'value': effect.json
         }, token)
 
@@ -62,16 +65,20 @@ class UpdatesObserverSocket(UpdatesObserver):
         }, token)
 
     def on_param_value_changed(self, param, token=None):
-        bank = param.effect.patch.bank
-        patch = param.effect.patch
         effect = param.effect
+        patch = effect.patch
+        bank = patch.bank
+
+        param_index = effect.params.index(param)
+        effect_index = patch.effects.index(effect)
+        patch_index = bank.patches.index(patch)
 
         self.send({
             'type': 'PARAM',
             'bank': bank.index,
-            'patch': patch.index,
-            'effect': effect.index,
-            'param': param.index,
+            'patch': patch_index,
+            'effect': effect_index,
+            'param': param_index,
             'value': param.value,
         }, token)
 

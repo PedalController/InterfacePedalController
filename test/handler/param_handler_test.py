@@ -1,9 +1,8 @@
-import unittest
 import requests
 
 from .handler_test import Test
 
-'''
+
 class ParamHandlerTest(Test):
     address = 'http://localhost:3000/'
     
@@ -17,25 +16,28 @@ class ParamHandlerTest(Test):
     # Tests
     ########################
     def test_get(self):
-        bankIndex, patchIndex, effectIndex, paramIndex = 0, 0, 0, 0
-        r = self.rest.getParam(bankIndex, patchIndex, effectIndex, paramIndex)
+        bank = self.default_bank
+        bank.index = self.rest.create_bank(bank).json()['index']
 
-        self.assertEqual(Test.SUCCESS, r.status_code)
+        param = bank.patches[0].effects[0].params[0]
+        response = self.rest.get_param(param)
+
+        self.assertEqual(Test.SUCCESS, response.status_code)
+        self.assertEqual(param.json, response.json())
+
+        self.rest.delete_bank(bank)
 
     def test_put(self):
-        bankIndex, patchIndex, effectIndex, paramIndex = 0, 0, 0, 0
+        bank = self.default_bank
+        bank.index = self.rest.create_bank(bank).json()['index']
 
-        param = self.rest.getParam(bankIndex, patchIndex, effectIndex, paramIndex).json()
-        originalValue = param['value']
-        newValue = originalValue+1
+        param = bank.patches[0].effects[0].params[0]
+        param.value += 1
 
-        r = self.rest.putParam(bankIndex, patchIndex, effectIndex, paramIndex, newValue)
-        self.assertEqual(Test.UPDATED, r.status_code)
-        self.assertEqual(
-            newValue,
-            self.rest.getParam(bankIndex, patchIndex, effectIndex, paramIndex).json()['value']
-        )
+        response = self.rest.put_param(param)
+        self.assertEqual(Test.UPDATED, response.status_code)
 
-        # Restoring
-        r = self.rest.putParam(bankIndex, patchIndex, effectIndex, paramIndex, originalValue)
-'''
+        get_value = self.rest.get_param(param)
+        self.assertEqual(param.json, get_value.json())
+
+        self.rest.delete_bank(bank)

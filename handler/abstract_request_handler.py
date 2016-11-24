@@ -9,7 +9,8 @@ class AbstractRequestHandler(CorsMixin, tornado.web.RequestHandler):
     CORS_MAX_AGE = 21600
     CORS_HEADERS = 'Content-Type, x-xsrf-token'
 
-    def getRequestData(self):
+    @property
+    def request_data(self):
         return json.loads(self.request.body.decode('utf-8'))
 
     def success(self):
@@ -21,7 +22,7 @@ class AbstractRequestHandler(CorsMixin, tornado.web.RequestHandler):
     def error(self, message):
         self.send(400, {"error": message})
 
-    def printError(self):
+    def print_error(self):
         import traceback
         import sys
         print(traceback.format_exc(), file=sys.stderr, flush=True)
@@ -36,3 +37,17 @@ class AbstractRequestHandler(CorsMixin, tornado.web.RequestHandler):
         token = self.request.headers.get('x-xsrf-token')
 
         return '' if token is None else token
+
+    def get(self, method, args):
+        try:
+            bank = self.banks.banks[bank_index]
+            patch = bank.patches[pedalboard_index]
+
+            return self.write(patch.json)
+
+        except IndexError as error:
+            return self.error(str(error))
+
+        except Exception:
+            self.print_error()
+            return self.send(500)

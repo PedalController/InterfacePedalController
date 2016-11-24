@@ -3,51 +3,48 @@ from handler.abstract_request_handler import AbstractRequestHandler
 from application.controller.banks_controller import BanksController
 from application.controller.param_controller import ParamController
 
-from util.HandlerUtils import HandlerUtils
+from util.handler_utils import integer
 
 
 class ParamHandler(AbstractRequestHandler):
     app = None
+    controller = None
+    banks = None
 
     def initialize(self, app):
         self.app = app
 
         self.controller = self.app.controller(ParamController)
-        self.banksController = self.app.controller(BanksController)
+        self.banks = self.app.controller(BanksController)
 
-    def get(self, bankIndex, patchIndex, effectIndex, paramIndex):
+    @integer('bank_index', 'pedalboard_index', 'effect_index', 'param_index')
+    def get(self, bank_index, pedalboard_index, effect_index, param_index):
         try:
-            bankIndex, patchIndex, effectIndex, paramIndex = HandlerUtils.toInt(
-                bankIndex, patchIndex, effectIndex, paramIndex
-            )
-            bank = self.banksController.banks[bankIndex]
+            bank = self.banks.banks[bank_index]
 
-            param = bank.patches[patchIndex].effects[effectIndex].params[paramIndex]
+            param = bank.patches[pedalboard_index].effects[effect_index].params[param_index]
             return self.write(param.json)
 
         except IndexError as error:
             return self.error(str(error))
-        except Exception as error:
-            self.printError()
+        except Exception:
+            self.print_error()
             return self.send(500)
 
-    def put(self, bankIndex, patchIndex, effectIndex, paramIndex):
+    @integer('bank_index', 'pedalboard_index', 'effect_index', 'param_index')
+    def put(self, bank_index, pedalboard_index, effect_index, param_index):
         try:
-            bankIndex, patchIndex, effectIndex, paramIndex = HandlerUtils.toInt(
-                bankIndex, patchIndex, effectIndex, paramIndex
-            )
+            bank = self.banks.banks[bank_index]
+            param = bank.patches[pedalboard_index].effects[effect_index].params[param_index]
+            value = self.request_data
 
-            bank = self.banksController.banks[bankIndex]
-            param = bank.patches[patchIndex].effects[effectIndex].params[paramIndex]
-            value = self.getRequestData()
-
-            self.controller.updateValue(param, value, self.token)
+            param.value = value
+            self.controller.updated(param, self.token)
 
             return self.success()
 
         except IndexError as error:
             return self.error(str(error))
-
         except Exception:
-            self.printError()
+            self.print_error()
             return self.send(500)
