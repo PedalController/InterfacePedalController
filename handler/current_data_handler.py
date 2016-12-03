@@ -16,7 +16,7 @@ class CurrentDataHandler(AbstractRequestHandler):
     def get(self):
         json = {
             'bank': self.banksController.banks[self.controller.bankNumber].json,
-            'patch': self.controller.patchNumber
+            'pedalboard': self.controller.pedalboardNumber
         }
 
         self.send(200, json)

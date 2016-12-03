@@ -5,7 +5,7 @@ import requests
 from test.rest_facade import RestFacade
 
 from pluginsmanager.model.bank import Bank
-from pluginsmanager.model.patch import Patch
+from pluginsmanager.model.pedalboard import Pedalboard
 
 from pluginsmanager.model.lv2.lv2_effect_builder import Lv2EffectBuilder
 
@@ -32,7 +32,7 @@ class Test(unittest.TestCase):
     @property
     def default_bank(self):
         bank = Bank('REST - Default Bank' + str(uuid.uuid4()))
-        pedalboard = Patch('REST - Default Patch')
+        pedalboard = Pedalboard('REST - Default Pedalboard')
 
         reverb = self.plugins_builder.build('http://calf.sourceforge.net/plugins/Reverb')
         reverb2 = self.plugins_builder.build('http://calf.sourceforge.net/plugins/Reverb')

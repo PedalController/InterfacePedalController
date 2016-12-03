@@ -6,7 +6,7 @@ class EffectHandlerTest(Test):
         bank = self.default_bank
         bank.index = self.rest.create_bank(bank).json()['index']
 
-        effect = bank.patches[0].effects[0]
+        effect = bank.pedalboards[0].effects[0]
         response = self.rest.get_effect(effect)
 
         self.assertEqual(Test.SUCCESS, response.status_code)
@@ -16,7 +16,7 @@ class EffectHandlerTest(Test):
 
     def test_post(self):
         bank = self.default_bank
-        pedalboard = bank.patches[0]
+        pedalboard = bank.pedalboards[0]
 
         bank.index = self.rest.create_bank(bank).json()['index']
 
@@ -35,7 +35,7 @@ class EffectHandlerTest(Test):
 
     def test_delete(self):
         bank = self.default_bank
-        pedalboard = bank.patches[0]
+        pedalboard = bank.pedalboards[0]
 
         bank.index = self.rest.create_bank(bank).json()['index']
 

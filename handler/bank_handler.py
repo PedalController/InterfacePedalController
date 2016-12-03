@@ -3,7 +3,7 @@ from handler.abstract_request_handler import AbstractRequestHandler
 from application.controller.banks_controller import BanksController
 from application.controller.device_controller import DeviceController
 
-from pluginsmanager.util.persistence import Persistence
+from pluginsmanager.util.persistence_decoder import PersistenceDecoder
 
 from util.handler_utils import integer
 
@@ -18,7 +18,7 @@ class BankHandler(AbstractRequestHandler):
 
         self.controller = self.app.controller(BanksController)
         sys_effect = self.app.controller(DeviceController).sys_effect
-        self.decoder = Persistence(sys_effect)
+        self.decoder = PersistenceDecoder(sys_effect)
 
     @integer('bank_index')
     def get(self, bank_index):

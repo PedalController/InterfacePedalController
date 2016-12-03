@@ -19,7 +19,7 @@ class ParamHandlerTest(Test):
         bank = self.default_bank
         bank.index = self.rest.create_bank(bank).json()['index']
 
-        param = bank.patches[0].effects[0].params[0]
+        param = bank.pedalboards[0].effects[0].params[0]
         response = self.rest.get_param(param)
 
         self.assertEqual(Test.SUCCESS, response.status_code)
@@ -31,7 +31,7 @@ class ParamHandlerTest(Test):
         bank = self.default_bank
         bank.index = self.rest.create_bank(bank).json()['index']
 
-        param = bank.patches[0].effects[0].params[0]
+        param = bank.pedalboards[0].effects[0].params[0]
         param.value += 1
 
         response = self.rest.put_param(param)

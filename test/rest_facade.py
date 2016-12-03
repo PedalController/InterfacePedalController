@@ -58,7 +58,7 @@ class RestFacade(object):
     # **********************
     def get_pedalboard(self, pedalboard):
         bank_index = pedalboard.bank.index
-        pedalboard_index = pedalboard.bank.patches.index(pedalboard)
+        pedalboard_index = pedalboard.bank.pedalboards.index(pedalboard)
         return self.get('bank/{0}/pedalboard/{1}'.format(bank_index, pedalboard_index))
 
     def create_pedalboard(self, pedalboard):
@@ -67,12 +67,12 @@ class RestFacade(object):
 
     def update_pedalboard(self, pedalboard):
         bank_index = pedalboard.bank.index
-        pedalboard_index = pedalboard.bank.patches.index(pedalboard)
+        pedalboard_index = pedalboard.bank.pedalboards.index(pedalboard)
         return self.put('bank/{0}/pedalboard/{1}'.format(bank_index, pedalboard_index), pedalboard.json)
 
-    def delete_pedalboard(self, patch):
-        bank_index = patch.bank.index
-        pedalboard_index = patch.bank.patches.index(patch)
+    def delete_pedalboard(self, pedalboard):
+        bank_index = pedalboard.bank.index
+        pedalboard_index = pedalboard.bank.pedalboards.index(pedalboard)
         return self.delete('bank/{0}/pedalboard/{1}'.format(bank_index, pedalboard_index))
 
     # **********************
@@ -81,9 +81,9 @@ class RestFacade(object):
     def get_effect(self, effect):
         return self.get(self._url_effect(effect))
 
-    def post_effect(self, patch, uri):
-        pedalboard_index = patch.bank.patches.index(patch)
-        bank_index = patch.bank.index
+    def post_effect(self, pedalboard, uri):
+        pedalboard_index = pedalboard.bank.pedalboards.index(pedalboard)
+        bank_index = pedalboard.bank.index
 
         url = 'bank/{0}/pedalboard/{1}/effect'.format(bank_index, pedalboard_index)
         return self.post(url, uri)
@@ -92,10 +92,10 @@ class RestFacade(object):
         return self.delete(self._url_effect(effect))
     
     def _url_effect(self, effect):
-        pedalboard = effect.patch
+        pedalboard = effect.pedalboard
 
         bank_index = pedalboard.bank.index
-        pedalboard_index = pedalboard.bank.patches.index(pedalboard)
+        pedalboard_index = pedalboard.bank.pedalboards.index(pedalboard)
         effect_index = pedalboard.effects.index(effect)
 
         return 'bank/{0}/pedalboard/{1}/effect/{2}'.format(
@@ -116,10 +116,10 @@ class RestFacade(object):
 
     def _url_param(self, param):
         effect = param.effect
-        pedalboard = effect.patch
+        pedalboard = effect.pedalboard
 
         bank_index = pedalboard.bank.index
-        pedalboard_index = pedalboard.bank.patches.index(pedalboard)
+        pedalboard_index = pedalboard.bank.pedalboards.index(pedalboard)
         effect_index = pedalboard.effects.index(effect)
         param_index = effect.params.index(param)
 

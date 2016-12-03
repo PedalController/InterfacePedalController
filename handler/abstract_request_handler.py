@@ -41,9 +41,9 @@ class AbstractRequestHandler(CorsMixin, tornado.web.RequestHandler):
     def get(self, method, args):
         try:
             bank = self.banks.banks[bank_index]
-            patch = bank.patches[pedalboard_index]
+            pedalboard = bank.pedalboards[pedalboard_index]
 
-            return self.write(patch.json)
+            return self.write(pedalboard.json)
 
         except IndexError as error:
             return self.error(str(error))

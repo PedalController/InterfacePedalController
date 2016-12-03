@@ -22,7 +22,7 @@ class ParamHandler(AbstractRequestHandler):
         try:
             bank = self.banks.banks[bank_index]
 
-            param = bank.patches[pedalboard_index].effects[effect_index].params[param_index]
+            param = bank.pedalboards[pedalboard_index].effects[effect_index].params[param_index]
             return self.write(param.json)
 
         except IndexError as error:
@@ -35,7 +35,7 @@ class ParamHandler(AbstractRequestHandler):
     def put(self, bank_index, pedalboard_index, effect_index, param_index):
         try:
             bank = self.banks.banks[bank_index]
-            param = bank.patches[pedalboard_index].effects[effect_index].params[param_index]
+            param = bank.pedalboards[pedalboard_index].effects[effect_index].params[param_index]
             value = self.request_data
 
             param.value = value

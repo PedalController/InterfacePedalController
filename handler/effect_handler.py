@@ -23,7 +23,7 @@ class EffectHandler(AbstractRequestHandler):
     @integer('bank_index', 'pedalboard_index', 'effect_index')
     def get(self, bank_index, pedalboard_index, effect_index):
         try:
-            effect = self.banks.banks[bank_index].patches[pedalboard_index].effects[effect_index]
+            effect = self.banks.banks[bank_index].pedalboards[pedalboard_index].effects[effect_index]
 
             return self.write(effect.json)
 
@@ -37,7 +37,7 @@ class EffectHandler(AbstractRequestHandler):
     @integer('bank_index', 'pedalboard_index')
     def post(self, bank_index, pedalboard_index):
         try:
-            pedalboard = self.banks.banks[bank_index].patches[pedalboard_index]
+            pedalboard = self.banks.banks[bank_index].pedalboards[pedalboard_index]
             uri = self.request_data
 
             effect = self.plugins.lv2_effect(uri)
@@ -57,7 +57,7 @@ class EffectHandler(AbstractRequestHandler):
     @integer('bank_index', 'pedalboard_index', 'effect_index')
     def delete(self, bank_index, pedalboard_index, effect_index):
         try:
-            effect = self.banks.banks[bank_index].patches[pedalboard_index].effects[effect_index]
+            effect = self.banks.banks[bank_index].pedalboards[pedalboard_index].effects[effect_index]
 
             self.controller.delete(effect, self.token)
             return self.success()

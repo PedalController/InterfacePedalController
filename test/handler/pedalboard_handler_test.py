@@ -1,22 +1,22 @@
 from .handler_test import Test
 
-from pluginsmanager.model.patch import Patch
+from pluginsmanager.model.pedalboard import Pedalboard
 
 
 class PedalboardHandlerTest(Test):
 
     @property
     def default_pedalboard(self):
-        return Patch('New default patch')
+        return Pedalboard('New default pedalboard')
 
     def test_get(self):
         bank = self.default_bank
         bank.index = self.rest.create_bank(bank).json()['index']
 
-        response = self.rest.get_pedalboard(bank.patches[0])
+        response = self.rest.get_pedalboard(bank.pedalboards[0])
 
         self.assertEqual(Test.SUCCESS, response.status_code)
-        self.assertEqual(bank.patches[0].json, response.json())
+        self.assertEqual(bank.pedalboards[0].json, response.json())
 
         self.rest.delete_bank(bank)
 
@@ -39,9 +39,9 @@ class PedalboardHandlerTest(Test):
         bank = self.default_bank
         bank.index = self.rest.create_bank(bank).json()['index']
 
-        pedalboard = bank.patches[0]
+        pedalboard = bank.pedalboards[0]
 
-        new_name = 'REST - Default patch - New name'
+        new_name = 'REST - Default pedalboard - New name'
         pedalboard.name = new_name
 
         response = self.rest.update_pedalboard(pedalboard)
@@ -56,9 +56,9 @@ class PedalboardHandlerTest(Test):
         bank = self.default_bank
         bank.index = self.rest.create_bank(bank).json()['index']
 
-        pedalboard = bank.patches[0]
+        pedalboard = bank.pedalboards[0]
         r = self.rest.delete_pedalboard(pedalboard)
-        bank.patches.remove(pedalboard)
+        bank.pedalboards.remove(pedalboard)
 
         self.assertEqual(Test.DELETED, r.status_code)
 

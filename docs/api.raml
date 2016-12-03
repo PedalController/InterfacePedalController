@@ -33,18 +33,18 @@ description:
     delete:
       description: Delete a bank
 
-    /patch:
+    /pedalboard:
       post:
-        description: Post a new patch
-      /{patchIndex}:
+        description: Post a new pedalboard
+      /{pedalboardIndex}:
         uriParameters:
-          patchIndex:
-            description: Patch index
+          pedalboardIndex:
+            description: Pedalboard index
             type: integer
         get:
-          description: Get a patch
+          description: Get a pedalboard
         put:
-          description: Update a patch
+          description: Update a pedalboard
         delete:
           description: Remove a effect
 
@@ -78,10 +78,10 @@ description:
     Save consumer and manage data in valid json-format.
   uriParameters:
     key:
-      description: Key idenfier. Util then more one application saves data in patch
+      description: Key idenfier. Util then more one application saves data in pedalboard
   get:
     description:
-      Get the patch data based in key sended
+      Get the pedalboard data based in key sended
     responses:
       200:
         body:
@@ -92,45 +92,45 @@ description:
 
   post:
     description:
-      Saves the patch data. If exists a data in key defined, will be overrided
+      Saves the pedalboard data. If exists a data in key defined, will be overrided
     body:
       application/json:
         example: {any-key: any-data}
 
   delete:
     description:
-      Removes the patch data for the key defined
+      Removes the pedalboard data for the key defined
 
 /current:
-  description: Manage the current patch
+  description: Manage the current pedalboard
   get:
-    description: Get the current bank index and the current patch index
+    description: Get the current bank index and the current pedalboard index
   /data:
     get:
-      description: Get the current bank data and the current patch index
+      description: Get the current bank data and the current pedalboard index
 
-  /bank/{bankIndex}/patch/{patchIndex}:
+  /bank/{bankIndex}/pedalboard/{pedalboardIndex}:
     uriParameters:
       bankIndex:
         type: integer
-      patchIndex:
+      pedalboardIndex:
         type: integer
     put:
-      description: Put the current bankIndex and the current patchIndex
+      description: Put the current bankIndex and the current pedalboardIndex
 
   /effect/{effectIndex}:
     uriParameters:
       effectIndex:
         type: integer
     put:
-      description: Put for toggle effect status (active for bypassed or bypassed for active) of the current patch
+      description: Put for toggle effect status (active for bypassed or bypassed for active) of the current pedalboard
 
     /param/{paramIndex}:
       uriParameters:
         paramIndex:
           type: integer
       put:
-        description: Put for set a parameter value for a effect of the current patch
+        description: Put for set a parameter value for a effect of the current pedalboard
 
 /swap:
   description: Deprecated

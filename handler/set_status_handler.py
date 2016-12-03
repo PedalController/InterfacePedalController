@@ -1,6 +1,7 @@
 from handler.abstract_request_handler import AbstractRequestHandler
 
 from application.controller.current_controller import CurrentController
+from application.controller.banks_controller import BanksController
 
 from util.RestOverloading import register, verb
 
@@ -19,10 +20,12 @@ class HandlerUtils(object):
 class SetStatusHandler(AbstractRequestHandler):
     app = None
     controller = None
+    banks = None
 
     def initialize(self, app):
         self.app = app
         self.controller = app.controller(CurrentController)
+        self.banks = app.controller(BanksController)
 
     @register('SetStatusHandler')
     def put(self, function, *args, **kwargs):
@@ -37,14 +40,17 @@ class SetStatusHandler(AbstractRequestHandler):
             return self.send(500)
 
     @verb('put', 'SetStatusHandler')
-    def putCurrentPatch(self, bankIndex, patchIndex):
-        bankIndex, patchIndex = HandlerUtils.toInt(bankIndex, patchIndex)
+    def put_current_pedalboard(self, bank_index, pedalboard_index):
+        bank_index, pedalboard_index = HandlerUtils.toInt(bank_index, pedalboard_index)
 
-        bankChangedAndPatchNotChanged = self.controller.bankNumber != bankIndex \
-                                    and self.controller.patchNumber == patchIndex
+        bank_changed_and_pedalboard_not_changed = self.controller.bank_number != bank_index \
+                                              and self.controller.pedalboard_number == pedalboard_index
 
-        self.controller.setBank(bankIndex, notify=bankChangedAndPatchNotChanged, token=self.token)
-        self.controller.setPatch(patchIndex, token=self.token)
+        bank = self.banks.banks[bank_index]
+        pedalboard = bank.pedalboards[pedalboard_index]
+
+        self.controller.set_bank(bank, notify=bank_changed_and_pedalboard_not_changed, token=self.token)
+        self.controller.set_pedalboard(pedalboard, token=self.token)
 
     @verb('put', 'SetStatusHandler')
     def putStatusEffect(self, effectIndex):
