@@ -20,7 +20,7 @@ class RestFacade(object):
             headers={'content-type': 'application/json'}
         )
 
-    def put(self, url, data):
+    def put(self, url, data=''):
         print('[PUT]', self.address + url)
         return requests.put(
             self.address + url,
@@ -129,6 +129,20 @@ class RestFacade(object):
             effect_index,
             param_index
         )
+
+    # **********************
+    # Swap
+    # **********************
+    def swap_banks(self, bank_a, bank_b):
+        bank_a_index = bank_a.index
+        bank_b_index = bank_b.index
+
+        url = 'swap/bank-a/{0}/bank-b/{1}'.format(
+            bank_a_index,
+            bank_b_index
+        )
+
+        return self.put(url)
 
     # **********************
     # ComponentData

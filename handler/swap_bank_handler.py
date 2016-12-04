@@ -20,7 +20,7 @@ class SwapBankHandler(AbstractRequestHandler):
             bank_a = banks[bank_a_index]
             bank_b = banks[bank_b_index]
 
-            self.controller.swapBanks(bank_a, bank_b, self.token)
+            self.controller.swap(bank_a, bank_b, self.token)
 
             return self.success()
 
