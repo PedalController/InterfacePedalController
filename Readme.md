@@ -121,11 +121,16 @@ This code disposes the Application features in a WebService. These projects uses
 
 ## Project configuration
 
-### Others
+### Documentation
 
 ```bash
+# For management
 npm install -g api-designer
 api-designer
+
+# For generate doc
+npm install -g raml2html
+raml2html api.raml > index.html
 ```
 
 ## To test Rest

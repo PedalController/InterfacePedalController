@@ -75,6 +75,17 @@ class RestFacade(object):
         pedalboard_index = pedalboard.bank.pedalboards.index(pedalboard)
         return self.delete('bank/{0}/pedalboard/{1}'.format(bank_index, pedalboard_index))
 
+    def get_pedalboard_data(self, pedalboard, key):
+        bank_index = pedalboard.bank.index
+        pedalboard_index = pedalboard.bank.pedalboards.index(pedalboard)
+        return self.get('bank/{0}/pedalboard/{1}/data/{2}'.format(bank_index, pedalboard_index, key))
+
+    def update_pedalboard_data(self, pedalboard, key):
+        bank_index = pedalboard.bank.index
+        pedalboard_index = pedalboard.bank.pedalboards.index(pedalboard)
+        content = pedalboard.data[key]
+        return self.put('bank/{0}/pedalboard/{1}/data/{2}'.format(bank_index, pedalboard_index, key), content)
+
     # **********************
     # Effect
     # **********************

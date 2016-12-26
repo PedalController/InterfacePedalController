@@ -10,6 +10,7 @@ from handler.bank_handler import BankHandler
 from handler.effect_handler import EffectHandler
 from handler.param_handler import ParamHandler
 from handler.pedalboard_handler import PedalboardHandler
+from handler.pedalboard_data_handler import PedalboardDataHandler
 
 from handler.plugins_handler import PluginsHandler
 from handler.plugin_handler import PluginHandler
@@ -52,8 +53,8 @@ class WebService(Component):
         self.ws_app = self.prepare()
         self.ws_app.listen(self.port)
 
-        print("WebService - PedalPi API REST      localhost:" + str(self.port))
-        print("WebService - PedalPi API WebSocket localhost:" + str(self.port) + "/ws")
+        self._log("WebService - PedalPi API REST      localhost:" + str(self.port))
+        self._log("WebService - PedalPi API WebSocket localhost:" + str(self.port) + "/ws")
 
     def register_handlers(self):
         self.for_handler(PluginsHandler) \
@@ -72,6 +73,10 @@ class WebService(Component):
         self.for_handler(PedalboardHandler) \
             .register(r"/bank/(?P<bank_index>[0-9]+)/pedalboard") \
             .register(r"/bank/(?P<bank_index>[0-9]+)/pedalboard/(?P<pedalboard_index>[0-9]+)")
+
+        # Pedalboard data
+        self.for_handler(PedalboardDataHandler) \
+            .register(r"/bank/(?P<bank_index>[0-9]+)/pedalboard/(?P<pedalboard_index>[0-9]+)/data/(?P<key>[a-zA-Z_\-0-9]+)")
 
         # Effect
         self.for_handler(EffectHandler) \

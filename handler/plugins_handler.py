@@ -1,6 +1,6 @@
 from handler.abstract_request_handler import AbstractRequestHandler
 
-from application.controller.plugins_controller import PluginsController
+from application.controller.plugins_controller import PluginsController, PluginTechnology
 
 
 class PluginsHandler(AbstractRequestHandler):
@@ -12,4 +12,8 @@ class PluginsHandler(AbstractRequestHandler):
     def get(self):
         controller = self.app.controller(PluginsController)
 
-        self.write({'plugins': list(controller.plugins.values())})
+        plugins = []
+        for plugin in controller.by(PluginTechnology.LV2).values():
+            plugins.append(plugin.json)
+
+        self.write({'plugins': plugins})
