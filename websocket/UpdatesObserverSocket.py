@@ -1,4 +1,4 @@
-from application.model.UpdatesObserver import UpdatesObserver
+from pluginsmanager.model.updates_observer import UpdatesObserver
 
 from websocket.WebSocketConnections import WebSocketConnections
 
@@ -6,19 +6,19 @@ from websocket.WebSocketConnections import WebSocketConnections
 class UpdatesObserverSocket(UpdatesObserver):
 
     def send(self, json_data, token=None):
-        WebSocketConnections.sendBroadcast(json_data, token)
+        WebSocketConnections.send_broadcast(json_data, token)
 
-    def onCurrentPatchChange(self, patch, token=None):
-        bank = patch.bank
+    def on_current_pedalboard_changed(self, pedalboard, token=None):
+        bank = pedalboard.bank
 
         self.send({
             'type': 'CURRENT',
             'bank': bank.index,
-            'patch': patch.index,
-            'value': patch.json
+            'pedalboard': bank.pedalboards.index(pedalboard),
+            'value': pedalboard.json
         }, token)
 
-    def onBankUpdate(self, bank, update_type, token=None):
+    def on_bank_updated(self, bank, update_type, token=None, **kwargs):
         self.send({
             'type': 'BANK',
             'updateType': update_type.name,
@@ -26,51 +26,61 @@ class UpdatesObserverSocket(UpdatesObserver):
             'value': bank.json
         }, token)
 
-    def onPatchUpdated(self, patch, update_type, token=None):
-        bank = patch.bank
+    def on_pedalboard_updated(self, pedalboard, update_type, token=None, **kwargs):
+        bank = kwargs['origin']
+        pedalboard_index = kwargs['index']
 
         self.send({
             'type': 'PATCH',
             'updateType': update_type.name,
             'bank': bank.index,
-            'patch': patch.index,
-            'value': patch.json
+            'pedalboard': pedalboard_index,
+            'value': pedalboard.json
         }, token)
 
-    def onEffectUpdated(self, effect, update_type, token=None):
-        bank = effect.patch.bank
-        patch = effect.patch
+    def on_effect_updated(self, effect, update_type, token=None, **kwargs):
+        pedalboard = kwargs['origin']
+        bank = pedalboard.bank
+        effect_index = kwargs['index']
+        pedalboard_index = bank.pedalboards.index(pedalboard)
 
         self.send({
             'type': 'EFFECT',
             'updateType': update_type.name,
             'bank': bank.index,
-            'patch': patch.index,
-            'effect': effect.index,
+            'pedalboard': pedalboard_index,
+            'effect': effect_index,
             'value': effect.json
         }, token)
 
-    def onEffectStatusToggled(self, effect, token=None):
-        bank = effect.patch.bank
-        patch = effect.patch
+    def on_effect_status_toggled(self, effect, token=None):
+        bank = effect.pedalboard.bank
+        pedalboard = effect.pedalboard
 
         self.send({
             'type': 'EFFECT-TOGGLE',
             'bank': bank.index,
-            'patch': patch.index,
+            'pedalboard': pedalboard.index,
             'effect': effect.index
         }, token)
 
-    def onParamValueChange(self, param, token=None):
-        bank = param.effect.patch.bank
-        patch = param.effect.patch
+    def on_param_value_changed(self, param, token=None):
         effect = param.effect
+        pedalboard = effect.pedalboard
+        bank = pedalboard.bank
+
+        param_index = effect.params.index(param)
+        effect_index = pedalboard.effects.index(effect)
+        pedalboard_index = bank.pedalboards.index(pedalboard)
 
         self.send({
             'type': 'PARAM',
             'bank': bank.index,
-            'patch': patch.index,
-            'effect': effect.index,
-            'param': param.index,
+            'pedalboard': pedalboard_index,
+            'effect': effect_index,
+            'param': param_index,
             'value': param.value,
         }, token)
+
+    def on_connection_updated(self):
+        pass

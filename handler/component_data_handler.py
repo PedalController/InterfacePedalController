@@ -1,6 +1,6 @@
-from handler.AbstractRequestHandler import AbstractRequestHandler
+from handler.abstract_request_handler import AbstractRequestHandler
 
-from controller.ComponentDataController import ComponentDataController
+from application.controller.component_data_controller import ComponentDataController
 
 
 class ComponentDataHandler(AbstractRequestHandler):
@@ -14,7 +14,7 @@ class ComponentDataHandler(AbstractRequestHandler):
         self.send(200, self.controller[key])
 
     def post(self, key):
-        self.controller[key] = self.getRequestData()
+        self.controller[key] = self.request_data
 
         self.success()
 

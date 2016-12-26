@@ -43,35 +43,35 @@ Not implemented
   * Params
     * **bankIndex**
 
-### Patch
+### Pedalboard
 
-* ```/bank/(?P<bankIndex>[0-9]+)/patch```
-  * **POST** a new patch.
-  * Returns the patch index
+* ```/bank/(?P<bankIndex>[0-9]+)/pedalboard```
+  * **POST** a new pedalboard.
+  * Returns the pedalboard index
   * Params
     * **bankIndex**
-* ```/bank/(?P<bankIndex>[0-9]+)/patch/(?P<patchIndex>[0-9]+)```
-  * **GET** a patch
-  * **PUT** for update a patch
-  * **DELETE** a patch
+* ```/bank/(?P<bankIndex>[0-9]+)/pedalboard/(?P<pedalboardIndex>[0-9]+)```
+  * **GET** a pedalboard
+  * **PUT** for update a pedalboard
+  * **DELETE** a pedalboard
   * Params
     * **bankIndex**
-    * **patchIndex**
+    * **pedalboardIndex**
 
 ### Effect
 
-* ```/bank/(?P<bankIndex>[0-9]+)/patch/(?P<patchIndex>[0-9]+)/effect```
+* ```/bank/(?P<bankIndex>[0-9]+)/pedalboard/(?P<pedalboardIndex>[0-9]+)/effect```
   * **POST** a new effect.
   * Returns the effect index
   * Params
     * **bankIndex**
-    * **patchIndex**
-* ```/bank/(?P<bankIndex>[0-9]+)/patch/(?P<patchIndex>[0-9]+)/effect/(?P<effectIndex>[0-9]+)```
+    * **pedalboardIndex**
+* ```/bank/(?P<bankIndex>[0-9]+)/pedalboard/(?P<pedalboardIndex>[0-9]+)/effect/(?P<effectIndex>[0-9]+)```
   * **GET** a effect
   * **DELETE** for remove a effect
   * Params
     * **bankIndex**
-    * **patchIndex**
+    * **pedalboardIndex**
     * **effectIndex**
 
 ### Param
@@ -79,27 +79,27 @@ Not implemented
 * ```/bank```
   * **POST** a new bank.
   * Returns the bank index
-* ```/bank/(?P<bankIndex>[0-9]+)/patch/(?P<patchIndex>[0-9]+)/effect/(?P<effectIndex>[0-9]+)/param/(?P<paramIndex>[0-9]+)```
+* ```/bank/(?P<bankIndex>[0-9]+)/pedalboard/(?P<pedalboardIndex>[0-9]+)/effect/(?P<effectIndex>[0-9]+)/param/(?P<paramIndex>[0-9]+)```
   * **GET** a parameter value
   * **PUT** for update a parameter value
   * Params
     * **bankIndex**
-    * **patchIndex**
+    * **pedalboardIndex**
     * **effectIndex**
     * **paramIndex**
 
 ### Current
 
 * ```/current```
-  * **GET** the current _bank index_ and the current _patch index_
+  * **GET** the current _bank index_ and the current _pedalboard index_
 * ```/current/data```
-  * **GET** the current _bank data_ and the current _patch index_
-* ```/current/bank/(?P<bankIndex>[0-9]+)/patch/(?P<patchIndex>[0-9]+)```
-  * **PUT** the current _bankIndex_ and the current _patchIndex_
+  * **GET** the current _bank data_ and the current _pedalboard index_
+* ```/current/bank/(?P<bankIndex>[0-9]+)/pedalboard/(?P<pedalboardIndex>[0-9]+)```
+  * **PUT** the current _bankIndex_ and the current _pedalboardIndex_
 * ```/current/effect/(?P<effect>[0-9]+)```
-  * **PUT** for toggle effect status (active for bypassed or bypassed for active) of the current patch
+  * **PUT** for toggle effect status (active for bypassed or bypassed for active) of the current pedalboard
 * ```/current/effect/(?P<effect>[0-9]+)/param/(?P<param>[0-9]+)```
-  * **PUT** for set a parameter value for a effect of the current patch
+  * **PUT** for set a parameter value for a effect of the current pedalboard
 
 ### Connections
 
@@ -121,11 +121,16 @@ This code disposes the Application features in a WebService. These projects uses
 
 ## Project configuration
 
-### Others
+### Documentation
 
 ```bash
+# For management
 npm install -g api-designer
 api-designer
+
+# For generate doc
+npm install -g raml2html
+raml2html api.raml > index.html
 ```
 
 ## To test Rest

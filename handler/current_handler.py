@@ -1,6 +1,6 @@
-from handler.AbstractRequestHandler import AbstractRequestHandler
+from handler.abstract_request_handler import AbstractRequestHandler
 
-from controller.CurrentController import CurrentController
+from application.controller.current_controller import CurrentController
 
 
 class CurrentHandler(AbstractRequestHandler):
@@ -12,8 +12,8 @@ class CurrentHandler(AbstractRequestHandler):
 
     def get(self):
         json = {
-            'bank': self.controller.bankNumber,
-            'patch': self.controller.patchNumber
+            'bank': self.controller.bank_number,
+            'pedalboard': self.controller.pedalboard_number
         }
 
         self.send(200, json)

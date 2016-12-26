@@ -1,10 +1,9 @@
-import unittest
 import requests
 
-from .test import Test
+from .handler_test import Test
 
 
-class BanksHanddlerTest(Test):
+class BanksHandlerTest(Test):
     def setUp(self):
         try:
             self.rest.get('')

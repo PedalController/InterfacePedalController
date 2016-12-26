@@ -1,4 +1,4 @@
-from handler.AbstractRequestHandler import AbstractRequestHandler
+from handler.abstract_request_handler import AbstractRequestHandler
 
 
 class PluginHandler(AbstractRequestHandler):

@@ -1,26 +1,28 @@
+import time
+
 import tornado.ioloop
 import tornado.web
 
-from application.architecture.Component import Component
+from application.component.component import Component
 
-from handler.BanksHandler import BanksHandler
-from handler.BankHandler import BankHandler
-from handler.EffectHandler import EffectHandler
-from handler.ParamHandler import ParamHandler
-from handler.PatchHandler import PatchHandler
+from handler.banks_handler import BanksHandler
+from handler.bank_handler import BankHandler
+from handler.effect_handler import EffectHandler
+from handler.param_handler import ParamHandler
+from handler.pedalboard_handler import PedalboardHandler
+from handler.pedalboard_data_handler import PedalboardDataHandler
 
-from handler.PluginsHandler import PluginsHandler
-from handler.PluginHandler import PluginHandler
+from handler.plugins_handler import PluginsHandler
+from handler.plugin_handler import PluginHandler
 
-from handler.CurrentHandler import CurrentHandler
-from handler.CurrentDataHandler import CurrentDataHandler
-from handler.SetStatusHandler import SetStatusHandler
+from handler.current_handler import CurrentHandler
+from handler.current_data_handler import CurrentDataHandler
+from handler.set_status_handler import SetStatusHandler
 
-from handler.SwapBankHandler import SwapBankHandler
-from handler.SwapPatchHandler import SwapPatchHandler
-from handler.SwapEffectHandler import SwapEffectHandler
+from handler.swap_bank_handler import SwapBankHandler
+from handler.swap_pedalboard_handler import SwapPedalboardHandler
 
-from handler.ComponentDataHandler import ComponentDataHandler
+from handler.component_data_handler import ComponentDataHandler
 
 from websocket.WebSocketConnectionHandler import WebSocketConnectionHandler
 from websocket.UpdatesObserverSocket import UpdatesObserverSocket
@@ -51,77 +53,84 @@ class WebService(Component):
         self.ws_app = self.prepare()
         self.ws_app.listen(self.port)
 
-        print("WebService - PedalPi API REST      localhost:" + str(self.port))
-        print("WebService - PedalPi API WebSocket localhost:" + str(self.port) + "/ws")
+        self._log("WebService - PedalPi API REST      localhost:" + str(self.port))
+        self._log("WebService - PedalPi API WebSocket localhost:" + str(self.port) + "/ws")
 
     def register_handlers(self):
-        self.forHandler(PluginsHandler) \
+        self.for_handler(PluginsHandler) \
             .register(r"/effects")
-        self.forHandler(PluginHandler) \
+        self.for_handler(PluginHandler) \
             .register(r"/effect/([^/]+)")
 
-        self.forHandler(BanksHandler).register(r"/banks")
+        self.for_handler(BanksHandler).register(r"/banks")
 
         # Bank
-        self.forHandler(BankHandler) \
+        self.for_handler(BankHandler) \
             .register(r"/bank") \
-            .register(r"/bank/(?P<bankIndex>[0-9]+)")
+            .register(r"/bank/(?P<bank_index>[0-9]+)")
 
-        # Patch
-        self.forHandler(PatchHandler) \
-            .register(r"/bank/(?P<bankIndex>[0-9]+)/patch") \
-            .register(r"/bank/(?P<bankIndex>[0-9]+)/patch/(?P<patchIndex>[0-9]+)")
+        # Pedalboard
+        self.for_handler(PedalboardHandler) \
+            .register(r"/bank/(?P<bank_index>[0-9]+)/pedalboard") \
+            .register(r"/bank/(?P<bank_index>[0-9]+)/pedalboard/(?P<pedalboard_index>[0-9]+)")
+
+        # Pedalboard data
+        self.for_handler(PedalboardDataHandler) \
+            .register(r"/bank/(?P<bank_index>[0-9]+)/pedalboard/(?P<pedalboard_index>[0-9]+)/data/(?P<key>[a-zA-Z_\-0-9]+)")
 
         # Effect
-        self.forHandler(EffectHandler) \
-            .register(r"/bank/(?P<bankIndex>[0-9]+)/patch/(?P<patchIndex>[0-9]+)/effect") \
-            .register(r"/bank/(?P<bankIndex>[0-9]+)/patch/(?P<patchIndex>[0-9]+)/effect/(?P<effectIndex>[0-9]+)")
+        self.for_handler(EffectHandler) \
+            .register(r"/bank/(?P<bank_index>[0-9]+)/pedalboard/(?P<pedalboard_index>[0-9]+)/effect") \
+            .register(r"/bank/(?P<bank_index>[0-9]+)/pedalboard/(?P<pedalboard_index>[0-9]+)/effect/(?P<effect_index>[0-9]+)")
 
         # Param
-        self.forHandler(ParamHandler) \
-            .register(r"/bank/(?P<bankIndex>[0-9]+)/patch/(?P<patchIndex>[0-9]+)/effect/(?P<effectIndex>[0-9]+)/param/(?P<paramIndex>[0-9]+)")
+        self.for_handler(ParamHandler) \
+            .register(r"/bank/(?P<bank_index>[0-9]+)/pedalboard/(?P<pedalboard_index>[0-9]+)/effect/(?P<effect_index>[0-9]+)/param/(?P<param_index>[0-9]+)")
 
         # Get current
-        self.forHandler(CurrentHandler) \
+        self.for_handler(CurrentHandler) \
             .register(r"/current")
-        self.forHandler(CurrentDataHandler) \
+        self.for_handler(CurrentDataHandler) \
             .register(r"/current/data")
 
         # Set current
-        self.forHandler(SetStatusHandler) \
-            .register(r"/current/bank/(?P<bankIndex>[0-9]+)/patch/(?P<patchIndex>[0-9]+)") \
-            .register(r"/current/effect/(?P<effectIndex>[0-9]+)") \
-            .register(r"/current/effect/(?P<effectIndex>[0-9]+)/param/(?P<paramIndex>[0-9]+)")
+        self.for_handler(SetStatusHandler) \
+            .register(r"/current/bank/(?P<bank_index>[0-9]+)/pedalboard/(?P<pedalboard_index>[0-9]+)") \
+            .register(r"/current/effect/(?P<effect_index>[0-9]+)") \
+            .register(r"/current/effect/(?P<effect_index>[0-9]+)/param/(?P<param_index>[0-9]+)")
 
         # Swap
-        self.forHandler(SwapBankHandler) \
-            .register(r"/swap/bank-a/(?P<bankAIndex>[0-9]+)/bank-b/(?P<bankBIndex>[0-9]+)")
-        self.forHandler(SwapPatchHandler) \
-            .register(r"/swap/patch/bank/(?P<bankIndex>[0-9]+)/patch-a/(?P<patchAIndex>[0-9]+)/patch-b/(?P<patchBIndex>[0-9]+)")
-        self.forHandler(SwapEffectHandler) \
-            .register(r"/swap/effect/bank/(?P<bankIndex>[0-9]+)/patch/(?P<patchIndex>[0-9]+)/effect-a/(?P<effectAIndex>[0-9]+)/effect-b/(?P<effectBIndex>[0-9]+)")
+        self.for_handler(SwapBankHandler) \
+            .register(r"/swap/bank-a/(?P<bank_a_index>[0-9]+)/bank-b/(?P<bank_b_index>[0-9]+)")
+        self.for_handler(SwapPedalboardHandler) \
+            .register(r"/swap/pedalboard/bank/(?P<bank_index>[0-9]+)/pedalboard-a/(?P<pedalboard_a_index>[0-9]+)/pedalboard-b/(?P<pedalboard_b_index>[0-9]+)")
 
         # Connections
 
         # Peripheral
 
         # ComponentDataHandler
-        self.forHandler(ComponentDataHandler) \
+        self.for_handler(ComponentDataHandler) \
             .register(r"/data/(?P<key>[a-zA-Z\-0-9:]+)") \
 
         # WebSocket
-        self.forHandler(WebSocketConnectionHandler) \
+        self.for_handler(WebSocketConnectionHandler) \
             .register(r"/ws/?$")
 
-    def forHandler(self, handler_class):
+    def for_handler(self, handler_class):
         return HandlerRegister(self, handler_class)
 
     def register(self, uri, class_handler):
         handler = (uri, class_handler, dict(app=self.application))
         self.handlers.append(handler)
 
+        self._log('WebService', '-', class_handler.__name__, uri)
+
     def prepare(self):
         return tornado.web.Application(self.handlers)
+
+    def _log(self, *args, **kwargs):
+        print('[' + time.strftime('%Y-%m-%d %H:%M:%S') + ']', *args, **kwargs)
 
 
 class HandlerRegister(object):

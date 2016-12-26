@@ -1,18 +1,18 @@
-import sys
-import tornado
+if __name__ == "__main__":
+    import sys
+    import tornado
 
-sys.path.append('application')
-sys.path.append('webservice')
+    sys.path.append('webservice')
 
-from application.Application import Application
-from webservice.WebService import WebService
+    from application.application import Application
+    from webservice.WebService import WebService
 
-address = 'localhost'
-port = 3000
+    address = 'localhost'
+    port = 3000
 
-application = Application(data_patch="application/test/data/", address=address, test=True)
-application.register(WebService(application, port))
+    application = Application(data_pedalboard="application/test/data/", address=address, test=True)
+    application.register(WebService(application, port))
 
-application.start()
+    application.start()
 
-tornado.ioloop.IOLoop.current().start()
+    tornado.ioloop.IOLoop.current().start()
