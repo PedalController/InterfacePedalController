@@ -1,6 +1,6 @@
 from pluginsmanager.model.updates_observer import UpdatesObserver
 
-from websocket.WebSocketConnections import WebSocketConnections
+from websocket.web_socket_connections import WebSocketConnections
 
 
 class UpdatesObserverSocket(UpdatesObserver):
@@ -54,14 +54,17 @@ class UpdatesObserverSocket(UpdatesObserver):
         }, token)
 
     def on_effect_status_toggled(self, effect, token=None):
-        bank = effect.pedalboard.bank
         pedalboard = effect.pedalboard
+        bank = pedalboard.bank
+
+        effect_index = pedalboard.effects.index(effect)
+        pedalboard_index = bank.pedalboards.index(pedalboard)
 
         self.send({
             'type': 'EFFECT-TOGGLE',
             'bank': bank.index,
-            'pedalboard': pedalboard.index,
-            'effect': effect.index
+            'pedalboard': pedalboard_index,
+            'effect': effect_index
         }, token)
 
     def on_param_value_changed(self, param, token=None):

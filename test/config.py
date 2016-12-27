@@ -5,7 +5,7 @@ if __name__ == "__main__":
     sys.path.append('webservice')
 
     from application.application import Application
-    from webservice.WebService import WebService
+    from webservice.webservice import WebService
 
     address = 'localhost'
     port = 3000

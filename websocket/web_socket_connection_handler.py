@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-from websocket.WebSocketConnections import WebSocketConnections
+from websocket.web_socket_connections import WebSocketConnections
 from tornado import websocket
 import json
 import uuid

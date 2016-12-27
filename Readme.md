@@ -98,8 +98,6 @@ Not implemented
   * **PUT** the current _bankIndex_ and the current _pedalboardIndex_
 * ```/current/effect/(?P<effect>[0-9]+)```
   * **PUT** for toggle effect status (active for bypassed or bypassed for active) of the current pedalboard
-* ```/current/effect/(?P<effect>[0-9]+)/param/(?P<param>[0-9]+)```
-  * **PUT** for set a parameter value for a effect of the current pedalboard
 
 ### Connections
 

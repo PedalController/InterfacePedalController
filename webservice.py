@@ -17,15 +17,16 @@ from handler.plugin_handler import PluginHandler
 
 from handler.current_handler import CurrentHandler
 from handler.current_data_handler import CurrentDataHandler
-from handler.set_status_handler import SetStatusHandler
+from handler.current_effect_status_handler import CurrentEffectStatusHandler
+from handler.current_pedalboard_handler import CurrentPedalboardHandler
 
 from handler.swap_bank_handler import SwapBankHandler
 from handler.swap_pedalboard_handler import SwapPedalboardHandler
 
 from handler.component_data_handler import ComponentDataHandler
 
-from websocket.WebSocketConnectionHandler import WebSocketConnectionHandler
-from websocket.UpdatesObserverSocket import UpdatesObserverSocket
+from websocket.web_socket_connection_handler import WebSocketConnectionHandler
+from websocket.updates_observer_socket import UpdatesObserverSocket
 
 
 class WebService(Component):
@@ -94,10 +95,10 @@ class WebService(Component):
             .register(r"/current/data")
 
         # Set current
-        self.for_handler(SetStatusHandler) \
-            .register(r"/current/bank/(?P<bank_index>[0-9]+)/pedalboard/(?P<pedalboard_index>[0-9]+)") \
-            .register(r"/current/effect/(?P<effect_index>[0-9]+)") \
-            .register(r"/current/effect/(?P<effect_index>[0-9]+)/param/(?P<param_index>[0-9]+)")
+        self.for_handler(CurrentEffectStatusHandler) \
+            .register(r"/current/effect/(?P<effect_index>[0-9]+)")
+        self.for_handler(CurrentPedalboardHandler) \
+            .register(r"/current/bank/(?P<bank_index>[0-9]+)/pedalboard/(?P<pedalboard_index>[0-9]+)")
 
         # Swap
         self.for_handler(SwapBankHandler) \
