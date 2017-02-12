@@ -1,9 +1,9 @@
-from pluginsmanager.model.updates_observer import UpdatesObserver
+from application.component.application_observer import ApplicationObserver
 
 from websocket.web_socket_connections import WebSocketConnections
 
 
-class UpdatesObserverSocket(UpdatesObserver):
+class UpdatesObserverSocket(ApplicationObserver):
 
     def send(self, json_data, token=None):
         WebSocketConnections.send_broadcast(json_data, token)
