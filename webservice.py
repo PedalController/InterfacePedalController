@@ -15,6 +15,8 @@ from handler.pedalboard_data_handler import PedalboardDataHandler
 from handler.plugins_handler import PluginsHandler
 from handler.plugin_handler import PluginHandler
 
+from handler.connection_handler import ConnectionHandler
+
 from handler.current_handler import CurrentHandler
 from handler.current_data_handler import CurrentDataHandler
 from handler.current_effect_status_handler import CurrentEffectStatusHandler
@@ -107,6 +109,9 @@ class WebService(Component):
             .register(r"/swap/pedalboard/bank/(?P<bank_index>[0-9]+)/pedalboard-a/(?P<pedalboard_a_index>[0-9]+)/pedalboard-b/(?P<pedalboard_b_index>[0-9]+)")
 
         # Connections
+        self.for_handler(ConnectionHandler) \
+            .register(r"/bank/(?P<bank_index>[0-9]+)/pedalboard/(?P<pedalboard_index>[0-9]+)/connect") \
+            .register(r"/bank/(?P<bank_index>[0-9]+)/pedalboard/(?P<pedalboard_index>[0-9]+)/disconnect")
 
         # Peripheral
 

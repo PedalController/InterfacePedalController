@@ -85,5 +85,14 @@ class UpdatesObserverSocket(ApplicationObserver):
             'value': param.value,
         }, token)
 
-    def on_connection_updated(self):
-        pass
+    def on_connection_updated(self, pedalboard, connection, update_type, token=None):
+        bank = pedalboard.bank
+        pedalboard_index = bank.pedalboards.index(pedalboard)
+
+        self.send({
+            'type': 'CONNECTION',
+            'updateType': update_type.name,
+            'bank': bank.index,
+            'pedalboard': pedalboard_index,
+            'value': connection,
+        }, token)

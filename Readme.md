@@ -101,11 +101,12 @@ Not implemented
 
 ### Connections
 
-Not implemented
-
-### Peripheral
-
-Not implemented
+* ```/bank/(?P<bank_index>[0-9]+)/pedalboard/(?P<pedalboard_index>[0-9]+)/connect```
+  * **PUT** a new connection for the specified pedalboard
+    * Data - JSON connection information
+* ```/current/data```
+  * **POST** for disconnect the specified_pedalboard
+    * Data - JSON connection information
 
 ### WebSocket
 
@@ -115,7 +116,7 @@ View ```websocker/UpdatesObserverSocket``` for details
 
 This code disposes the Application features in a WebService. These projects uses it for control.
 
-* [Apk](https://github.com/Apk): App controller for smart devices and navigators.
+* [Apk](https://github.com/PedalPi/Apk): App controller for smart devices and navigators.
 
 ## Project configuration
 

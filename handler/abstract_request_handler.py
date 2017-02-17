@@ -37,17 +37,3 @@ class AbstractRequestHandler(CorsMixin, tornado.web.RequestHandler):
         token = self.request.headers.get('x-xsrf-token')
 
         return '' if token is None else token
-
-    def get(self, method, args):
-        try:
-            bank = self.banks.banks[bank_index]
-            pedalboard = bank.pedalboards[pedalboard_index]
-
-            return self.write(pedalboard.json)
-
-        except IndexError as error:
-            return self.error(str(error))
-
-        except Exception:
-            self.print_error()
-            return self.send(500)
