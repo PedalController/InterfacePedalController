@@ -18,6 +18,9 @@ script:
   - mv WebService webservice
   - mv webservice/test/config.py config.py
   - git clone --recursive https://github.com/PedalPi/Application.git application --depth=1
+  - cd application
+  - python setup.py develop
+  - cd ..
   - python3 config.py &
   - sleep 5
   - cd webservice
