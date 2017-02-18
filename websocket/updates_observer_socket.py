@@ -94,5 +94,5 @@ class UpdatesObserverSocket(ApplicationObserver):
             'updateType': update_type.name,
             'bank': bank.index,
             'pedalboard': pedalboard_index,
-            'value': connection,
+            'value': connection.json,
         }, token)
