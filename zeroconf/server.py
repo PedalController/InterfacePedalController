@@ -26,11 +26,16 @@ info2 = ServiceInfo("_http._tcp.local.",
                        socket.inet_aton("127.0.0.1"), 80, 0, 0,
                        {'path': '/~paulsm/'}, "ash-2.local.")
 
-info3 = ServiceInfo("_http._tcp.local.", 'carla._http._tcp.local.', socket.inet_aton("127.0.0.1"), 80, 0, 0, {})
-
-info3 = ServiceInfo("_http._tcp.local.", 'carla._http._tcp.local.', socket.inet_aton("127.0.0.1"), 80, 0, 0, {})
-
-info3 = ServiceInfo("_http._tcp.local.", 'Becvert\'s iPad (imitacao)._http._tcp.local.', port=80, properties={})
+info3 = ServiceInfo(
+    type_="_http._tcp.local.",
+    name="Becvert\'s iPad I._http._tcp.local.",
+    address=socket.inet_aton("127.0.0.1"),
+    port=80,
+    weight=0,
+    priority=0,
+    properties=description,
+    server="pedalpi.local."
+)
 
 zeroconf = Zeroconf()
 zeroconf.register_service(info)
