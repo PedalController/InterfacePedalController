@@ -37,10 +37,28 @@ info3 = ServiceInfo(
     server="pedalpi.local."
 )
 
+fqdn = socket.gethostname()
+ip_addr = socket.gethostbyname(fqdn)
+hostname = fqdn.split('.')[0]
+print(fqdn)
+
+wsDesc = {'service': 'Verasonics Frame', 'version': '1.0.0'}
+wsInfo = ServiceInfo(
+    '_http._tcp.local.',
+    hostname + '._http._tcp.local.',
+    socket.inet_aton('10.0.0.102'),
+    80, 0, 0,
+    wsDesc,
+    hostname + '.local.'
+)
+
+print(wsInfo)
+
 zeroconf = Zeroconf()
-zeroconf.register_service(info)
-zeroconf.register_service(info2)
-zeroconf.register_service(info3)
+zeroconf.register_service(wsInfo)
+#zeroconf.register_service(info)
+#zeroconf.register_service(info2)
+#zeroconf.register_service(info3)
 
 print("Registration of a service, press Ctrl-C to exit...")
 
