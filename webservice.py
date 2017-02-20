@@ -30,7 +30,7 @@ from handler.component_data_handler import ComponentDataHandler
 from websocket.web_socket_connection_handler import WebSocketConnectionHandler
 from websocket.updates_observer_socket import UpdatesObserverSocket
 
-from zeroconf_avahi.zeroconf import Zeroconf
+from pybonjour_service.pybonjour_service import PybonjourService
 
 
 class WebService(Component):
@@ -61,7 +61,7 @@ class WebService(Component):
         self._log("WebService - PedalPi API REST      localhost:" + str(self.port))
         self._log("WebService - PedalPi API WebSocket localhost:" + str(self.port) + "/ws")
 
-        self._start_zeroconf()
+        self._start_zeroconf(self.port)
 
     def register_handlers(self):
         self.for_handler(PluginsHandler) \
@@ -142,9 +142,9 @@ class WebService(Component):
     def _log(self, *args, **kwargs):
         print('[' + time.strftime('%Y-%m-%d %H:%M:%S') + ']', *args, **kwargs)
 
-    def _start_zeroconf(self):
+    def _start_zeroconf(self, port):
         try:
-            zeroconf = Zeroconf(3000)
+            zeroconf = PybonjourService(port)
             register = zeroconf.start()
         except:
             self._log('zeroconf is not instaled')

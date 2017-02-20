@@ -5,7 +5,7 @@ import socket
 import pybonjour
 
 
-class Zeroconf(object):
+class PybonjourService(object):
     """
     sudo apt-get install libavahi-compat-libdnssd1
     pip install git+https://github.com/depl0y/pybonjour-python3
