@@ -31,7 +31,7 @@ class UpdatesObserverSocket(ApplicationObserver):
         pedalboard_index = kwargs['index']
 
         self.send({
-            'type': 'PATCH',
+            'type': 'PEDALBOARD',
             'updateType': update_type.name,
             'bank': bank.index,
             'pedalboard': pedalboard_index,
