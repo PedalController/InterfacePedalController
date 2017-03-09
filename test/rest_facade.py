@@ -58,8 +58,7 @@ class RestFacade(object):
     # **********************
     def get_pedalboard(self, pedalboard):
         bank_index = pedalboard.bank.index
-        pedalboard_index = pedalboard.bank.pedalboards.index(pedalboard)
-        return self.get('bank/{0}/pedalboard/{1}'.format(bank_index, pedalboard_index))
+        return self.get('bank/{0}/pedalboard/{1}'.format(bank_index, pedalboard.index))
 
     def create_pedalboard(self, pedalboard):
         bank_index = pedalboard.bank.index
@@ -67,24 +66,20 @@ class RestFacade(object):
 
     def update_pedalboard(self, pedalboard):
         bank_index = pedalboard.bank.index
-        pedalboard_index = pedalboard.bank.pedalboards.index(pedalboard)
-        return self.put('bank/{0}/pedalboard/{1}'.format(bank_index, pedalboard_index), pedalboard.json)
+        return self.put('bank/{0}/pedalboard/{1}'.format(bank_index, pedalboard.index), pedalboard.json)
 
     def delete_pedalboard(self, pedalboard):
         bank_index = pedalboard.bank.index
-        pedalboard_index = pedalboard.bank.pedalboards.index(pedalboard)
-        return self.delete('bank/{0}/pedalboard/{1}'.format(bank_index, pedalboard_index))
+        return self.delete('bank/{0}/pedalboard/{1}'.format(bank_index, pedalboard.index))
 
     def get_pedalboard_data(self, pedalboard, key):
         bank_index = pedalboard.bank.index
-        pedalboard_index = pedalboard.bank.pedalboards.index(pedalboard)
-        return self.get('bank/{0}/pedalboard/{1}/data/{2}'.format(bank_index, pedalboard_index, key))
+        return self.get('bank/{0}/pedalboard/{1}/data/{2}'.format(bank_index, pedalboard.index, key))
 
     def update_pedalboard_data(self, pedalboard, key):
         bank_index = pedalboard.bank.index
-        pedalboard_index = pedalboard.bank.pedalboards.index(pedalboard)
         content = pedalboard.data[key]
-        return self.put('bank/{0}/pedalboard/{1}/data/{2}'.format(bank_index, pedalboard_index, key), content)
+        return self.put('bank/{0}/pedalboard/{1}/data/{2}'.format(bank_index, pedalboard.index, key), content)
 
     # **********************
     # Effect
@@ -93,10 +88,9 @@ class RestFacade(object):
         return self.get(self._url_effect(effect))
 
     def post_effect(self, pedalboard, uri):
-        pedalboard_index = pedalboard.bank.pedalboards.index(pedalboard)
         bank_index = pedalboard.bank.index
 
-        url = 'bank/{0}/pedalboard/{1}/effect'.format(bank_index, pedalboard_index)
+        url = 'bank/{0}/pedalboard/{1}/effect'.format(bank_index, pedalboard.index)
         return self.post(url, uri)
 
     def delete_effect(self, effect):
@@ -105,14 +99,10 @@ class RestFacade(object):
     def _url_effect(self, effect):
         pedalboard = effect.pedalboard
 
-        bank_index = pedalboard.bank.index
-        pedalboard_index = pedalboard.bank.pedalboards.index(pedalboard)
-        effect_index = pedalboard.effects.index(effect)
-
         return 'bank/{0}/pedalboard/{1}/effect/{2}'.format(
-            bank_index,
-            pedalboard_index,
-            effect_index
+            pedalboard.bank.index,
+            pedalboard.index,
+            effect.index
         )
 
     # **********************
@@ -128,29 +118,22 @@ class RestFacade(object):
     def _url_param(self, param):
         effect = param.effect
         pedalboard = effect.pedalboard
-
-        bank_index = pedalboard.bank.index
-        pedalboard_index = pedalboard.bank.pedalboards.index(pedalboard)
-        effect_index = pedalboard.effects.index(effect)
-        param_index = effect.params.index(param)
+        bank = pedalboard.bank
 
         return 'bank/{0}/pedalboard/{1}/effect/{2}/param/{3}'.format(
-            bank_index,
-            pedalboard_index,
-            effect_index,
-            param_index
+            bank.index,
+            pedalboard.index,
+            effect.index,
+            param.index
         )
 
     # **********************
     # Swap
     # **********************
     def swap_banks(self, bank_a, bank_b):
-        bank_a_index = bank_a.index
-        bank_b_index = bank_b.index
-
         url = 'swap/bank-a/{0}/bank-b/{1}'.format(
-            bank_a_index,
-            bank_b_index
+            bank_a.index,
+            bank_b.index
         )
 
         return self.put(url)

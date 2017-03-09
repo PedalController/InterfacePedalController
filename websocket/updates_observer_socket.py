@@ -42,13 +42,12 @@ class UpdatesObserverSocket(ApplicationObserver):
         pedalboard = kwargs['origin']
         bank = pedalboard.bank
         effect_index = kwargs['index']
-        pedalboard_index = bank.pedalboards.index(pedalboard)
 
         self.send({
             'type': 'EFFECT',
             'updateType': update_type.name,
             'bank': bank.index,
-            'pedalboard': pedalboard_index,
+            'pedalboard': pedalboard.index,
             'effect': effect_index,
             'value': effect.json
         }, token)
@@ -57,14 +56,11 @@ class UpdatesObserverSocket(ApplicationObserver):
         pedalboard = effect.pedalboard
         bank = pedalboard.bank
 
-        effect_index = pedalboard.effects.index(effect)
-        pedalboard_index = bank.pedalboards.index(pedalboard)
-
         self.send({
             'type': 'EFFECT-TOGGLE',
             'bank': bank.index,
-            'pedalboard': pedalboard_index,
-            'effect': effect_index
+            'pedalboard': pedalboard.index,
+            'effect': effect.index
         }, token)
 
     def on_param_value_changed(self, param, token=None):
@@ -72,27 +68,22 @@ class UpdatesObserverSocket(ApplicationObserver):
         pedalboard = effect.pedalboard
         bank = pedalboard.bank
 
-        param_index = effect.params.index(param)
-        effect_index = pedalboard.effects.index(effect)
-        pedalboard_index = bank.pedalboards.index(pedalboard)
-
         self.send({
             'type': 'PARAM',
             'bank': bank.index,
-            'pedalboard': pedalboard_index,
-            'effect': effect_index,
-            'param': param_index,
+            'pedalboard': pedalboard.index,
+            'effect': effect.index,
+            'param': param.index,
             'value': param.value,
         }, token)
 
     def on_connection_updated(self, pedalboard, connection, update_type, token=None):
         bank = pedalboard.bank
-        pedalboard_index = bank.pedalboards.index(pedalboard)
 
         self.send({
             'type': 'CONNECTION',
             'updateType': update_type.name,
             'bank': bank.index,
-            'pedalboard': pedalboard_index,
+            'pedalboard': pedalboard.index,
             'value': connection.json,
         }, token)
