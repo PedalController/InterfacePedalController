@@ -18,7 +18,7 @@ class UpdatesObserverSocket(ApplicationObserver):
             'value': pedalboard.json
         }, token)
 
-    def on_bank_updated(self, bank, update_type, token=None, **kwargs):
+    def on_bank_updated(self, bank, update_type, index, origin, token=None, **kwargs):
         self.send({
             'type': 'BANK',
             'updateType': update_type.name,
@@ -26,9 +26,9 @@ class UpdatesObserverSocket(ApplicationObserver):
             'value': bank.json
         }, token)
 
-    def on_pedalboard_updated(self, pedalboard, update_type, token=None, **kwargs):
-        bank = kwargs['origin']
-        pedalboard_index = kwargs['index']
+    def on_pedalboard_updated(self, pedalboard, update_type, index, origin, token=None, **kwargs):
+        bank = origin
+        pedalboard_index = index
 
         self.send({
             'type': 'PEDALBOARD',
@@ -38,10 +38,10 @@ class UpdatesObserverSocket(ApplicationObserver):
             'value': pedalboard.json
         }, token)
 
-    def on_effect_updated(self, effect, update_type, token=None, **kwargs):
-        pedalboard = kwargs['origin']
+    def on_effect_updated(self, effect, update_type, index, origin, token=None, **kwargs):
+        pedalboard = origin
         bank = pedalboard.bank
-        effect_index = kwargs['index']
+        effect_index = index
 
         self.send({
             'type': 'EFFECT',
@@ -52,7 +52,7 @@ class UpdatesObserverSocket(ApplicationObserver):
             'value': effect.json
         }, token)
 
-    def on_effect_status_toggled(self, effect, token=None):
+    def on_effect_status_toggled(self, effect, token=None, **kwargs):
         pedalboard = effect.pedalboard
         bank = pedalboard.bank
 
@@ -63,7 +63,7 @@ class UpdatesObserverSocket(ApplicationObserver):
             'effect': effect.index
         }, token)
 
-    def on_param_value_changed(self, param, token=None):
+    def on_param_value_changed(self, param, token=None, **kwargs):
         effect = param.effect
         pedalboard = effect.pedalboard
         bank = pedalboard.bank
@@ -77,7 +77,7 @@ class UpdatesObserverSocket(ApplicationObserver):
             'value': param.value,
         }, token)
 
-    def on_connection_updated(self, pedalboard, connection, update_type, token=None):
+    def on_connection_updated(self, connection, update_type, pedalboard, token=None, **kwargs):
         bank = pedalboard.bank
 
         self.send({
