@@ -11,6 +11,7 @@ before_install:
   - git submodule update --init --recursive
 
 install:
+  - sudo apt-get install libavahi-compat-libdnssd1
   - pip3 install -r requirements.txt
 
 script:

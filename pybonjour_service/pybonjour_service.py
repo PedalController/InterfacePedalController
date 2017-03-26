@@ -2,7 +2,11 @@ import time
 
 import select
 import socket
-import pybonjour
+try:
+    import pybonjour
+except ImportError:
+    from unittest.mock import MagicMock
+    pybonjour = MagicMock()
 
 
 class PybonjourService(object):
