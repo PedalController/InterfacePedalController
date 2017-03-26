@@ -18,8 +18,8 @@ script:
   - cd ..
   - mv WebService webservice
   - mv webservice/test/config.py config.py
-  - git clone --recursive https://github.com/PedalPi/Application.git application --depth=1
-  - cd application
+  - git clone --recursive https://github.com/PedalPi/Application.git Application --depth=1
+  - cd Application
   - python setup.py develop
   - cd ..
   - python3 config.py &
