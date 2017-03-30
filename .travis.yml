@@ -3,28 +3,20 @@ language: python
 python:
   - "3.4"
   - "3.5"
+  - "3.6-dev"
   - "nightly"
 
 sudo: required
 
-before_install:
-  - git submodule update --init --recursive
-
 install:
   - sudo apt-get install libavahi-compat-libdnssd1
-  - pip3 install -r requirements.txt
+  - pip setup.py install
 
 script:
-  - cd ..
-  - mv WebService webservice
-  - mv webservice/test/config.py config.py
-  - git clone --recursive https://github.com/PedalPi/Application.git Application --depth=1
-  - cd Application
-  - python setup.py develop
-  - cd ..
-  - python3 config.py &
+  - cd test/
+  - python config.py &
   - sleep 5
-  - cd webservice
+  - cd ..
   - coverage3 run --source=handler setup.py test
 
 after_success:
