@@ -11,7 +11,17 @@ This project requires dependencies too, like `Tornado` and `Requests` (for tests
 
 For a `config.py` example, see [`test/config.py`](https://github.com/PedalPi/WebService/blob/master/test/config.py)
 
-## Rest
+For the bonjour support for auto discover this web-service, it's necessary install [pybonjour-python3](https://github.com/depl0y/pybonjour-python3) and your system lib dependencies.
+```
+sudo apt-get install libavahi-compat-libdnssd1
+git clone https://github.com/depl0y/pybonjour-python3
+cd pybonjour-python3
+pip setup.py install
+```
+
+## API
+
+### Rest
 
 [Access the documentation](http://pedalpi.github.io/WebService/)  for API details.
 
