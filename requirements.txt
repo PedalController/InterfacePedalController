@@ -2,3 +2,4 @@ coverage==4.2
 requests==2.11.1
 tornado==4.4.2
 tornado-cors==0.6.0
+https://github.com/depl0y/pybonjour-python3/tarball/master#egg=pybonjour-python3

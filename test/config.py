@@ -10,7 +10,7 @@ if __name__ == "__main__":
     address = 'localhost'
     port = 3000
 
-    application = Application(data_pedalboard="application/test/data/", address=address, test=True)
+    application = Application(data_pedalboard="Application/test/data/", address=address, test=True)
     application.register(WebService(application, port))
 
     application.start()

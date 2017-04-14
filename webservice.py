@@ -5,30 +5,32 @@ import tornado.web
 
 from application.component.component import Component
 
-from handler.banks_handler import BanksHandler
-from handler.bank_handler import BankHandler
-from handler.effect_handler import EffectHandler
-from handler.param_handler import ParamHandler
-from handler.pedalboard_handler import PedalboardHandler
-from handler.pedalboard_data_handler import PedalboardDataHandler
+from webservice.handler.banks_handler import BanksHandler
+from webservice.handler.bank_handler import BankHandler
+from webservice.handler.effect_handler import EffectHandler
+from webservice.handler.param_handler import ParamHandler
+from webservice.handler.pedalboard_handler import PedalboardHandler
+from webservice.handler.pedalboard_data_handler import PedalboardDataHandler
 
-from handler.plugins_handler import PluginsHandler
-from handler.plugin_handler import PluginHandler
+from webservice.handler.plugins_handler import PluginsHandler
+from webservice.handler.plugin_handler import PluginHandler
 
-from handler.connection_handler import ConnectionHandler
+from webservice.handler.connection_handler import ConnectionHandler
 
-from handler.current_handler import CurrentHandler
-from handler.current_data_handler import CurrentDataHandler
-from handler.current_effect_status_handler import CurrentEffectStatusHandler
-from handler.current_pedalboard_handler import CurrentPedalboardHandler
+from webservice.handler.current_handler import CurrentHandler
+from webservice.handler.current_data_handler import CurrentDataHandler
+from webservice.handler.current_effect_status_handler import CurrentEffectStatusHandler
+from webservice.handler.current_pedalboard_handler import CurrentPedalboardHandler
 
-from handler.swap_bank_handler import SwapBankHandler
-from handler.swap_pedalboard_handler import SwapPedalboardHandler
+from webservice.handler.swap_bank_handler import SwapBankHandler
+from webservice.handler.swap_pedalboard_handler import SwapPedalboardHandler
 
-from handler.component_data_handler import ComponentDataHandler
+from webservice.handler.component_data_handler import ComponentDataHandler
 
 from websocket.web_socket_connection_handler import WebSocketConnectionHandler
 from websocket.updates_observer_socket import UpdatesObserverSocket
+
+from pybonjour_service.pybonjour_service import PybonjourService
 
 
 class WebService(Component):
@@ -58,6 +60,8 @@ class WebService(Component):
 
         self._log("WebService - PedalPi API REST      localhost:" + str(self.port))
         self._log("WebService - PedalPi API WebSocket localhost:" + str(self.port) + "/ws")
+
+        self._start_zeroconf(self.port)
 
     def register_handlers(self):
         self.for_handler(PluginsHandler) \
@@ -137,6 +141,14 @@ class WebService(Component):
 
     def _log(self, *args, **kwargs):
         print('[' + time.strftime('%Y-%m-%d %H:%M:%S') + ']', *args, **kwargs)
+
+    def _start_zeroconf(self, port):
+        try:
+            zeroconf = PybonjourService(port)
+            register = zeroconf.start()
+        except:
+            self._log('zeroconf is not instaled')
+            pass
 
 
 class HandlerRegister(object):
