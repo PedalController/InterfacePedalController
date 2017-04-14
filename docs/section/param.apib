@@ -1,0 +1,42 @@
+Manages a param: update and retrive the value.
+
+## Manages a param by index position [/bank/{bank_index}/pedalboard/{pedalboard_index}/effect/{effect_index}/param/{param_index}]
+
+:::warning
+Params contains a `index` attribute, but the requests needs the **index position** in params list.
+:::
+
++ Parameters
+    + bank_index: `1` (number, required) - Bank index
+    + pedalboard_index: `3` (number, required) - Pedalboard position in bank pedalboards list
+    + effect_index: `2` (number, required) - Effect position in pedalboard effects list
+    + param_index: `0` (number, required) - Param position in effect params list
+
+
+### Get by index position [GET]
+
+Request a param data with the your position
+
++ Response 200 (application/json; charset=UTF-8)
+    + Body
+
+            {"maximum": 30.0, "minimum": 0.0, "value": 17, "symbol": "delay", "index": 2}
++ Response 400 (application/json; charset=UTF-8)
+    + Body
+
+            {"error": "Invalid index"}
+
+### Update by index position [PUT]
+
+Update a pedalboard
+
++ Request 200 (text/plain)
+    + Body
+
+            1.1901190476159431
+
++ Response 200
++ Response 400 (application/json; charset=UTF-8)
+    + Body
+
+            {"error": "Invalid index"}

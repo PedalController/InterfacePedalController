@@ -30,19 +30,17 @@ The effect does not have an identifier, the returned index is only for listing a
 
             {"index": 1}
 
-## Manages a effect by index [/bank/{bank_index}/pedalboard/{pedalboard_index}/effect/{effect_index}]
+## Manages a effect by index position [/bank/{bank_index}/pedalboard/{pedalboard_index}/effect/{effect_index}]
 
 + Parameters
     + bank_index: `1` (number, required) - Bank index
     + pedalboard_index: `3` (number, required) - Pedalboard position in bank pedalboards list
     + effect_index: `2` (number, required) - Effect position in pedalboard effects list
 
-### Get by index [GET]
+### Get by index position [GET]
 
 Request a effect data with the your index (effect position in pedalboard effects list).
 
-+ Parameters
-    + bank_index: `1` (number, required) - Bank index
 + Response 200 (application/json; charset=UTF-8)
     + Body
 
@@ -52,12 +50,10 @@ Request a effect data with the your index (effect position in pedalboard effects
 
             {"error": "Invalid index"}
 
-### Delete by index [DELETE]
+### Delete by index position [DELETE]
 
 Delete a effect
 
-+ Parameters
-    + bank_index: `1` (number, required) - Bank index
 + Response 200
 + Response 400 (application/json; charset=UTF-8)
     + Body

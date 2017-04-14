@@ -25,18 +25,16 @@ The pedalboard does not have an identifier, the returned index is only for listi
 
             {"index": 1}
 
-## Manages a pedalboard by index [/bank/{bank_index}/pedalboard/{pedalboard_index}]
+## Manages a pedalboard by index position [/bank/{bank_index}/pedalboard/{pedalboard_index}]
 
 + Parameters
     + bank_index: `1` (number, required) - Bank index
     + pedalboard_index: `3` (number, required) - Pedalboard position in bank pedalboards list
 
-### Get by index [GET]
+### Get by index position [GET]
 
 Request a pedalboard data with the your index (pedalboard position in bank pedalboards list).
 
-+ Parameters
-    + bank_index: `1` (number, required) - Bank index
 + Response 200 (application/json; charset=UTF-8)
     + Body
 
@@ -46,12 +44,10 @@ Request a pedalboard data with the your index (pedalboard position in bank pedal
 
             {"error": "Invalid index"}
 
-### Update by index [PUT]
+### Update by index position [PUT]
 
 Update a pedalboard
 
-+ Parameters
-    + bank_index: `1` (number, required) - Bank index
 + Request 200 (application/json; charset=UTF-8)
     + Body
 
@@ -63,12 +59,10 @@ Update a pedalboard
 
             {"error": "Invalid index"}
 
-### Delete by index [DELETE]
+### Delete by index position [DELETE]
 
 Delete a pedalboard
 
-+ Parameters
-    + bank_index: `1` (number, required) - Bank index
 + Response 200
 + Response 400 (application/json; charset=UTF-8)
     + Body
