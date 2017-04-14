@@ -48,14 +48,14 @@ After started the a `Application` with `WebService` component, excute:
 
 ```bash
 
+# Test by documentation
 npm install -g dredd
-dredd docs/documentation.apib http://localhost:3000
-dredd docs/plugins.apib http://localhost:3000
 dredd
 
-# Run server
-#coverage3 run --source=handler setup.py test
-#coverage3 report
-#coverage3 html
-#firefox htmlcov/index.html
+# Test by code implemented
+## (it necessary start a WebService server before)
+coverage3 run --source=handler setup.py test
+coverage3 report
+coverage3 html
+firefox htmlcov/index.html
 ```

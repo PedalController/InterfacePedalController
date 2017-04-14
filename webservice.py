@@ -120,7 +120,7 @@ class WebService(Component):
 
         # Peripheral
 
-        # ComponentDataHandler
+        # Component data
         self.for_handler(ComponentDataHandler) \
             .register(r"/v1/data/(?P<key>[a-zA-Z\-0-9:]+)") \
 
