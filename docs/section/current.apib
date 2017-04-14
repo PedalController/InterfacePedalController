@@ -1,0 +1,49 @@
+Provides easy access to current pedalboard settings
+
+## Retrieve current [/current]
+
+### Current index [GET]
+
+Returns the current pedalboard index and your bank index.
+
++ Response 200 (application/json; charset=UTF-8)
+    + Body
+
+            {"bank": 1, "pedalboard": 0}
+
+## Manages the current effect [/current/data]
+
+### Current data [GET]
+
+Returns the json data of the bank of the current pedalboard.
+
++ Response 200 (application/json; charset=UTF-8)
+    + Body
+
+            {"bank": {"index": 2, "name": "Rock 80's", "pedalboards": [{"name": "Go go punk", "connections": [], "data": {}, "effects": []}]}, "pedalboard": 0}
+
+## Manages the current pedalboard [/current/bank/{bank_index}/pedalboard/{pedalboard_index}]
+
++ Parameters
+    + bank_index: `1` (number, required) - Bank index
+    + pedalboard_index: `3` (number, required) - Pedalboard position in bank pedalboards list
+
+### Set current pedalboard [PUT]
+
+The the specified pedalboard for the current. The audio processing will be setted for the pedalboard configuration (adding effects and your relationships).
+
++ Response 200 (application/json; charset=UTF-8)
+
+## Menages effect status of the current pedalboard [/current/effect/{effect_index}]
+
++ Parameters
+    + effect_index: `2` (number, required) - Effect position in pedalboard effects list
+
+### Toggle effect status [PUT]
+
+Toggle the status of a effect of the current pedalboard.
+
+::: note
+**Toggle status effect:** Changes the status `active → bypass` or the reverse (`bypass → active`) for a effect loaded.
+:::
++ Response 200 (application/json; charset=UTF-8)
