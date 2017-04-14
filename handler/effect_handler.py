@@ -28,7 +28,7 @@ class EffectHandler(AbstractRequestHandler):
             return self.write(effect.json)
 
         except IndexError as error:
-            return self.error(str(error))
+            return self.error("Invalid index")
 
         except Exception:
             self.print_error()
@@ -48,7 +48,7 @@ class EffectHandler(AbstractRequestHandler):
             return self.created({"index": effect_index, "effect": effect.json})
 
         except IndexError as error:
-            return self.error(str(error))
+            return self.error("Invalid index")
 
         except Exception:
             self.print_error()
@@ -63,7 +63,7 @@ class EffectHandler(AbstractRequestHandler):
             return self.success()
 
         except IndexError as error:
-            return self.error(str(error))
+            return self.error("Invalid index")
 
         except Exception:
             self.print_error()

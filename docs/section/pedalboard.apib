@@ -1,6 +1,6 @@
-## Pedalboard [/bank/{bank_index}/pedalboard]
+Manages a pedalboard: creates a new, update, get the pedalboard data or removes it.
 
-Manages a bank: creates a new, update, get the bank data or removes it.
+## Pedalboard data [/bank/{bank_index}/pedalboard]
 
 + Parameters
     + bank_index: `1` (number, required) - Bank index
@@ -9,10 +9,10 @@ Manages a bank: creates a new, update, get the bank data or removes it.
 
 Save a new pedalboard.
 
-The pedalboard index is returned
+The pedalboard position in bank pedalboards list is returned
 
 ::: note
-The pedalboard does not have an identifier, the returned index is only for listing and sorting questions.
+The pedalboard does not have an identifier, the returned index is only for listing and sorting purpose.
 :::
 
 + Request 201 (application/json; charset=UTF-8)
@@ -29,11 +29,11 @@ The pedalboard does not have an identifier, the returned index is only for listi
 
 + Parameters
     + bank_index: `1` (number, required) - Bank index
-    + pedalboard_index: `3` (number, required) - Pedalboard index (position)
+    + pedalboard_index: `3` (number, required) - Pedalboard position in bank pedalboards list
 
 ### Get by index [GET]
 
-Request a bank data with the bank index.
+Request a pedalboard data with the your index (pedalboard position in bank pedalboards list).
 
 + Parameters
     + bank_index: `1` (number, required) - Bank index
