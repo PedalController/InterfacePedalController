@@ -19,10 +19,10 @@ Not implemented
 
 ### Plugins
 
-* ```/effects```: 
+* ```/effects```:
   * **GET** all plugins effects instaled
 * ```/effect/(?P<pluginUri>[^/]+)```:
-  * **GET** specific plugin data by 
+  * **GET** specific plugin data by
   * Params
     * **pluginUri**: URI of plugin required
 
@@ -112,7 +112,7 @@ Not implemented
 
 View ```websocker/UpdatesObserverSocket``` for details
 
-## Applications 
+## Applications
 
 This code disposes the Application features in a WebService. These projects uses it for control.
 
@@ -123,23 +123,30 @@ This code disposes the Application features in a WebService. These projects uses
 ### Documentation
 
 ```bash
-# For management
-npm install -g api-designer
-api-designer
+# Installing dependencies
+npm install -g aglio
 
-# For generate doc
-npm install -g raml2html
-raml2html api.raml > index.html
+# Generate doc
+aglio -i documentation.apib --theme-template triple -o index.html
+
+# View documentation
+firefox index.html
 ```
 
-## To test Rest
+## Testing Rest
 
-After started the a `Application` with `WebService` component, excute: 
+After started the a `Application` with `WebService` component, excute:
 
 ```bash
+
+npm install -g dredd
+dredd docs/documentation.apib http://localhost:3000
+dredd docs/plugins.apib http://localhost:3000
+dredd
+
 # Run server
-coverage3 run --source=handler setup.py test
-coverage3 report
-coverage3 html
-firefox htmlcov/index.html
+#coverage3 run --source=handler setup.py test
+#coverage3 report
+#coverage3 html
+#firefox htmlcov/index.html
 ```

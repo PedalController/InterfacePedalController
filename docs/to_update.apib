@@ -1,0 +1,204 @@
+
+## Banks [/banks]
+
+### Banks [GET]
+Get all banks
+
++ Response 200
+
+# Group bank
+
+## Bank Pedalboard Effect EffectIndex Param ParamIndex [/bank/{bankIndex}/pedalboard/{pedalboardIndex}/effect/{effectIndex}/param/{paramIndex}]
+
++ Parameters
+    + bankIndex (number, required)
+
+        Bank index{INT}
+
+    + pedalboardIndex (number, required)
+
+        Pedalboard index{INT}
+
+    + effectIndex (number, required)
+
+        Effect index{INT}
+
+    + paramIndex (number, required)
+
+        Param index{INT}
+
+
+### BankPedalboardEffectEffectIndexParamParamIndex [GET]
+Get a param
+
++ Response 200
+
+
+
+### BankPedalboardEffectEffectIndexParamParamIndex [PUT]
+Update the param value
+
++ Response 200
+
+
+
+
+## Bank Pedalboard Effect EffectIndex [/bank/{bankIndex}/pedalboard/{pedalboardIndex}/effect/{effectIndex}]
+
++ Parameters
+    + bankIndex (number, required)
+
+        Bank index{INT}
+
+    + pedalboardIndex (number, required)
+
+        Pedalboard index{INT}
+
+    + effectIndex (number, required)
+
+        Effect index{INT}
+
+
+### BankPedalboardEffectEffectIndex [GET]
+Get an effect
+
++ Response 200
+
+
+
+### BankPedalboardEffectEffectIndex [DELETE]
+Remove an effect
+
++ Response 200
+
+
+
+
+## Bank Pedalboard Effect By BankIndex [/bank/{bankIndex}/pedalboard/{pedalboardIndex}/effect]
+
++ Parameters
+    + bankIndex (number, required)
+
+        Bank index{INT}
+
+    + pedalboardIndex (number, required)
+
+        Pedalboard index{INT}
+
+
+### BankPedalboardEffectByBankIndex [POST]
+Post a new effect
+
++ Response 200
+
+# Group data
+
+## Data By Key [/data/{key}]
+
++ Parameters
+    + key (string, required)
+
+        Key idenfier. Util then more one application saves data in pedalboard
+
+
+### DataByKey [GET]
+Get the pedalboard data based in key sended
+
++ Response 200
+    + Attributes (string)
+
+
+### DataByKey [POST]
+Saves the pedalboard data. If exists a data in key defined, will be overrided
+
++ Request
+    + Attributes (string)
+
+
++ Response 200
+
+
+
+### DataByKey [DELETE]
+Removes the pedalboard data for the key defined
+
++ Response 200
+
+
+
+
+
+# Group current
+
+## Current Data [/current/data]
+
+### CurrentData [GET]
+Get the current bank data and the current pedalboard index
+
++ Response 200
+
+
+
+
+## Current Bank Pedalboard By BankIndex [/current/bank/{bankIndex}/pedalboard/{pedalboardIndex}]
+
++ Parameters
+    + bankIndex (number, required)
+
+        {INT}
+
+    + pedalboardIndex (number, required)
+
+        {INT}
+
+
+### CurrentBankPedalboardByBankIndex [PUT]
+Put the current bankIndex and the current pedalboardIndex
+
++ Response 200
+
+
+
+
+## Current Effect Param By EffectIndex [/current/effect/{effectIndex}/param/{paramIndex}]
+
++ Parameters
+    + effectIndex (number, required)
+
+        {INT}
+
+    + paramIndex (number, required)
+
+        {INT}
+
+
+### CurrentEffectParamByEffectIndex [PUT]
+Put for set a parameter value for a effect of the current pedalboard
+
++ Response 200
+
+
+
+
+## Current Effect By EffectIndex [/current/effect/{effectIndex}]
+
++ Parameters
+    + effectIndex (number, required)
+
+        {INT}
+
+
+### CurrentEffectByEffectIndex [PUT]
+Put for toggle effect status (active for bypassed or bypassed for active) of the current pedalboard
+
++ Response 200
+
+
+
+
+## Current [/current]
+
+### Current [GET]
+Get the current bank index and the current pedalboard index
+
++ Response 200

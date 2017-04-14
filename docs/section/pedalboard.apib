@@ -1,0 +1,76 @@
+## Pedalboard [/bank/{bank_index}/pedalboard]
+
+Manages a bank: creates a new, update, get the bank data or removes it.
+
++ Parameters
+    + bank_index: `1` (number, required) - Bank index
+
+### Save new pedalboard [POST]
+
+Save a new pedalboard.
+
+The pedalboard index is returned
+
+::: note
+The pedalboard does not have an identifier, the returned index is only for listing and sorting questions.
+:::
+
++ Request 201 (application/json; charset=UTF-8)
+    + Body
+
+            <!-- include(pedalboard_post.json) -->
+
++ Response 200 (application/json; charset=UTF-8)
+    + Body
+
+            {"index": 1}
+
+## Manages a pedalboard by index [/bank/{bank_index}/pedalboard/{pedalboard_index}]
+
++ Parameters
+    + bank_index: `1` (number, required) - Bank index
+    + pedalboard_index: `3` (number, required) - Pedalboard index (position)
+
+### Get by index [GET]
+
+Request a bank data with the bank index.
+
++ Parameters
+    + bank_index: `1` (number, required) - Bank index
++ Response 200 (application/json; charset=UTF-8)
+    + Body
+
+            <!-- include(pedalboard_post.json) -->
++ Response 400 (application/json; charset=UTF-8)
+    + Body
+
+            {"error": "Invalid index"}
+
+### Update by index [PUT]
+
+Update a pedalboard
+
++ Parameters
+    + bank_index: `1` (number, required) - Bank index
++ Request 200 (application/json; charset=UTF-8)
+    + Body
+
+            <!-- include(pedalboard_post.json) -->
+
++ Response 200
++ Response 400 (application/json; charset=UTF-8)
+    + Body
+
+            {"error": "Invalid index"}
+
+### Delete by index [DELETE]
+
+Delete a pedalboard
+
++ Parameters
+    + bank_index: `1` (number, required) - Bank index
++ Response 200
++ Response 400 (application/json; charset=UTF-8)
+    + Body
+
+            {"error": "Invalid index"}

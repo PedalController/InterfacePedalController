@@ -65,63 +65,64 @@ class WebService(Component):
 
     def register_handlers(self):
         self.for_handler(PluginsHandler) \
-            .register(r"/effects")
+            .register(r"/v1/plugins")
         self.for_handler(PluginHandler) \
-            .register(r"/effect/([^/]+)")
+            .register(r"/v1/plugin/(?P<uri>[^^]+)")
 
-        self.for_handler(BanksHandler).register(r"/banks")
+        self.for_handler(BanksHandler)\
+            .register(r"/v1/banks")
 
         # Bank
         self.for_handler(BankHandler) \
-            .register(r"/bank") \
-            .register(r"/bank/(?P<bank_index>[0-9]+)")
+            .register(r"/v1/bank") \
+            .register(r"/v1/bank/(?P<bank_index>[0-9]+)")
 
         # Pedalboard
         self.for_handler(PedalboardHandler) \
-            .register(r"/bank/(?P<bank_index>[0-9]+)/pedalboard") \
-            .register(r"/bank/(?P<bank_index>[0-9]+)/pedalboard/(?P<pedalboard_index>[0-9]+)")
+            .register(r"/v1/bank/(?P<bank_index>[0-9]+)/pedalboard") \
+            .register(r"/v1/bank/(?P<bank_index>[0-9]+)/pedalboard/(?P<pedalboard_index>[0-9]+)")
 
         # Pedalboard data
         self.for_handler(PedalboardDataHandler) \
-            .register(r"/bank/(?P<bank_index>[0-9]+)/pedalboard/(?P<pedalboard_index>[0-9]+)/data/(?P<key>[a-zA-Z_\-0-9]+)")
+            .register(r"/v1/bank/(?P<bank_index>[0-9]+)/pedalboard/(?P<pedalboard_index>[0-9]+)/data/(?P<key>[a-zA-Z_\-0-9]+)")
 
         # Effect
         self.for_handler(EffectHandler) \
-            .register(r"/bank/(?P<bank_index>[0-9]+)/pedalboard/(?P<pedalboard_index>[0-9]+)/effect") \
-            .register(r"/bank/(?P<bank_index>[0-9]+)/pedalboard/(?P<pedalboard_index>[0-9]+)/effect/(?P<effect_index>[0-9]+)")
+            .register(r"/v1/bank/(?P<bank_index>[0-9]+)/pedalboard/(?P<pedalboard_index>[0-9]+)/effect") \
+            .register(r"/v1/bank/(?P<bank_index>[0-9]+)/pedalboard/(?P<pedalboard_index>[0-9]+)/effect/(?P<effect_index>[0-9]+)")
 
         # Param
         self.for_handler(ParamHandler) \
-            .register(r"/bank/(?P<bank_index>[0-9]+)/pedalboard/(?P<pedalboard_index>[0-9]+)/effect/(?P<effect_index>[0-9]+)/param/(?P<param_index>[0-9]+)")
+            .register(r"/v1/bank/(?P<bank_index>[0-9]+)/pedalboard/(?P<pedalboard_index>[0-9]+)/effect/(?P<effect_index>[0-9]+)/param/(?P<param_index>[0-9]+)")
 
         # Get current
         self.for_handler(CurrentHandler) \
-            .register(r"/current")
+            .register(r"/v1/current")
         self.for_handler(CurrentDataHandler) \
-            .register(r"/current/data")
+            .register(r"/v1/current/data")
 
         # Set current
         self.for_handler(CurrentEffectStatusHandler) \
-            .register(r"/current/effect/(?P<effect_index>[0-9]+)")
+            .register(r"/v1/current/effect/(?P<effect_index>[0-9]+)")
         self.for_handler(CurrentPedalboardHandler) \
-            .register(r"/current/bank/(?P<bank_index>[0-9]+)/pedalboard/(?P<pedalboard_index>[0-9]+)")
+            .register(r"/v1/current/bank/(?P<bank_index>[0-9]+)/pedalboard/(?P<pedalboard_index>[0-9]+)")
 
         # Swap
         self.for_handler(SwapBankHandler) \
-            .register(r"/swap/bank-a/(?P<bank_a_index>[0-9]+)/bank-b/(?P<bank_b_index>[0-9]+)")
+            .register(r"/v1/swap/bank-a/(?P<bank_a_index>[0-9]+)/bank-b/(?P<bank_b_index>[0-9]+)")
         self.for_handler(SwapPedalboardHandler) \
-            .register(r"/swap/pedalboard/bank/(?P<bank_index>[0-9]+)/pedalboard-a/(?P<pedalboard_a_index>[0-9]+)/pedalboard-b/(?P<pedalboard_b_index>[0-9]+)")
+            .register(r"/v1/swap/pedalboard/bank/(?P<bank_index>[0-9]+)/pedalboard-a/(?P<pedalboard_a_index>[0-9]+)/pedalboard-b/(?P<pedalboard_b_index>[0-9]+)")
 
         # Connections
         self.for_handler(ConnectionHandler) \
-            .register(r"/bank/(?P<bank_index>[0-9]+)/pedalboard/(?P<pedalboard_index>[0-9]+)/connect") \
-            .register(r"/bank/(?P<bank_index>[0-9]+)/pedalboard/(?P<pedalboard_index>[0-9]+)/disconnect")
+            .register(r"/v1/bank/(?P<bank_index>[0-9]+)/pedalboard/(?P<pedalboard_index>[0-9]+)/connect") \
+            .register(r"/v1/bank/(?P<bank_index>[0-9]+)/pedalboard/(?P<pedalboard_index>[0-9]+)/disconnect")
 
         # Peripheral
 
         # ComponentDataHandler
         self.for_handler(ComponentDataHandler) \
-            .register(r"/data/(?P<key>[a-zA-Z\-0-9:]+)") \
+            .register(r"/v1/data/(?P<key>[a-zA-Z\-0-9:]+)") \
 
         # WebSocket
         self.for_handler(WebSocketConnectionHandler) \

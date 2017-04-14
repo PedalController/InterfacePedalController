@@ -1,4 +1,5 @@
 from handler.abstract_request_handler import AbstractRequestHandler
+from application.controller.plugins_controller import PluginsController, PluginTechnology
 
 
 class PluginHandler(AbstractRequestHandler):
@@ -8,7 +9,10 @@ class PluginHandler(AbstractRequestHandler):
         self.app = app
 
     def get(self, uri):
-        plugins = self.app.controllers["plugins"]
+        controller = self.app.controller(PluginsController)
+        plugins = controller.by(PluginTechnology.LV2)
 
-        data = plugins.all[uri] if uri in plugins.all else {}
-        self.write(data)
+        if uri in plugins:
+            self.write(plugins[uri].json)
+        else:
+            self.error('Plugin "{}" not installed'.format(uri))

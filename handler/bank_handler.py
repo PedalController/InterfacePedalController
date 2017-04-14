@@ -28,7 +28,7 @@ class BankHandler(AbstractRequestHandler):
             self.write(bank.json)
 
         except IndexError as error:
-            return self.error(str(error))
+            return self.error("Invalid index")
 
         except Exception:
             self.print_error()
@@ -44,7 +44,7 @@ class BankHandler(AbstractRequestHandler):
             self.created({"index": index})
 
         except IndexError as error:
-            return self.error(str(error))
+            return self.error("Invalid index")
 
         except Exception:
             self.print_error()
@@ -63,7 +63,7 @@ class BankHandler(AbstractRequestHandler):
             self.success()
 
         except IndexError as error:
-            return self.error(str(error))
+            return self.error("Invalid index")
 
         except Exception:
             self.print_error()
@@ -77,4 +77,4 @@ class BankHandler(AbstractRequestHandler):
             self.controller.delete(self.controller.banks[bank_index], self.token)
             self.success()
         except IndexError as error:
-            return self.error(str(error))
+            return self.error("Invalid index")
