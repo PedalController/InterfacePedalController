@@ -1,0 +1,69 @@
+## Bank [/bank]
+
+Manages a bank: creates a new, update, get the bank data or removes it.
+
+### Save new bank [POST]
+
+Save a new bank.
+
+Send the new bank with the `index: -1`. The response returns the bank index.
+
+::: note
+It's necessary updates the (client) bank data with the returned index.
+:::
+
++ Request  (application/json; charset=UTF-8)
+    + Body
+
+            <!-- include(bank_post.json) -->
+
++ Response 200 (application/json; charset=UTF-8)
+    + Body
+
+            {"index": 2}
+
+## Manages a bank by index [/bank/{bank_index}]
+
+### Get by index [GET]
+
+Request a bank data with the bank index.
+
++ Parameters
+    + bank_index: `1` (number, required) - Bank index
++ Response 200 (application/json; charset=UTF-8)
+    + Body
+
+            <!-- include(bank_get.json) -->
++ Response 400 (application/json; charset=UTF-8)
+    + Body
+
+            {"error": "Invalid index"}
+
+### Update by index [PUT]
+
+Update a bank
+
++ Parameters
+    + bank_index: `1` (number, required) - Bank index
++ Request  (application/json; charset=UTF-8)
+    + Body
+
+            <!-- include(bank_post.json) -->
+
++ Response 200 (application/json; charset=UTF-8)
++ Response 400 (application/json; charset=UTF-8)
+    + Body
+
+            {"error": "Invalid index"}
+
+### Delete by index [DELETE]
+
+Delete a bank
+
++ Parameters
+    + bank_index: `1` (number, required) - Bank index
++ Response 200
++ Response 400 (application/json; charset=UTF-8)
+    + Body
+
+            {"error": "Invalid index"}

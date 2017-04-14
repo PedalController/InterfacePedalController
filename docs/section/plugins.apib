@@ -1,0 +1,39 @@
+It's possible obtains the Lv2Plugins data in a json format. Pedal Pi uses [lilvlib](https://github.com/moddevices/lilvlib) for parse to json.
+
+## Plugins [/plugins]
+
+### Plugins list [GET]
+
+Get all audio plugins installed
+
++ Response 200 (application/json; charset=UTF-8)
+   + Body
+
+            {
+                "plugins": [
+                    /* Plugins list */
+                    {"presets": [], ...},
+                ]
+            }
+
+## Plugin [/plugin/{uri}]
+
+### Plugin data [GET]
+
+Get a specific audio plugin json by `uri` identifier.
+
++ Parameters
+    + uri: `http://calf.sourceforge.net/plugins/MonoInput` (required, string) - The plugin URI
++ Response 200 (application/json; charset=UTF-8)
+    + Body
+
+            <!-- include(plugin.json) -->
+
+    + Schema
+
+            Not defined
++ Response 400 (application/json; charset=UTF-8)
+
+    + Body
+
+            {"error": "Plugin \"https://github.com/ninodewit/SHIRO-Plugins/plugins/larynx\" not installed"}

@@ -26,7 +26,7 @@ class ParamHandler(AbstractRequestHandler):
             return self.write(param.json)
 
         except IndexError as error:
-            return self.error(str(error))
+            return self.error("Invalid index")
         except Exception:
             self.print_error()
             return self.send(500)
@@ -44,7 +44,7 @@ class ParamHandler(AbstractRequestHandler):
             return self.success()
 
         except IndexError as error:
-            return self.error(str(error))
+            return self.error("Invalid index")
         except Exception:
             self.print_error()
             return self.send(500)

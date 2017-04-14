@@ -13,131 +13,47 @@ For a `config.py` example, see [`test/config.py`](https://github.com/PedalPi/Web
 
 ## Rest
 
-### Auth
-
-Not implemented
-
-### Plugins
-
-* ```/effects```: 
-  * **GET** all plugins effects instaled
-* ```/effect/(?P<pluginUri>[^/]+)```:
-  * **GET** specific plugin data by 
-  * Params
-    * **pluginUri**: URI of plugin required
-
-### Banks
-
-* ```/banks```
-  *  **GET** all banks
-
-### Bank
-
-* ```/bank```
-  * **POST** a new bank.
-  * Returns the new bank index
-* ```/bank/(?P<bankIndex>[0-9]+)```
-  * **GET** a bank
-  * **PUT** for update a bank
-  * **DELETE** a bank
-  * Params
-    * **bankIndex**
-
-### Pedalboard
-
-* ```/bank/(?P<bankIndex>[0-9]+)/pedalboard```
-  * **POST** a new pedalboard.
-  * Returns the pedalboard index
-  * Params
-    * **bankIndex**
-* ```/bank/(?P<bankIndex>[0-9]+)/pedalboard/(?P<pedalboardIndex>[0-9]+)```
-  * **GET** a pedalboard
-  * **PUT** for update a pedalboard
-  * **DELETE** a pedalboard
-  * Params
-    * **bankIndex**
-    * **pedalboardIndex**
-
-### Effect
-
-* ```/bank/(?P<bankIndex>[0-9]+)/pedalboard/(?P<pedalboardIndex>[0-9]+)/effect```
-  * **POST** a new effect.
-  * Returns the effect index
-  * Params
-    * **bankIndex**
-    * **pedalboardIndex**
-* ```/bank/(?P<bankIndex>[0-9]+)/pedalboard/(?P<pedalboardIndex>[0-9]+)/effect/(?P<effectIndex>[0-9]+)```
-  * **GET** a effect
-  * **DELETE** for remove a effect
-  * Params
-    * **bankIndex**
-    * **pedalboardIndex**
-    * **effectIndex**
-
-### Param
-
-* ```/bank```
-  * **POST** a new bank.
-  * Returns the bank index
-* ```/bank/(?P<bankIndex>[0-9]+)/pedalboard/(?P<pedalboardIndex>[0-9]+)/effect/(?P<effectIndex>[0-9]+)/param/(?P<paramIndex>[0-9]+)```
-  * **GET** a parameter value
-  * **PUT** for update a parameter value
-  * Params
-    * **bankIndex**
-    * **pedalboardIndex**
-    * **effectIndex**
-    * **paramIndex**
-
-### Current
-
-* ```/current```
-  * **GET** the current _bank index_ and the current _pedalboard index_
-* ```/current/data```
-  * **GET** the current _bank data_ and the current _pedalboard index_
-* ```/current/bank/(?P<bankIndex>[0-9]+)/pedalboard/(?P<pedalboardIndex>[0-9]+)```
-  * **PUT** the current _bankIndex_ and the current _pedalboardIndex_
-* ```/current/effect/(?P<effect>[0-9]+)```
-  * **PUT** for toggle effect status (active for bypassed or bypassed for active) of the current pedalboard
-
-### Connections
-
-* ```/bank/(?P<bank_index>[0-9]+)/pedalboard/(?P<pedalboard_index>[0-9]+)/connect```
-  * **PUT** a new connection for the specified pedalboard
-    * Data - JSON connection information
-* ```/current/data```
-  * **POST** for disconnect the specified_pedalboard
-    * Data - JSON connection information
+[Access the documentation](http://pedalpi.github.io/WebService/)  for API details.
 
 ### WebSocket
 
 View ```websocker/UpdatesObserverSocket``` for details
 
-## Applications 
+## Using in your client
 
 This code disposes the Application features in a WebService. These projects uses it for control.
 
 * [Apk](https://github.com/PedalPi/Apk): App controller for smart devices and navigators.
+
+If you are using too, please, send a pull request for this project.
 
 ## Project configuration
 
 ### Documentation
 
 ```bash
-# For management
-npm install -g api-designer
-api-designer
+# Installing dependencies
+npm install -g aglio
 
-# For generate doc
-npm install -g raml2html
-raml2html api.raml > index.html
+# Generate doc
+aglio -i documentation.apib --theme-template triple -o index.html
+
+# View documentation
+firefox index.html
 ```
 
-## To test Rest
+## Testing Rest
 
-After started the a `Application` with `WebService` component, excute: 
+After started the a `Application` with `WebService` component, excute:
 
 ```bash
-# Run server
+
+# Test by documentation
+npm install -g dredd
+dredd
+
+# Test by code implemented
+## (it necessary start a WebService server before)
 coverage3 run --source=handler setup.py test
 coverage3 report
 coverage3 html

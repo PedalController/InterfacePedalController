@@ -32,7 +32,7 @@ class PedalboardHandler(AbstractRequestHandler):
             return self.write(pedalboard.json)
 
         except IndexError as error:
-            return self.error(str(error))
+            return self.error("Invalid index")
 
         except Exception:
             self.print_error()
@@ -50,7 +50,7 @@ class PedalboardHandler(AbstractRequestHandler):
             return self.created({"index": len(bank.pedalboards) - 1})
 
         except IndexError as error:
-            return self.error(str(error))
+            return self.error("Invalid index")
 
         except Exception:
             self.print_error()
@@ -67,7 +67,7 @@ class PedalboardHandler(AbstractRequestHandler):
             return self.success()
 
         except IndexError as error:
-            return self.error(str(error))
+            return self.error("Invalid index")
 
         except Exception:
             self.print_error()
@@ -82,7 +82,7 @@ class PedalboardHandler(AbstractRequestHandler):
             return self.success()
 
         except IndexError as error:
-            return self.error(str(error))
+            return self.error("Invalid index")
 
         except Exception:
             self.print_error()

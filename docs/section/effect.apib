@@ -1,0 +1,61 @@
+Manages a effect: creates a new, get the effect data or removes it.
+
+::: note
+For update effect data, view [current toggle status effect](#current-management-menages-effect-status-of-the-current-pedalboard-put) and [update param data](#param-management-manages-a-param-by-index-position-put).
+:::
+
+## Effect data [/bank/{bank_index}/pedalboard/{pedalboard_index}/effect]
+
++ Parameters
+    + bank_index: `1` (number, required) - Bank index
+    + pedalboard_index: `3` (number, required) - Pedalboard index (position)
+
+### Save new effect [POST]
+
+Save a new effect.
+
+The effect position in pedalboard effects list is returned.
+
+::: note
+The effect does not have an identifier, the returned index is only for listing and sorting purpose.
+:::
+
++ Request 201 (application/json; charset=UTF-8)
+    + Body
+
+            <!-- include(effect.json) -->
+
++ Response 200 (application/json; charset=UTF-8)
+    + Body
+
+            {"index": 1}
+
+## Manages a effect by index position [/bank/{bank_index}/pedalboard/{pedalboard_index}/effect/{effect_index}]
+
++ Parameters
+    + bank_index: `1` (number, required) - Bank index
+    + pedalboard_index: `3` (number, required) - Pedalboard position in bank pedalboards list
+    + effect_index: `2` (number, required) - Effect position in pedalboard effects list
+
+### Get by index position [GET]
+
+Request a effect data with the your index (effect position in pedalboard effects list).
+
++ Response 200 (application/json; charset=UTF-8)
+    + Body
+
+            <!-- include(effect.json) -->
++ Response 400 (application/json; charset=UTF-8)
+    + Body
+
+            {"error": "Invalid index"}
+
+### Delete by index position [DELETE]
+
+Delete a effect
+
++ Response 200
++ Response 400 (application/json; charset=UTF-8)
+    + Body
+
+            {"error": "Invalid index"}

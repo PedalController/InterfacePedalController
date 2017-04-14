@@ -1,0 +1,39 @@
+Authentication has two purposes: Control access and obtaining token request identifier
+
+## Control access [/?]
+
+Not implemented
+
+## Token identifier [/ws]
+
+With a token identifier, it is possible to send changes if they are identified, so that no notifications of their own changes to WebSocket occur.
+
+When a connection is established with `http://pedalpi.local/ws`, a `TOKEN message` (`"type": "TOKEN"`) returns a **uuid4** for the client.
+
+```json
+{
+  "value": "{token uuid4}",
+  "type": "TOKEN"
+}
+```
+
+It's necessary that all requests add the following header parameter.
+
+```http
+x-xsrf-token: {token uuid4}
+```
+
+### Example request [GET]
+
+It's a example request for a random address
+
++ Request 200 (application/json; charset=UTF-8)
+
+    + Headers
+
+            x-xsrf-token: {token uuid4}
+
++ Response 200 (application/json; charset=UTF-8)
+    + Body
+
+            anything
