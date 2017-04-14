@@ -1,0 +1,77 @@
+Manages a custom data for a specified pedalboard.
+
+This feature allows multiple clients to add their data to a pedalboard.
+
+For secure use, you must choose a **unique key identifier** for the customer so that other customers do not change the data.
+
+For example, [Pedal Pi - Apk](https://github.com/PedalPi/Apk) uses the `pedalpi-apk` key.
+
+The data persisted has been added in pedalboard:
+
+```json
+{
+  "name": "My pedalboard",
+  "connections": [],
+  "effects": [
+    {
+      "technology": "lv2",
+      "plugin": "http://drobilla.net/plugins/fomp/cs_chorus1",
+      "other informations": "yes",
+    }
+  ],
+  "data": {
+    "pedalpi-apk": {
+      "effectPositions": [
+        {
+          "x": 137.3348846435547,
+          "y": 88.69785690307617
+        }
+      ]
+    }
+  }
+}
+```
+
+## Manages by key [/bank/{bank_index}/pedalboard/{pedalboard_index}/data/{key}]
+
++ Parameters
+    + bank_index: `1` (number, required) - Bank index
+    + pedalboard_index: `3` (number, required) - Pedalboard position in bank pedalboards list
+    + key: `pedalpi-apk` (string, required) - Key identifier for data
+
+
+### Get by key [GET]
+
+Request a param data with the your position
+
+::: note
+If the request with a `key` that not data has been not persisted yet, the response returns a empty json object:
+```json
+{}
+```
+:::
+
++ Request 200 (application/json; charset=UTF-8)
++ Response 200 (application/json; charset=UTF-8)
+    + Body
+
+            {"effectPositions": [{"x": 159.74801635742188, "y": 91.4995002746582}]}
++ Request 200 (application/json; charset=UTF-8)
++ Response 200 (application/json; charset=UTF-8)
+    + Body
+
+            {}
+
+### Update by key [PUT]
+
+Update the data for a pedalboard
+
+::: note
+If any data has been not persisted yet, uses **PUT** too instread **POST** method (POST method has been not implemented)
+:::
+
++ Request 200 (application/json; charset=UTF-8)
+    + Body
+
+            {"effectPositions": [{"x": 159.74801635742188, "y": 91.4995002746582}]}
++ Response 200
