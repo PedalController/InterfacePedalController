@@ -28,7 +28,7 @@ class ConnectionHandler(AbstractRequestHandler):
 
         self.controller.connected(pedalboard, connection, token=self.token)
 
-        self.send(200, {})
+        self.send(200)
 
     @integer('bank_index', 'pedalboard_index')
     def post(self, bank_index, pedalboard_index):
@@ -40,4 +40,4 @@ class ConnectionHandler(AbstractRequestHandler):
 
         self.controller.disconnected(pedalboard, connection, token=self.token)
 
-        self.send(200, {})
+        self.send(200)

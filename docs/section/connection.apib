@@ -1,0 +1,43 @@
+Connect and disconnect effects.
+
+## Manages by key [/bank/{bank_index}/pedalboard/{pedalboard_index}/connect]
+
++ Parameters
+    + bank_index: `1` (number, required) - Bank index
+    + pedalboard_index: `3` (number, required) - Pedalboard position in bank pedalboards list
+
+### Add a new connection [POST]
+
+Add a new connection between pedalboards
+
++ Request  (application/json; charset=UTF-8)
+    + Body
+
+            {"output":{"effect":0,"symbol":"out","index":1},"input":{"symbol":"playback_2","index":1}}
++ Response 200
+
++ Request  (application/json; charset=UTF-8)
+    + Body
+
+            {"output":{"effect":0,"symbol":"out","index":1},"input":{"effect":1,"symbol":"in_l","index":0}}
++ Response 200
+
+### Disconnect effects [PUT]
+
+Disconnect the specified connection
+
+::: warning
+Is used **PUT** instread **DELETE** because DELETE don't accepts body data
+:::
+
++ Request  (application/json; charset=UTF-8)
+    + Body
+
+            {"output":{"effect":0,"symbol":"out","index":1},"input":{"symbol":"playback_2","index":1}}
+
++ Response 200
++ Request  (application/json; charset=UTF-8)
+    + Body
+
+            {"output":{"effect":0,"symbol":"out","index":1},"input":{"effect":1,"symbol":"in_l","index":0}}
++ Response 200
