@@ -13,6 +13,7 @@ from webservice.handler.pedalboard_handler import PedalboardHandler
 from webservice.handler.pedalboard_data_handler import PedalboardDataHandler
 
 from webservice.handler.plugins_handler import PluginsHandler
+from webservice.handler.plugins_reload_handler import PluginsReloadHandler
 from webservice.handler.plugin_handler import PluginHandler
 
 from webservice.handler.connection_handler import ConnectionHandler
@@ -66,6 +67,8 @@ class WebService(Component):
     def register_handlers(self):
         self.for_handler(PluginsHandler) \
             .register(r"/v1/plugins")
+        self.for_handler(PluginsReloadHandler) \
+            .register(r"/v1/plugins/reload")
         self.for_handler(PluginHandler) \
             .register(r"/v1/plugin/(?P<uri>[^^]+)")
 
