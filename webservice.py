@@ -23,7 +23,7 @@ from webservice.handler.current_effect_status_handler import CurrentEffectStatus
 from webservice.handler.current_pedalboard_handler import CurrentPedalboardHandler
 
 from webservice.handler.swap_bank_handler import SwapBankHandler
-from webservice.handler.swap_pedalboard_handler import SwapPedalboardHandler
+from webservice.handler.move_pedalboard_handler import MovePedalboardHandler
 
 from webservice.handler.component_data_handler import ComponentDataHandler
 
@@ -110,8 +110,8 @@ class WebService(Component):
         # Swap
         self.for_handler(SwapBankHandler) \
             .register(r"/v1/swap/bank-a/(?P<bank_a_index>[0-9]+)/bank-b/(?P<bank_b_index>[0-9]+)")
-        self.for_handler(SwapPedalboardHandler) \
-            .register(r"/v1/swap/pedalboard/bank/(?P<bank_index>[0-9]+)/pedalboard-a/(?P<pedalboard_a_index>[0-9]+)/pedalboard-b/(?P<pedalboard_b_index>[0-9]+)")
+        self.for_handler(MovePedalboardHandler) \
+            .register(r"/v1/move/bank/(?P<bank_index>[0-9]+)/pedalboard/(?P<from_index>[0-9]+)/to/(?P<to_index>[0-9]+)")
 
         # Connections
         self.for_handler(ConnectionHandler) \
