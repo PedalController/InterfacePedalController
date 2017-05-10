@@ -16,6 +16,29 @@ Get all audio plugins installed
                 ]
             }
 
+## Reload plugins [/plugins/reload]
+
+### Reload plugins [PUT]
+
+Reloads the lv2 plugins data.
+
+To get the audio plugin metadata, you need to install lilv. Check the [`Lv2EffectBuilder.lv2_plugins_data()` method documentation](http://pedalpi-pluginsmanager.readthedocs.io/model_lv2.html#pluginsmanager.model.lv2.lv2_effect_builder.Lv2EffectBuilder.lv2_plugins_data) for more details on how to install.
+
+If `lilv` is not installed, an error (400) is returned.
+
++ Response 200 (application/json; charset=UTF-8)
+   + Body
+
+            {
+              "status": "ok"
+            }
++ Response 400 (application/json; charset=UTF-8)
+   + Body
+
+            {
+              "error": "lilv not configured"
+            }
+
 ## Plugin [/plugin/{uri}]
 
 ### Plugin data [GET]
