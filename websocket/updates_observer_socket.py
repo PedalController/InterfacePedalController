@@ -5,6 +5,10 @@ from websocket.web_socket_connections import WebSocketConnections
 
 class UpdatesObserverSocket(ApplicationObserver):
 
+    @property
+    def token(self):
+        return None
+
     def send(self, json_data, token=None):
         WebSocketConnections.send_broadcast(json_data, token)
 
