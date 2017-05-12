@@ -39,8 +39,11 @@ setup(
     license="Apache Software License v2",
 
     packages=[
-        'handler',
-        'test'
+        'webservice',
+        'webservice/handler',
+        'webservice/pybonjour_service',
+        'webservice/util',
+        'webservice/websocket',
     ],
 
     package_data={},

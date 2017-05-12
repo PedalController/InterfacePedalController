@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from handler.abstract_request_handler import AbstractRequestHandler
+from webservice.handler.abstract_request_handler import AbstractRequestHandler
+from webservice.util.handler_utils import integer
 
 from application.controller.banks_controller import BanksController
 from application.controller.device_controller import DeviceController
 
 from pluginsmanager.util.persistence_decoder import PersistenceDecoder
-
-from util.handler_utils import integer
 
 
 class BankHandler(AbstractRequestHandler):

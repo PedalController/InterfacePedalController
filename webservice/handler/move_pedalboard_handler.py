@@ -12,34 +12,33 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from handler.abstract_request_handler import AbstractRequestHandler
+from webservice.handler.abstract_request_handler import AbstractRequestHandler
+from webservice.util.handler_utils import integer
 
-from application.controller.banks_controller import BanksController, BankError
+from application.controller.pedalboard_controller import PedalboardController
+from application.controller.banks_controller import BanksController
 
-from util.handler_utils import integer
 
-
-class SwapBankHandler(AbstractRequestHandler):
+class MovePedalboardHandler(AbstractRequestHandler):
     app = None
     controller = None
+    banks = None
 
     def initialize(self, app):
         self.app = app
-        self.controller = self.app.controller(BanksController)
 
-    @integer('bank_a_index', 'bank_b_index')
-    def put(self, bank_a_index, bank_b_index):
+        self.banks = self.app.controller(BanksController)
+        self.controller = self.app.controller(PedalboardController)
+
+    @integer('bank_index', 'from_index', 'to_index')
+    def put(self, bank_index, from_index, to_index):
         try:
-            banks = self.controller.banks
-            bank_a = banks[bank_a_index]
-            bank_b = banks[bank_b_index]
+            pedalboards = self.banks.banks[bank_index].pedalboards
+            pedalboard = pedalboards[from_index]
 
-            self.controller.swap(bank_a, bank_b, self.token)
+            self.controller.move(pedalboard, to_index, self.token)
 
             return self.success()
-
-        except BankError as error:
-            return self.error(str(error))
 
         except Exception:
             self.print_error()

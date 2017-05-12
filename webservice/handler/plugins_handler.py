@@ -12,22 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from handler.abstract_request_handler import AbstractRequestHandler
+from webservice.handler.abstract_request_handler import AbstractRequestHandler
 
 from application.controller.plugins_controller import PluginsController, PluginTechnology
 
 
-class PluginsReloadHandler(AbstractRequestHandler):
+class PluginsHandler(AbstractRequestHandler):
     app = None
 
     def initialize(self, app):
         self.app = app
 
-    def put(self):
+    def get(self):
         controller = self.app.controller(PluginsController)
 
-        try:
-            controller.reload_lv2_plugins_data()
-            self.write({'status': 'ok'})
-        except ImportError:
-            self.error('"lilv" not configured')
+        plugins = []
+        for plugin in controller.by(PluginTechnology.LV2).values():
+            plugins.append(plugin.json)
+
+        self.write({'plugins': plugins})

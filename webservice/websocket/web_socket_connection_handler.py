@@ -12,10 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from websocket.web_socket_connections import WebSocketConnections
-from tornado import websocket
 import json
 import uuid
+
+from webservice.websocket.web_socket_connections import WebSocketConnections
+
+from tornado import websocket
 
 
 class WebSocketConnectionHandler(websocket.WebSocketHandler):

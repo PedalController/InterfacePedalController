@@ -14,7 +14,7 @@
 
 from application.component.application_observer import ApplicationObserver
 
-from websocket.web_socket_connections import WebSocketConnections
+from webservice.websocket.web_socket_connections import WebSocketConnections
 
 
 class UpdatesObserverSocket(ApplicationObserver):

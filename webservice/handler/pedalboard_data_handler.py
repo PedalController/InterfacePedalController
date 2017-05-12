@@ -12,53 +12,55 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from handler.abstract_request_handler import AbstractRequestHandler
+from webservice.handler.abstract_request_handler import AbstractRequestHandler
+from webservice.util.handler_utils import integer
 
 from application.controller.banks_controller import BanksController
-from application.controller.param_controller import ParamController
-
-from util.handler_utils import integer
+from application.controller.pedalboard_controller import PedalboardController
 
 
-class ParamHandler(AbstractRequestHandler):
+class PedalboardDataHandler(AbstractRequestHandler):
     app = None
     controller = None
-    banks = None
 
     def initialize(self, app):
         self.app = app
 
-        self.controller = self.app.controller(ParamController)
+        self.controller = self.app.controller(PedalboardController)
         self.banks = self.app.controller(BanksController)
 
-    @integer('bank_index', 'pedalboard_index', 'effect_index', 'param_index')
-    def get(self, bank_index, pedalboard_index, effect_index, param_index):
+    @integer('bank_index', 'pedalboard_index')
+    def get(self, bank_index, pedalboard_index, key):
         try:
             bank = self.banks.banks[bank_index]
+            pedalboard = bank.pedalboards[pedalboard_index]
 
-            param = bank.pedalboards[pedalboard_index].effects[effect_index].params[param_index]
-            return self.write(param.json)
+            if key not in pedalboard.data:
+                return self.write({})
+
+            return self.write(pedalboard.data[key])
 
         except IndexError as error:
-            return self.error("Invalid index")
+            return self.error(str(error))
+
         except Exception:
             self.print_error()
             return self.send(500)
 
-    @integer('bank_index', 'pedalboard_index', 'effect_index', 'param_index')
-    def put(self, bank_index, pedalboard_index, effect_index, param_index):
+    @integer('bank_index', 'pedalboard_index')
+    def put(self, bank_index, pedalboard_index, key):
         try:
             bank = self.banks.banks[bank_index]
-            param = bank.pedalboards[pedalboard_index].effects[effect_index].params[param_index]
-            value = self.request_data
+            pedalboard = bank.pedalboards[pedalboard_index]
+            pedalboard.data[key] = self.request_data
 
-            param.value = value
-            self.controller.updated(param, self.token)
+            self.controller.update(pedalboard, self.token, reload=False)
 
             return self.success()
 
         except IndexError as error:
-            return self.error("Invalid index")
+            return self.error(str(error))
+
         except Exception:
             self.print_error()
             return self.send(500)

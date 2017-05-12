@@ -12,22 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from handler.abstract_request_handler import AbstractRequestHandler
+from webservice.handler.abstract_request_handler import AbstractRequestHandler
+from webservice.util.handler_utils import integer
 
+from application.controller.effect_controller import EffectController
 from application.controller.current_controller import CurrentController
 
 
-class CurrentHandler(AbstractRequestHandler):
+class CurrentEffectStatusHandler(AbstractRequestHandler):
     app = None
+    current = None
     controller = None
 
     def initialize(self, app):
-        self.controller = app.controller(CurrentController)
+        self.app = app
+        self.controller = app.controller(EffectController)
+        self.current = app.controller(CurrentController)
 
-    def get(self):
-        json = {
-            'bank': self.controller.bank_number,
-            'pedalboard': self.controller.pedalboard_number
-        }
-
-        self.send(200, json)
+    @integer('effect_index')
+    def put(self, effect_index):
+        effect = self.current.current_pedalboard.effects[effect_index]
+        self.controller.toggle_status(effect, token=self.token)

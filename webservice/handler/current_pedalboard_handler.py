@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from handler.abstract_request_handler import AbstractRequestHandler
+from webservice.handler.abstract_request_handler import AbstractRequestHandler
+from webservice.util.handler_utils import integer
 
 from application.controller.current_controller import CurrentController
 from application.controller.banks_controller import BanksController
-
-from util.handler_utils import integer
 
 
 class CurrentPedalboardHandler(AbstractRequestHandler):

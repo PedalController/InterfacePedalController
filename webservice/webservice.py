@@ -42,10 +42,10 @@ from webservice.handler.move_pedalboard_handler import MovePedalboardHandler
 
 from webservice.handler.component_data_handler import ComponentDataHandler
 
-from websocket.web_socket_connection_handler import WebSocketConnectionHandler
-from websocket.updates_observer_socket import UpdatesObserverSocket
+from webservice.websocket.web_socket_connection_handler import WebSocketConnectionHandler
+from webservice.websocket.updates_observer_socket import UpdatesObserverSocket
 
-from pybonjour_service.pybonjour_service import PybonjourService
+from webservice.pybonjour_service.pybonjour_service import PybonjourService
 
 
 class WebService(Component):
