@@ -16,7 +16,7 @@ import uuid
 import unittest
 import requests
 
-from test.rest_facade import RestFacade
+from wstest.rest_facade import RestFacade
 
 from pluginsmanager.model.bank import Bank
 from pluginsmanager.model.pedalboard import Pedalboard
@@ -25,7 +25,7 @@ from pluginsmanager.model.lv2.lv2_effect_builder import Lv2EffectBuilder
 
 
 class Test(unittest.TestCase):
-    address = 'http://localhost:3000/'
+    address = 'http://localhost:3000/v1/'
 
     SUCCESS = 200
     CREATED = 201

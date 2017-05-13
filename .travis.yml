@@ -9,22 +9,20 @@ python:
 
 sudo: required
 
-before_install:
-  - npm install -g dredd@3.4.1
-
-before_script:
-  - dredd
-
 install:
-  - sudo apt-get install libavahi-compat-libdnssd1
-  - python setup.py install
+  - sudo apt-get update
+  - sudo apt-get install -y lilv-utils calf-plugins guitarix --no-install-recommends
+  - sudo apt-get install -y libavahi-compat-libdnssd1 --no-install-recommends
+  - pip3 install coveralls
+  - python3 setup.py develop
+  - git clone https://github.com/depl0y/pybonjour-python3
+  - cd pybonjour-python3
+  - pip3 install .
+  - cd ..
 
 script:
-  - cd test/
-  - python config.py &
-  - sleep 5
-  - cd ..
-  - coverage3 run --source=webservice setup.py test
+  - lv2ls
+  - coverage3 run --source=webservice wstest/config.py test
 
 after_success:
   - 'bash <(curl -s https://codecov.io/bash)'

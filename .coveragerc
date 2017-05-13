@@ -1,0 +1,6 @@
+[report]
+exclude_lines =
+    if __name__ == .__main__.:
+    def __repr__
+    pass
+    def __str__

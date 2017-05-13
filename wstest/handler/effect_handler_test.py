@@ -34,7 +34,7 @@ class EffectHandlerTest(Test):
 
         bank.index = self.rest.create_bank(bank).json()['index']
 
-        uri = 'http://guitarix.sourceforge.net/plugins/gxtubedelay#tubedelay'
+        uri = 'http://calf.sourceforge.net/plugins/Filter'
         effect = self.plugins_builder.build(uri)
 
         response = self.rest.post_effect(pedalboard, uri)
@@ -53,7 +53,7 @@ class EffectHandlerTest(Test):
 
         bank.index = self.rest.create_bank(bank).json()['index']
 
-        uri = 'http://guitarix.sourceforge.net/plugins/gxtubedelay#tubedelay'
+        uri = 'http://calf.sourceforge.net/plugins/Filter'
         effect = self.plugins_builder.build(uri)
 
         self.rest.post_effect(pedalboard, uri)

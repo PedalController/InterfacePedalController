@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .handler_test import Test
+from wstest.handler.handler_test import Test
 
 
 class BankHandlerTest(Test):

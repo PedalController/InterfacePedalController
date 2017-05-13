@@ -54,7 +54,7 @@ setup(
         'tornado-cors==0.6.0'
     ],
 
-    test_suite='test',
+    test_suite='wstest',
     tests_requires=[
         'PedalPi-Application',
         'requests==2.11.1'

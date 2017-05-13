@@ -113,7 +113,7 @@ After started the a `Application` with `WebService` component, excute:
 
     # Test by code implemented
     # (it necessary start a WebService server before)
-    coverage3 run --source=handler setup.py test
+    coverage3 run --source=webservice setup.py test
     coverage3 report
     coverage3 html
     firefox htmlcov/index.html

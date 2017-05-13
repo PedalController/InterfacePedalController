@@ -17,7 +17,7 @@ import json
 
 
 class RestFacade(object):
-    address = 'http://localhost:3000/'
+    address = 'http://localhost:3000/v1/'
     
     # **********************
     # CRUD
