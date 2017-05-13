@@ -15,6 +15,7 @@ install:
   - sudo apt-get install -y libavahi-compat-libdnssd1 --no-install-recommends
   - pip3 install coveralls
   - pip3 install git+https://github.com/depl0y/pybonjour-python3
+  - pip3 install zeroconf
   - python3 setup.py develop
 
 script:
