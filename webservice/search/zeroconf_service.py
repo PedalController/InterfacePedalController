@@ -13,8 +13,6 @@
 # limitations under the License.
 
 import time
-
-import select
 import socket
 
 from webservice.search.abstract_zeroconf_service import AbstractZeroconfService

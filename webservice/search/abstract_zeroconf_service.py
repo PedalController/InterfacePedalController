@@ -35,7 +35,7 @@ class AbstractZeroconfService(object, metaclass=ABCMeta):
     def ips(self):
         output = check_output(['hostname', '--all-ip-addresses']).decode("utf-8")
         output_no_linebreak = output[0:-2]
-        return output_no_linebreak.split(' ')[0]
+        return output_no_linebreak.split(' ')
 
     @classmethod
     @abstractmethod

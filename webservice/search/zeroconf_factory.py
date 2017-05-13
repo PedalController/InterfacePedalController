@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from unittest.mock import MagicMock
+
 from webservice.search.pybonjour_service import PybonjourService
 from webservice.search.zeroconf_service import ZeroconfService
 
@@ -22,5 +24,7 @@ class ZeroconfFactory(object):
     def generate(port):
         if PybonjourService.has_support():
             return PybonjourService(port)
-        else:
+        elif ZeroconfService.has_support():
             return ZeroconfService(port)
+        else:
+            return MagicMock()
