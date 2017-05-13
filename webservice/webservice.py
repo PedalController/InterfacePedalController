@@ -164,8 +164,8 @@ class WebService(Component):
 
     def _start_zeroconf(self, port):
         try:
-            zeroconf = ZeroconfService(port)
-            #zeroconf = PybonjourService(port)
+            #zeroconf = ZeroconfService(port)
+            zeroconf = PybonjourService(port)
             zeroconf.start()
 
             def close_zeroconf():

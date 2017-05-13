@@ -51,14 +51,14 @@ setup(
     install_requires=[
         'PedalPi-Application',
         'tornado>=4.4.2',
-        'tornado-cors==0.6.0'
+        'tornado-cors==0.6.0',
+        'zeroconf'
     ],
 
     test_suite='wstest',
     tests_requires=[
         'PedalPi-Application',
-        'requests==2.11.1',
-        'zeroconf'
+        'requests==2.11.1'
     ],
 
     classifiers=[

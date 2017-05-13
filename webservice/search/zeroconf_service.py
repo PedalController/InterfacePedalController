@@ -44,7 +44,7 @@ class ZeroconfService(AbstractZeroconfService):
     def __init__(self, port):
         super(ZeroconfService, self).__init__(port)
         self._zeroconf = None
-        self._info = None
+        self._infos = []
 
     @classmethod
     def has_support(cls):
@@ -52,21 +52,27 @@ class ZeroconfService(AbstractZeroconfService):
 
     def start(self):
         self._zeroconf = Zeroconf()
-        self._info = ServiceInfo(
+        for ip in self.ips:
+            info = self._gerenate_service_info(ip)
+            self._infos.append(info)
+
+            self._zeroconf.register_service(info)
+            self._log('Zeroconf', self.__class__.__name__, '- Registered service:', 'name=' + self.name, 'regtype=' + self.type, 'domain=local.')
+
+    def _gerenate_service_info(self, ip):
+        return ServiceInfo(
             self.type + '.local.',
             self.name + '.' + self.type + '.local.',
-            socket.inet_aton(self.ip),
+            socket.inet_aton(ip),
             self.port,
             0,
             0,
             {}
         )
 
-        self._zeroconf.register_service(self._info)
-        self._log('Zeroconf', self.__class__.__name__, '- Registered service:', 'name=' + self.name, 'regtype=' + self.type, 'domain=local.')
-
     def close(self):
-        self._zeroconf.unregister_service(self._info)
+        for info in self._infos:
+            self._zeroconf.unregister_service(info)
 
     def _log(self, *args, **kwargs):
         print('[' + time.strftime('%Y-%m-%d %H:%M:%S') + ']', *args, **kwargs)

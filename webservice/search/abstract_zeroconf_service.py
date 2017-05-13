@@ -32,9 +32,9 @@ class AbstractZeroconfService(object, metaclass=ABCMeta):
         return '_pedalpi._tcp'
 
     @property
-    def ip(self):
+    def ips(self):
         output = check_output(['hostname', '--all-ip-addresses']).decode("utf-8")
-        return output.split(' ')[0]
+        return output.split(' ')
 
     @classmethod
     @abstractmethod
