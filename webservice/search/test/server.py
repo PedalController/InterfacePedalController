@@ -11,14 +11,14 @@ description = {
 }
 
 info = ServiceInfo(
-    type_="_http._tcp.local.",
-    name="_pedalpi._http._tcp.local.",
+    type_="_tcp.local.",
+    name="_pedalpi2._tcp.local.",
     address=socket.inet_aton("127.0.0.1"),
     port=80,
     weight=0,
     priority=0,
     properties=description,
-    server="_pedalpi.local."
+    server="local."
 )
 
 info2 = ServiceInfo("_http._tcp.local.",

@@ -45,8 +45,10 @@ from webservice.handler.component_data_handler import ComponentDataHandler
 from webservice.websocket.web_socket_connection_handler import WebSocketConnectionHandler
 from webservice.websocket.updates_observer_socket import UpdatesObserverSocket
 
-from webservice.pybonjour_service.pybonjour_service import PybonjourService
+from webservice.search.pybonjour_service import PybonjourService
+from webservice.search.zeroconf_service import ZeroconfService
 
+import atexit
 
 class WebService(Component):
     """
@@ -162,11 +164,18 @@ class WebService(Component):
 
     def _start_zeroconf(self, port):
         try:
-            zeroconf = PybonjourService(port)
-            register = zeroconf.start()
-        except:
+            zeroconf = ZeroconfService(port)
+            #zeroconf = PybonjourService(port)
+            zeroconf.start()
+
+            def close_zeroconf():
+                zeroconf.close()
+                self._log('Stop zeroconf')
+
+            atexit.register(close_zeroconf)
+        except Exception as e:
+            self._log('Error', e)
             self._log('zeroconf is not instaled')
-            pass
 
 
 class HandlerRegister(object):

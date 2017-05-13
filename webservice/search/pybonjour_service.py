@@ -15,31 +15,39 @@
 import time
 
 import select
-import socket
+
+from webservice.search.abstract_zeroconf_service import AbstractZeroconfService
+
 try:
     import pybonjour
+    support = True
 except ImportError:
     from unittest.mock import MagicMock
     pybonjour = MagicMock()
+    support = False
 
 
-class PybonjourService(object):
+class PybonjourService(AbstractZeroconfService):
     """
-    sudo apt-get install libavahi-compat-libdnssd1
-    pip install git+https://github.com/depl0y/pybonjour-python3
+    :class:`PybonjourService` uses pybonjour-python for python 3
 
-    Examples:
-    https://gist.github.com/nickcoutsos/7714711
+    Install::
+
+    .. code-block:: bash
+
+        sudo apt-get install libavahi-compat-libdnssd1
+        pip install git+https://github.com/depl0y/pybonjour-python3
     """
 
     def __init__(self, port):
-        hostname = socket.gethostname().split('.')[0]
-
-        self.name = hostname
-        self.type = '_pedalpi._tcp'
-        self.port = port
+        super(PybonjourService, self).__init__(port)
 
         self.registered = False
+        self.register = None
+
+    @classmethod
+    def has_support(cls):
+        return support
 
     def _log(self, *args, **kwargs):
         print('[' + time.strftime('%Y-%m-%d %H:%M:%S') + ']', *args, **kwargs)
@@ -47,7 +55,7 @@ class PybonjourService(object):
     def register_callback(self, sdRef, flags, error_code, name, regtype, domain):
         if error_code == pybonjour.kDNSServiceErr_NoError:
             self.registered = True
-            self._log('Zeroconf - Registered service:', 'name='+name, 'regtype='+regtype, 'domain='+domain)
+            self._log('Zeroconf', self.__class__.__name__, '- Registered service:', 'name='+name, 'regtype='+regtype, 'domain='+domain)
         else:
             self._log('zeroconf is not workings')
 
@@ -64,18 +72,18 @@ class PybonjourService(object):
             if register in readable:
                 pybonjour.DNSServiceProcessResult(register)
 
-        return register
+        self.register = register
 
-    def close(self, register):
-        register.close()
+    def close(self):
+        self.register.close()
 
 
 if __name__ == '__main__':
     from signal import pause
 
-    zeroconf = Zeroconf(3000)
-    register = zeroconf.start()
-    print('I am wating')
+    service = PybonjourService(3000)
+    service.start()
+    print('I am waiting')
 
     try:
         pause()
@@ -83,4 +91,4 @@ if __name__ == '__main__':
         pass
     finally:
         print('closing')
-        zeroconf.close(register)
+        service.close()

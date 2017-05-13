@@ -41,7 +41,7 @@ setup(
     packages=[
         'webservice',
         'webservice/handler',
-        'webservice/pybonjour_service',
+        'webservice/search',
         'webservice/util',
         'webservice/websocket',
     ],
@@ -57,7 +57,8 @@ setup(
     test_suite='wstest',
     tests_requires=[
         'PedalPi-Application',
-        'requests==2.11.1'
+        'requests==2.11.1',
+        'zeroconf'
     ],
 
     classifiers=[
