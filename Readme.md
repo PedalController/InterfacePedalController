@@ -46,7 +46,8 @@ If you are using too, please, send a pull request for this project.
 npm install -g aglio
 
 # Generate doc
-aglio -i documentation.apib --theme-template triple -o index.html
+cd docs/
+aglio -i documentation.apib --theme-variables streak --theme-template triple -o index.html
 
 # View documentation
 firefox index.html

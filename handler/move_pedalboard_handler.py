@@ -6,7 +6,7 @@ from application.controller.banks_controller import BanksController
 from util.handler_utils import integer
 
 
-class SwapPedalboardHandler(AbstractRequestHandler):
+class MovePedalboardHandler(AbstractRequestHandler):
     app = None
     controller = None
     banks = None
@@ -17,14 +17,13 @@ class SwapPedalboardHandler(AbstractRequestHandler):
         self.banks = self.app.controller(BanksController)
         self.controller = self.app.controller(PedalboardController)
 
-    @integer('bank_index', 'pedalboard_a_index', 'pedalboard_b_index')
-    def put(self, bank_index, pedalboard_a_index, pedalboard_b_index):
+    @integer('bank_index', 'from_index', 'to_index')
+    def put(self, bank_index, from_index, to_index):
         try:
             pedalboards = self.banks.banks[bank_index].pedalboards
-            pedalboard_a = pedalboards[pedalboard_a_index]
-            pedalboard_b = pedalboards[pedalboard_b_index]
+            pedalboard = pedalboards[from_index]
 
-            self.controller.swap(pedalboard_a, pedalboard_b, self.token)
+            self.controller.move(pedalboard, to_index, self.token)
 
             return self.success()
 
