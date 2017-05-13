@@ -45,8 +45,7 @@ from webservice.handler.component_data_handler import ComponentDataHandler
 from webservice.websocket.web_socket_connection_handler import WebSocketConnectionHandler
 from webservice.websocket.updates_observer_socket import UpdatesObserverSocket
 
-from webservice.search.pybonjour_service import PybonjourService
-from webservice.search.zeroconf_service import ZeroconfService
+from webservice.search.zeroconf_factory import ZeroconfFactory
 
 import atexit
 
@@ -163,19 +162,14 @@ class WebService(Component):
         print('[' + time.strftime('%Y-%m-%d %H:%M:%S') + ']', *args, **kwargs)
 
     def _start_zeroconf(self, port):
-        try:
-            #zeroconf = ZeroconfService(port)
-            zeroconf = PybonjourService(port)
-            zeroconf.start()
+        zeroconf = ZeroconfFactory.generate(port)
+        zeroconf.start()
 
-            def close_zeroconf():
-                zeroconf.close()
-                self._log('Stop zeroconf')
+        def close_zeroconf():
+            zeroconf.close()
+            self._log('Stop zeroconf')
 
-            atexit.register(close_zeroconf)
-        except Exception as e:
-            self._log('Error', e)
-            self._log('zeroconf is not instaled')
+        atexit.register(close_zeroconf)
 
 
 class HandlerRegister(object):

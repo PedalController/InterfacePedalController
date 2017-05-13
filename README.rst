@@ -49,9 +49,7 @@ For the bonjour support for auto discover this web-service, it's necessary insta
 .. code-block:: bash
 
     sudo apt-get install libavahi-compat-libdnssd1
-    git clone https://github.com/depl0y/pybonjour-python3
-    cd pybonjour-python3
-    pip setup.py install
+    pip3 install git+https://github.com/depl0y/pybonjour-python3
 
 
 API

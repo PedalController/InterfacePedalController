@@ -52,17 +52,20 @@ class ZeroconfService(AbstractZeroconfService):
 
     def start(self):
         self._zeroconf = Zeroconf()
-        for ip in self.ips:
-            info = self._gerenate_service_info(ip)
+        for index, ip in enumerate(self.ips):
+            info = self._gerenate_service_info(index, ip)
             self._infos.append(info)
 
             self._zeroconf.register_service(info)
             self._log('Zeroconf', self.__class__.__name__, '- Registered service:', 'name=' + self.name, 'regtype=' + self.type, 'domain=local.')
+            self._log('         Network: ', ip)
 
-    def _gerenate_service_info(self, ip):
+    def _gerenate_service_info(self, index, ip):
+        name = '{}-{}.{}.local.'.format(self.name, index, self.type, '.local.')
+
         return ServiceInfo(
             self.type + '.local.',
-            self.name + '.' + self.type + '.local.',
+            name,
             socket.inet_aton(ip),
             self.port,
             0,
