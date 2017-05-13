@@ -12,21 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import requests
+from webservice.handler.abstract_request_handler import AbstractRequestHandler
 
-from .handler_test import Test
+from application.controller.current_controller import CurrentController
 
 
-class BanksHandlerTest(Test):
-    def setUp(self):
-        try:
-            self.rest.get('')
-        except requests.exceptions.ConnectionError:
-            self.fail("Server is down")
+class CurrentDataHandler(AbstractRequestHandler):
+    app = None
+    controller = None
+    banksController = None
 
-    def test_get(self):
-        r = self.rest.getBanks()
-        self.assertEqual(Test.SUCCESS, r.status_code)
+    def initialize(self, app):
+        self.controller = app.controller(CurrentController)
 
-        banks = r.json()['banks']
-        self.assertLess(0, len(banks))
+    def get(self):
+        json = {
+            'bank': self.controller.current_bank.json,
+            'pedalboard': self.controller.pedalboard_number
+        }
+
+        self.send(200, json)

@@ -12,21 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import requests
+from webservice.handler.abstract_request_handler import AbstractRequestHandler
+from application.controller.plugins_controller import PluginsController, PluginTechnology
 
-from .handler_test import Test
 
+class PluginHandler(AbstractRequestHandler):
+    app = None
 
-class BanksHandlerTest(Test):
-    def setUp(self):
-        try:
-            self.rest.get('')
-        except requests.exceptions.ConnectionError:
-            self.fail("Server is down")
+    def initialize(self, app):
+        self.app = app
 
-    def test_get(self):
-        r = self.rest.getBanks()
-        self.assertEqual(Test.SUCCESS, r.status_code)
+    def get(self, uri):
+        controller = self.app.controller(PluginsController)
+        plugins = controller.by(PluginTechnology.LV2)
 
-        banks = r.json()['banks']
-        self.assertLess(0, len(banks))
+        if uri in plugins:
+            self.write(plugins[uri].json)
+        else:
+            self.error('Plugin "{}" not installed'.format(uri))

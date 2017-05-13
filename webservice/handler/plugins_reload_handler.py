@@ -12,21 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import requests
+from webservice.handler.abstract_request_handler import AbstractRequestHandler
 
-from .handler_test import Test
+from application.controller.plugins_controller import PluginsController, PluginTechnology
 
 
-class BanksHandlerTest(Test):
-    def setUp(self):
+class PluginsReloadHandler(AbstractRequestHandler):
+    app = None
+
+    def initialize(self, app):
+        self.app = app
+
+    def put(self):
+        controller = self.app.controller(PluginsController)
+
         try:
-            self.rest.get('')
-        except requests.exceptions.ConnectionError:
-            self.fail("Server is down")
-
-    def test_get(self):
-        r = self.rest.getBanks()
-        self.assertEqual(Test.SUCCESS, r.status_code)
-
-        banks = r.json()['banks']
-        self.assertLess(0, len(banks))
+            controller.reload_lv2_plugins_data()
+            self.write({'status': 'ok'})
+        except ImportError:
+            self.error('"lilv" not configured')

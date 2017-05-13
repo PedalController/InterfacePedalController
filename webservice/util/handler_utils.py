@@ -12,21 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import requests
+class integer(object):
+    """
+    Convert the informed args to integer
+    """
+    def __init__(self, *args):
+        self.args = args
 
-from .handler_test import Test
+    def __call__(self, f):
+        def wrapped(*args, **kwargs):
+            for arg in self.args:
+                kwargs[arg] = int(kwargs[arg])
+            f(*args, **kwargs)
 
-
-class BanksHandlerTest(Test):
-    def setUp(self):
-        try:
-            self.rest.get('')
-        except requests.exceptions.ConnectionError:
-            self.fail("Server is down")
-
-    def test_get(self):
-        r = self.rest.getBanks()
-        self.assertEqual(Test.SUCCESS, r.status_code)
-
-        banks = r.json()['banks']
-        self.assertLess(0, len(banks))
+        return wrapped
