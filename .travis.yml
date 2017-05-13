@@ -19,7 +19,6 @@ install:
   - python3 setup.py develop
 
 script:
-  - sudo start avahi-daemon
   - lv2ls
   - coverage3 run --source=webservice wstest/config.py test
 

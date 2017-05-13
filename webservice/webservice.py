@@ -77,7 +77,11 @@ class WebService(Component):
         self._log("WebService - PedalPi API REST      localhost:" + str(self.port))
         self._log("WebService - PedalPi API WebSocket localhost:" + str(self.port) + "/ws")
 
-        self._start_zeroconf(self.port)
+        try:
+            self._start_zeroconf(self.port)
+        except Exception as e:
+            self._log("Zeroconf not supported")
+            self._log(e)
 
     def register_handlers(self):
         self.for_handler(PluginsHandler) \
