@@ -148,7 +148,7 @@ Using in your client
 
 WebService disposes the Application features in a web service. These projects uses it for control:
 
- * `Apk`_: App controller for smart devices and navigators.
+* `Apk`_: App controller for smart devices and navigators.
 
 .. _Apk: https://github.com/PedalPi/Apk
 
