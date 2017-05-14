@@ -4,3 +4,4 @@ PedalPi_WebService.egg-info
 .coverage
 htmlcov/
 .idea/
+dist

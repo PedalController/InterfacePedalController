@@ -1,0 +1,21 @@
+## Move Pedalboard [/move/bank/{bank_index}/pedalboard/{from_index}/to/{to_index}]
+
+Use it to changes the order of the pedalboards of a bank.
+
++ Parameters
+    + bank_index: `1` (number, required) - Index of Bank that contains the pedalboard
+    + from_index: `3` (number, required) - Actual pedalboard position in bank pedalboards list
+    + to_index: `2` (number, required) - New pedalboard position in bank pedalboards list
+
+### Change order of a pedalboard in your bank [PUT]
+
+Change the position of a pedalboard in your bank
+
++ Request  (application/json; charset=UTF-8)
++ Response 200 (application/json; charset=UTF-8)
+
+## Move Bank [/move/bank/{from_index}/to/{to_index}]
+
+::: warning
+Not implemented yet
+:::
