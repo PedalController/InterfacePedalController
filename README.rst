@@ -14,7 +14,11 @@ Pedal Pi - WebService
     :alt: Code Health
 
 **Pedal Pi - WebService** is a Pedal Pi component that offers a
-Pedal Pi management over REST + WebSocket
+Pedal Pi management over REST + WebSocket.
+
+WebService also supports auto discover: by publishing to the network using *zeroconf*,
+it offers a certain level of location transparency, allowing applications to connect to
+the WebService with minimal user effort.
 
 **Documentation:**
    http://pedalpi.github.io/WebService/
@@ -34,23 +38,92 @@ Pedal Pi management over REST + WebSocket
 Use
 ---
 
-Dependencies
-************
+Installation and dependencies
+*****************************
 
-This project requires [PedalPi/Application](http://github.com/PedalPi/Application) project. See the [Application documentation](http://pedalpi-application.readthedocs.io/en/latest/#extending) for mode details.
+Most dependencies will be installed through `pip`
 
-This project requires dependencies too, like `Tornado` and `Requests` (for tests).
-For the full list, see [`requirements.txt`](https://github.com/PedalPi/WebService/blob/master/requirements.txt)
+.. code-block:: bash
 
-For a `config.py` example, see [`test/config.py`](https://github.com/PedalPi/WebService/blob/master/test/config.py)
+    pip install PedalPi-WebService
 
-For the bonjour support for auto discover this web-service, it's necessary install [pybonjour-python3](https://github.com/depl0y/pybonjour-python3) and your system lib dependencies.
+WebService, for its publication in the network for auto discover, needs the installation of `pybonjour-python3`_.
+On debian/ubuntu-based systems, run:
 
 .. code-block:: bash
 
     sudo apt-get install libavahi-compat-libdnssd1
     pip3 install git+https://github.com/depl0y/pybonjour-python3
 
+.. _pybonjour-python3: https://github.com/depl0y/pybonjour-python3
+
+Configuring the component
+*************************
+
+PedalPi components enable the extension of `Pedal Pi - Application`_.
+Through them, opening services are offered. A list of components can be found in the `Components repository`_.
+
+To use this component, two steps are required:
+
+1. Registering the webservice in Application
+++++++++++++++++++++++++++++++++++++++++++++
+
+The registration must occur before application initialization (``application.start``)
+
+.. code-block:: python
+    :emphasize-lines: 4, 5
+
+    from application.application import Application
+    application = Application(path_data="data/", address='localhost')
+
+    from webservice.webservice import WebService
+    application.register(WebService(application, port))
+
+2. Initialization of the web server
++++++++++++++++++++++++++++++++++++
+
+The Application documentation suggests using `signal.pause` so
+that the program does not terminate at the end of initialization:
+`signal.pause` causes the program to be terminated only when it is
+requested (`Ctrl + C`).
+
+When we use PedalPi-WebService, we must replace the use of `signal.pause`
+by initializing the web server. This is done using the following
+lines of code:
+
+.. code-block:: python
+    :emphasize-lines: 3, 4
+
+    application.start()
+
+    import tornado
+    tornado.ioloop.IOLoop.current().start()
+
+    # Not more necessary
+    #from signal import pause
+    #pause()
+
+Config file
++++++++++++
+
+The code for starting the Application using the WebService component
+look like the following code:
+
+.. code-block:: python
+
+    from application.application import Application
+    application = Application(path_data="data/", address='localhost')
+
+    from webservice.webservice import WebService
+    application.register(WebService(application, port))
+
+    application.start()
+
+    import tornado
+    tornado.ioloop.IOLoop.current().start()
+
+.. _Pedal Pi - Application: http://pedalpi-application.readthedocs.io/en/latest/
+.. _Components repository: https://github.com/PedalPi/Components#list
 
 API
 ---
@@ -58,25 +131,31 @@ API
 Rest
 ****
 
-`Access the documentation`_ for API details.
-
-.. _Access the documentation:http://pedalpi.github.io/WebService/
+API documentation can be found at http://pedalpi.github.io/WebService/
 
 WebSocket
 *********
 
-View ```websocker/UpdatesObserverSocket``` for the details
+Communication via WebService basically consists of receiving updates
+about the state of the application. The message types will be
+documented in the future and listed at http://pedalpi.github.io/WebService/.
+
+Currently, information about the messages can be found
+in the `source code of this project`_.
+
+.. _source code of this project: https://github.com/PedalPi/WebService/tree/master/webservice/websocket/updates_observer_socket.py
 
 Using in your client
 --------------------
 
-This code disposes the Application features in a WebService. These projects uses it for control.
+WebService disposes the Application features in a web service. These projects uses it for control:
 
-* [Apk](https://github.com/PedalPi/Apk): App controller for smart devices and navigators.
+ * `Apk`_: App controller for smart devices and navigators.
+
+.. _Apk: https://github.com/PedalPi/Apk
 
 If you are using too, please, send a pull request for this project.
 
-## Project configuration
 
 Maintenance
 -----------
@@ -99,19 +178,9 @@ Documentation
 Test
 ****
 
-After started the a `Application` with `WebService` component, excute:
-
 .. code-block:: bash
 
-    # Test by documentation
-    npm install -g dredd
-    dredd
-
-.. code-block:: bash
-
-    # Test by code implemented
-    # (it necessary start a WebService server before)
-    coverage3 run --source=webservice setup.py test
+    coverage3 run --source=webservice wstest/config.py test
     coverage3 report
     coverage3 html
     firefox htmlcov/index.html
