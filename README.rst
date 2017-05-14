@@ -32,7 +32,7 @@ the WebService with minimal user effort.
 **License:**
    `Apache License 2.0`_
 
-.. _Apache License 2.0: https://github.com/PedalPi/Application/blob/master/LICENSE
+.. _Apache License 2.0: https://github.com/PedalPi/WebService/blob/master/LICENSE
 
 
 Use
@@ -45,10 +45,10 @@ Most dependencies will be installed through `pip`
 
 .. code-block:: bash
 
-    pip install PedalPi-WebService
+    pip install PedalPi-WebService
 
-WebService, for its publication in the network for auto discover, needs the installation of `pybonjour-python3`_.
-On debian/ubuntu-based systems, run:
+WebService, for its publication in the network for auto discover, needs the installation
+of `pybonjour-python3`_. On debian/ubuntu-based systems, run:
 
 .. code-block:: bash
 
@@ -65,13 +65,15 @@ Through them, opening services are offered. A list of components can be found in
 
 To use this component, two steps are required:
 
+.. _Pedal Pi - Application: http://pedalpi-application.readthedocs.io/en/latest/
+.. _Components repository: https://github.com/PedalPi/Components#list
+
 1. Registering the webservice in Application
 ++++++++++++++++++++++++++++++++++++++++++++
 
 The registration must occur before application initialization (``application.start``)
 
 .. code-block:: python
-    :emphasize-lines: 4, 5
 
     from application.application import Application
     application = Application(path_data="data/", address='localhost')
@@ -92,7 +94,6 @@ by initializing the web server. This is done using the following
 lines of code:
 
 .. code-block:: python
-    :emphasize-lines: 3, 4
 
     application.start()
 
@@ -121,9 +122,6 @@ look like the following code:
 
     import tornado
     tornado.ioloop.IOLoop.current().start()
-
-.. _Pedal Pi - Application: http://pedalpi-application.readthedocs.io/en/latest/
-.. _Components repository: https://github.com/PedalPi/Components#list
 
 API
 ---
