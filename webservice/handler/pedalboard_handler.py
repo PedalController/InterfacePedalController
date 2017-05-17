@@ -23,13 +23,12 @@ from pluginsmanager.util.persistence_decoder import PedalboardReader
 
 
 class PedalboardHandler(AbstractRequestHandler):
-    app = None
     controller = None
     banks = None
     decode = None
 
-    def initialize(self, app):
-        self.app = app
+    def initialize(self, app, webservice):
+        super(PedalboardHandler, self).initialize(app, webservice)
 
         self.controller = self.app.controller(PedalboardController)
         self.banks = self.app.controller(BanksController)

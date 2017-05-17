@@ -21,10 +21,10 @@ from webservice.search.zeroconf_service import ZeroconfService
 class ZeroconfFactory(object):
 
     @staticmethod
-    def generate(port):
+    def generate(name, port):
         if PybonjourService.has_support():
-            return PybonjourService(port)
+            return PybonjourService(name, port)
         elif ZeroconfService.has_support():
-            return ZeroconfService(port)
+            return ZeroconfService(name, port)
         else:
             return MagicMock()

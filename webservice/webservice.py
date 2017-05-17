@@ -12,12 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import time
-
 import tornado.ioloop
 import tornado.web
 
+import socket
+
 from application.component.component import Component
+from application.controller.component_data_controller import ComponentDataController
+from webservice.properties import WSProperties
 
 from webservice.handler.banks_handler import BanksHandler
 from webservice.handler.bank_handler import BankHandler
@@ -47,6 +49,8 @@ from webservice.websocket.updates_observer_socket import UpdatesObserverSocket
 
 from webservice.search.zeroconf_factory import ZeroconfFactory
 
+from webservice.handler.device_name_handler import DeviceNameHandler
+
 
 class WebService(Component):
     """
@@ -64,6 +68,8 @@ class WebService(Component):
         self.ws_app = None
         self.port = port
 
+        self.zeroconf = None
+
     def init(self):
         self.register_handlers()
 
@@ -73,15 +79,23 @@ class WebService(Component):
         self.ws_app = self.prepare()
         self.ws_app.listen(self.port)
 
-        self._log("WebService - PedalPi API REST      localhost:" + str(self.port))
-        self._log("WebService - PedalPi API WebSocket localhost:" + str(self.port) + "/ws")
+        self._log("WebService - PedalPi API REST      localhost:{}".format(self.port))
+        self._log("WebService - PedalPi API WebSocket localhost:{}/ws".format(self.port))
 
-        self.zeroconf = None
-        try:
-            self.zeroconf = self._start_zeroconf(self.port)
-        except Exception as e:
-            self._log("Zeroconf not supported")
-            self._log(e)
+        data = self._configurations_data()
+
+        self.zeroconf = self._start_zeroconf(data[WSProperties.DEVICE_NAME], self.port)
+
+    def _configurations_data(self):
+        controller = self.application.controller(ComponentDataController)
+
+        data = controller[WSProperties.DATA_KEY]
+
+        if WSProperties.DEVICE_NAME not in controller[WSProperties.DATA_KEY]:
+            data[WSProperties.DEVICE_NAME] = socket.gethostname().split('.')[0]
+
+        controller[WSProperties.DATA_KEY] = data
+        return data
 
     def close(self):
         self.zeroconf.close()
@@ -154,11 +168,16 @@ class WebService(Component):
         self.for_handler(WebSocketConnectionHandler) \
             .register(r"/ws/?$")
 
+        # Others
+        self.for_handler(DeviceNameHandler) \
+            .register(r"/v1/configurations/device_name/?$") \
+            .register(r"/v1/configurations/device_name/(?P<new_name>[^^]+)")
+
     def for_handler(self, handler_class):
         return HandlerRegister(self, handler_class)
 
     def register(self, uri, class_handler):
-        handler = (uri, class_handler, dict(app=self.application))
+        handler = (uri, class_handler, dict(app=self.application, webservice=self))
         self.handlers.append(handler)
 
         self._log('WebService - {} {}', class_handler.__name__, uri)
@@ -169,11 +188,22 @@ class WebService(Component):
     def _log(self, message, *args, **kwargs):
         self.application.log(message, *args, **kwargs)
 
-    def _start_zeroconf(self, port):
-        zeroconf = ZeroconfFactory.generate(port)
-        zeroconf.start()
+    def _start_zeroconf(self, name, port):
+        try:
+            zeroconf = ZeroconfFactory.generate(name, port)
+            zeroconf.start()
 
-        return zeroconf
+            return zeroconf
+        except Exception as e:
+            self._log("Zeroconf not supported")
+            self._log(str(e))
+            return None
+
+    def restart_zeroconf(self, name):
+        if self.zeroconf is not None:
+            self.zeroconf.close()
+            self.zeroconf.name = name
+            self.zeroconf.start()
 
 
 class HandlerRegister(object):

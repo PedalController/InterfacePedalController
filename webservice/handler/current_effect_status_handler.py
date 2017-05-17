@@ -20,12 +20,11 @@ from application.controller.current_controller import CurrentController
 
 
 class CurrentEffectStatusHandler(AbstractRequestHandler):
-    app = None
     current = None
     controller = None
 
-    def initialize(self, app):
-        self.app = app
+    def initialize(self, app, webservice):
+        super(CurrentEffectStatusHandler, self).initialize(app, webservice)
         self.controller = app.controller(EffectController)
         self.current = app.controller(CurrentController)
 

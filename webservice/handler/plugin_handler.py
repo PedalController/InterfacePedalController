@@ -17,10 +17,6 @@ from application.controller.plugins_controller import PluginsController, PluginT
 
 
 class PluginHandler(AbstractRequestHandler):
-    app = None
-
-    def initialize(self, app):
-        self.app = app
 
     def get(self, uri):
         controller = self.app.controller(PluginsController)

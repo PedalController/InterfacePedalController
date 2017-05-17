@@ -20,12 +20,11 @@ from application.controller.param_controller import ParamController
 
 
 class ParamHandler(AbstractRequestHandler):
-    app = None
     controller = None
     banks = None
 
-    def initialize(self, app):
-        self.app = app
+    def initialize(self, app, webservice):
+        super(ParamHandler, self).initialize(app, webservice)
 
         self.controller = self.app.controller(ParamController)
         self.banks = self.app.controller(BanksController)

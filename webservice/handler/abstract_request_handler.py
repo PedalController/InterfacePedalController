@@ -23,6 +23,17 @@ class AbstractRequestHandler(CorsMixin, tornado.web.RequestHandler):
     CORS_MAX_AGE = 21600
     CORS_HEADERS = 'Content-Type, x-xsrf-token'
 
+    app = None
+    ws = None
+
+    def initialize(self, app, webservice):
+        """
+        :param Application app:
+        :param WebService webservice:
+        """
+        self.app = app
+        self.ws = webservice
+
     @property
     def request_data(self):
         return json.loads(self.request.body.decode('utf-8'))

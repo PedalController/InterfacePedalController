@@ -12,20 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import logging
 
 from abc import ABCMeta, abstractmethod
-import socket
 from subprocess import check_output
 
 
 class AbstractZeroconfService(object, metaclass=ABCMeta):
 
-    def __init__(self, port):
+    def __init__(self, name, port):
         self.port = port
-
-    @property
-    def name(self):
-        return socket.gethostname().split('.')[0]
+        self.name = name
 
     @property
     def type(self):
@@ -54,3 +51,9 @@ class AbstractZeroconfService(object, metaclass=ABCMeta):
     @abstractmethod
     def close(self):
         pass
+
+    def _log(self, message, *args, error=False, **kwargs):
+        if error:
+            logging.error(msg=message.format(*args, **kwargs))
+        else:
+            logging.info(msg=message.format(*args, **kwargs))
