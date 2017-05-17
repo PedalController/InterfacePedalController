@@ -47,7 +47,6 @@ from webservice.websocket.updates_observer_socket import UpdatesObserverSocket
 
 from webservice.search.zeroconf_factory import ZeroconfFactory
 
-import atexit
 
 class WebService(Component):
     """
@@ -77,11 +76,16 @@ class WebService(Component):
         self._log("WebService - PedalPi API REST      localhost:" + str(self.port))
         self._log("WebService - PedalPi API WebSocket localhost:" + str(self.port) + "/ws")
 
+        self.zeroconf = None
         try:
-            self._start_zeroconf(self.port)
+            self.zeroconf = self._start_zeroconf(self.port)
         except Exception as e:
             self._log("Zeroconf not supported")
             self._log(e)
+
+    def close(self):
+        self.zeroconf.close()
+        self._log('Stopped zeroconf')
 
     def register_handlers(self):
         self.for_handler(PluginsHandler) \
@@ -157,23 +161,19 @@ class WebService(Component):
         handler = (uri, class_handler, dict(app=self.application))
         self.handlers.append(handler)
 
-        self._log('WebService', '-', class_handler.__name__, uri)
+        self._log('WebService - {} {}', class_handler.__name__, uri)
 
     def prepare(self):
         return tornado.web.Application(self.handlers)
 
-    def _log(self, *args, **kwargs):
-        print('[' + time.strftime('%Y-%m-%d %H:%M:%S') + ']', *args, **kwargs)
+    def _log(self, message, *args, **kwargs):
+        self.application.log(message, *args, **kwargs)
 
     def _start_zeroconf(self, port):
         zeroconf = ZeroconfFactory.generate(port)
         zeroconf.start()
 
-        def close_zeroconf():
-            zeroconf.close()
-            self._log('Stop zeroconf')
-
-        atexit.register(close_zeroconf)
+        return zeroconf
 
 
 class HandlerRegister(object):

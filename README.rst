@@ -98,11 +98,17 @@ lines of code:
     application.start()
 
     import tornado
-    tornado.ioloop.IOLoop.current().start()
+    try:
+        tornado.ioloop.IOLoop.current().start()
+    except KeyboardInterrupt:
+        application.stop()
 
     # Not more necessary
     #from signal import pause
-    #pause()
+    #try:
+    #    pause()
+    #except KeyboardInterrupt:
+    #    application.stop()
 
 Config file
 +++++++++++

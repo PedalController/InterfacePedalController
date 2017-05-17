@@ -17,6 +17,7 @@ import time
 import select
 
 from webservice.search.abstract_zeroconf_service import AbstractZeroconfService
+import logging
 
 try:
     import pybonjour
@@ -49,15 +50,18 @@ class PybonjourService(AbstractZeroconfService):
     def has_support(cls):
         return support
 
-    def _log(self, *args, **kwargs):
-        print('[' + time.strftime('%Y-%m-%d %H:%M:%S') + ']', *args, **kwargs)
+    def _log(self, message, *args, error=False, **kwargs):
+        if error:
+            logging.error(msg=message.format(*args, **kwargs))
+        else:
+            logging.info(msg=message.format(*args, **kwargs))
 
     def register_callback(self, sdRef, flags, error_code, name, regtype, domain):
         if error_code == pybonjour.kDNSServiceErr_NoError:
             self.registered = True
-            self._log('Zeroconf', self.__class__.__name__, '- Registered service:', 'name='+name, 'regtype='+regtype, 'domain='+domain)
+            self._log('Zeroconf {} - Registered service: name={}, regtype={}, domain={}', self.__class__.__name__, name, regtype, domain)
         else:
-            self._log('zeroconf is not workings')
+            self._log('Zeroconf is not workings', error=True)
 
     def start(self):
         register = pybonjour.DNSServiceRegister(
