@@ -162,7 +162,7 @@ class WebService(Component):
 
         # Component data
         self.for_handler(ComponentDataHandler) \
-            .register(r"/v1/data/(?P<key>[a-zA-Z\-0-9:]+)") \
+            .register(r"/v1/data/(?P<key>[a-zA-Z\-0-9:]+)")
 
         # WebSocket
         self.for_handler(WebSocketConnectionHandler) \

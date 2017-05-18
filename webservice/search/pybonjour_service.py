@@ -56,6 +56,7 @@ class PybonjourService(AbstractZeroconfService):
             self._log('Zeroconf is not workings', error=True)
 
     def start(self):
+        self.registered = False
         register = pybonjour.DNSServiceRegister(
             name=self.name,
             regtype=self.type,
