@@ -1,0 +1,32 @@
+{
+  "type":"BANK",
+  "updateType":"DELETED",
+  "bank":3,
+   "value":{
+      "name":"My bank",
+      "pedalboards":[
+         {
+            "data":{
+
+            },
+            "effects":[
+
+            ],
+            "name":"Empty pedalboard",
+            "connections":[
+               {
+                  "input":{
+                     "symbol":"playback_1",
+                     "index":0
+                  },
+                  "output":{
+                     "symbol":"capture_1",
+                     "index":0
+                  }
+               }
+            ]
+         }
+      ],
+      "index":3
+   }
+}

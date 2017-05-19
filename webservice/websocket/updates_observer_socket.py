@@ -32,7 +32,7 @@ class UpdatesObserverSocket(ApplicationObserver):
         self.send({
             'type': 'CURRENT',
             'bank': bank.index,
-            'pedalboard': bank.pedalboards.index(pedalboard),
+            'pedalboard': pedalboard.index,
             'value': pedalboard.json
         }, token)
 

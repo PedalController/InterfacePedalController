@@ -1,0 +1,310 @@
+{
+   "type":"EFFECT",
+   "updateType":"CREATED",
+   "bank":2,
+   "pedalboard":0,
+   "effect":3,
+   "value":{
+      "technology":"lv2",
+      "active":true,
+      "plugin":"http://guitarix.sourceforge.net/plugins/gx_chorus_stereo#_chorus_stereo",
+      "params":[
+         {
+            "value":0.5,
+            "maximum":1,
+            "minimum":0,
+            "symbol":"level",
+            "index":0
+         },
+         {
+            "value":0.019999999552965164,
+            "maximum":0.20000000298023224,
+            "minimum":0,
+            "symbol":"delay",
+            "index":1
+         },
+         {
+            "value":0.019999999552965164,
+            "maximum":1,
+            "minimum":0,
+            "symbol":"depth",
+            "index":2
+         },
+         {
+            "value":3,
+            "maximum":10,
+            "minimum":0.10000000149011612,
+            "symbol":"freq",
+            "index":3
+         }
+      ],
+      "pluginData":{
+         "presets":[
+
+         ],
+         "comment":"\n\n\"In music, a chorus effect (sometimes chorusing or chorused effect) occurs when individual sounds with roughly the same timbre and nearly (but never exactly) the same pitch converge and are perceived as one. While similar sounds coming from multiple sources can occur naturally (as in the case of a choir or string orchestra), it can also be simulated using an electronic effects unit or signal processing device.\" Wikipedia\n\n*Unofficial documentation\n\nsource: http://en.wikipedia.org/wiki/Chorus_effect\n\n",
+         "stability":"testing",
+         "stable":false,
+         "ports":{
+            "audio":{
+               "input":[
+                  {
+                     "units":{
+
+                     },
+                     "rangeSteps":null,
+                     "properties":[
+
+                     ],
+                     "shortName":"In",
+                     "designation":"",
+                     "ranges":{
+
+                     },
+                     "name":"In",
+                     "scalePoints":[
+
+                     ],
+                     "symbol":"in",
+                     "index":6
+                  },
+                  {
+                     "units":{
+
+                     },
+                     "rangeSteps":null,
+                     "properties":[
+
+                     ],
+                     "shortName":"In1",
+                     "designation":"",
+                     "ranges":{
+
+                     },
+                     "name":"In1",
+                     "scalePoints":[
+
+                     ],
+                     "symbol":"in1",
+                     "index":7
+                  }
+               ],
+               "output":[
+                  {
+                     "units":{
+
+                     },
+                     "rangeSteps":null,
+                     "properties":[
+
+                     ],
+                     "shortName":"Out",
+                     "designation":"",
+                     "ranges":{
+
+                     },
+                     "name":"Out",
+                     "scalePoints":[
+
+                     ],
+                     "symbol":"out",
+                     "index":4
+                  },
+                  {
+                     "units":{
+
+                     },
+                     "rangeSteps":null,
+                     "properties":[
+
+                     ],
+                     "shortName":"Out1",
+                     "designation":"",
+                     "ranges":{
+
+                     },
+                     "name":"Out1",
+                     "scalePoints":[
+
+                     ],
+                     "symbol":"out1",
+                     "index":5
+                  }
+               ]
+            },
+            "control":{
+               "input":[
+                  {
+                     "units":{
+
+                     },
+                     "rangeSteps":null,
+                     "properties":[
+
+                     ],
+                     "shortName":"Level",
+                     "designation":"",
+                     "ranges":{
+                        "maximum":1,
+                        "minimum":0,
+                        "default":0.5
+                     },
+                     "name":"Level",
+                     "scalePoints":[
+
+                     ],
+                     "symbol":"level",
+                     "index":0
+                  },
+                  {
+                     "units":{
+
+                     },
+                     "rangeSteps":null,
+                     "properties":[
+
+                     ],
+                     "shortName":"Delay",
+                     "designation":"",
+                     "ranges":{
+                        "maximum":0.20000000298023224,
+                        "minimum":0,
+                        "default":0.019999999552965164
+                     },
+                     "name":"Delay",
+                     "scalePoints":[
+
+                     ],
+                     "symbol":"delay",
+                     "index":1
+                  },
+                  {
+                     "units":{
+
+                     },
+                     "rangeSteps":null,
+                     "properties":[
+
+                     ],
+                     "shortName":"Depth",
+                     "designation":"",
+                     "ranges":{
+                        "maximum":1,
+                        "minimum":0,
+                        "default":0.019999999552965164
+                     },
+                     "name":"Depth",
+                     "scalePoints":[
+
+                     ],
+                     "symbol":"depth",
+                     "index":2
+                  },
+                  {
+                     "units":{
+                        "label":"hertz",
+                        "render":"%f Hz",
+                        "symbol":"Hz"
+                     },
+                     "rangeSteps":null,
+                     "properties":[
+
+                     ],
+                     "shortName":"Freq",
+                     "designation":"",
+                     "ranges":{
+                        "maximum":10,
+                        "minimum":0.10000000149011612,
+                        "default":3
+                     },
+                     "name":"Freq",
+                     "scalePoints":[
+
+                     ],
+                     "symbol":"freq",
+                     "index":3
+                  }
+               ],
+               "output":[
+
+               ]
+            },
+            "midi":{
+               "input":[
+
+               ],
+               "output":[
+
+               ]
+            }
+         },
+         "microVersion":3,
+         "brand":"Guitarix",
+         "id":"56a8bae52f1d0e03d12aa483",
+         "author":{
+            "name":"Guitarix team",
+            "homepage":"",
+            "email":"brummer@web.de"
+         },
+         "bundles":[
+
+         ],
+         "license":"http://opensource.org/licenses/isc",
+         "bundle_multi_plugins":false,
+         "label":"GxChorus-Stereo",
+         "bundle_name":"gx_chorus.lv2",
+         "version":"3.28",
+         "href":"http://api.dev.moddevices.com/v2/lv2/plugins/56a8bae52f1d0e03d12aa483/",
+         "release_number":2,
+         "screenshot_available":true,
+         "bundle_href":"http://api.dev.moddevices.com/v2/lv2/bundles/56a8bae42f1d0e03d12aa478/",
+         "bundle_id":"56a8bae42f1d0e03d12aa478",
+         "binary":"gx_chorus.so",
+         "category":[
+            "Modulator",
+            "Chorus"
+         ],
+         "minorVersion":28,
+         "gui":{
+            "color":"petrol",
+            "panel":"5-knobs",
+            "screenshot":"modgui/screenshot-gxchorus-stereo.png",
+            "resourcesDirectory":"modgui",
+            "ports":[
+               {
+                  "name":"Depth",
+                  "symbol":"depth",
+                  "index":0
+               },
+               {
+                  "name":"Rate",
+                  "symbol":"freq",
+                  "index":1
+               },
+               {
+                  "name":"Delay",
+                  "symbol":"delay",
+                  "index":2
+               },
+               {
+                  "name":"Level",
+                  "symbol":"level",
+                  "index":3
+               }
+            ],
+            "brand":"Guitarix",
+            "stylesheet":"modgui/stylesheet-gxchorus-stereo.css",
+            "knob":"bronze",
+            "label":"Chorus Stereo",
+            "iconTemplate":"modgui/icon-gxchorus-stereo.html",
+            "thumbnail":"modgui/thumbnail-gxchorus-stereo.png",
+            "model":"boxy"
+         },
+         "thumbnail_available":true,
+         "uri":"http://guitarix.sourceforge.net/plugins/gx_chorus_stereo#_chorus_stereo",
+         "name":"GxChorus-Stereo",
+         "screenshot_href":"http://api.dev.moddevices.com/v2/lv2/plugins/56a8bae52f1d0e03d12aa483/screenshot/",
+         "thumbnail_href":"http://api.dev.moddevices.com/v2/lv2/plugins/56a8bae52f1d0e03d12aa483/thumbnail/"
+      }
+   }
+}

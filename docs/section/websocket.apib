@@ -1,0 +1,121 @@
+**Pedal Pi - WebService** uses [WebSockets](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API) to receive notification of changes made by other clients. For example, consider a Pedal Pi configured with the [Raspberry-P0](https://github.com/PedalPi/Raspberry-P0) and WebSocket components, when the user presses a button to change the current pedalboard, WebService clients will be notified that the status of the application has changed via their WebSocket connections.
+
+::: note
+In order for a client to not receive notifications of state changes made by the client itself, [**TOKEN identifier** must be passed in the header](#authentication-token-identifier).
+:::
+
+### WebSocket notification messages
+
+Notification messages have a **type** field that determines the type of notification. `EFFECT-TOGGLE`, for example, informs that the notification refers to changing the current state of an effect (whether it is active or not).
+
+Some message types have an **updateType** field to tell you what type of update occurred. The accepted values ​​for **updateType** are `CREATED`, `UPDATED` and `DELETED`. A `type=CONNECTION` message with `updateType=DELETED` indicates that a connection (which is described in the other fields of the message) has been removed.
+
+::: note
+For implementation details, check [`updates_observer_socket.py`](https://github.com/PedalPi/WebService/tree/master/webservice/websocket/updates_observer_socket.py).
+:::
+
+#### Notification `on_current_pedalboard_changed`
+
+* **Parameters**:
+  * **type**: `string` - `"CURRENT"`
+  * **bank**: `number` - Bank index
+  * **pedalboard**: `number` - Pedalboard index
+  * **value**: `object` - Current pedalboard data
+* **Example**:
+  ```json
+  <!-- include(websocket-examples/on_current_pedalboard_changed.json) -->
+  ```
+
+#### Notification `on_bank_updated`
+
+* **Parameters:**
+  * **type**: `string` - `"BANK"`
+  * **updateType**: `enum[string]` - (`CREATED` | `UPDATED` | `DELETED`)
+  * **bank**: `number` - Bank index
+  * **value**: `object` - Bank on which the notification refers
+* **Example:**
+  ```json
+  <!-- include(websocket-examples/on_bank_updated.json) -->
+  ```
+
+#### Notification `on_pedalboard_updated`
+
+* **Parameters:**
+  * **type**: `string` - `"PEDALBOARD"`
+  * **updateType**: `enum[string]` - (`CREATED` | `UPDATED` | `DELETED`)
+  * **bank**: `number` - Bank index
+  * **pedalboard**: `number` - Pedalboard index
+  * **value**: `object` - Pedalboard on which the notification refers
+* **Example:**
+  ```json
+  <!-- include(websocket-examples/on_pedalboard_updated.json) -->
+  ```
+
+#### Notification `on_effect_updated`
+
+* **Parameters:**
+  * **type**: `string` - `"EFFECT"`
+  * **updateType**: `enum[string]` - (`CREATED` | `UPDATED` | `DELETED`)
+  * **bank**: `number` - Bank index
+  * **pedalboard**: `number` - Pedalboard index
+  * **effect**: `number` - Effect index
+  * **value**: `object` - Effect on which the notification refers
+* **Example:**
+  ```json
+  <!-- include(websocket-examples/on_effect_updated.json) -->
+  ```
+
+#### Notification `on_effect_status_toggled`
+
+* **Parameters:**
+  * **type**: `string` - `"EFFECT-TOGGLE"`
+  * **bank**: `number` - Bank index
+  * **pedalboard**: `number` - Pedalboard index
+  * **effect**: `number` - Index of effect whose status was toggled
+* **Example:**
+  ```json
+  {
+      "type": "EFFECT-TOGGLE",
+      "bank": 2,
+      "pedalboard": 1,
+      "effect": 3
+  }
+  ```
+
+#### Notification `on_param_value_changed`
+
+* **Parameters:**
+  * **type**: `string` - `"PARAM"`
+  * **bank**: `number` - Bank index
+  * **pedalboard**: `number` - Pedalboard index
+  * **effect**: `number` - Effect index
+  * **param**: `number` - Param index
+  * **value**: `number` - New param value
+* **Example:**
+  ```json
+  {
+    "type":"PARAM",
+    "bank":2,
+    "pedalboard":0,
+    "effect":2,
+    "param":1,
+    "value":28.9453125
+  }
+  ```
+
+#### Notification `on_connection_updated`
+
+* **Parameters:**
+  * **type**: `string` - `"CONNECTION"`
+  * **updateType**: `enum[string]` - (`CREATED` | `UPDATED` | `DELETED`)
+  * **bank**: `number` - Bank index
+  * **pedalboard**: `number` - Pedalboard index
+  * **value**: `object` - Connection between an output of an effect and an input of another effect
+* **Example 1:** Connection between Lv2Effects
+  ```json
+  <!-- include(websocket-examples/on_connection_updated_1.json) -->
+  ```
+* **Example 2:** Connection between SystemEffect and Lv2Effect
+  ```json
+  <!-- include(websocket-examples/on_connection_updated_2.json) -->
+  ```
