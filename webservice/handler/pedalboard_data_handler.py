@@ -14,7 +14,7 @@
 
 from pluginsmanager.observer.update_type import UpdateType
 from webservice.handler.abstract_request_handler import AbstractRequestHandler
-from webservice.util.handler_utils import integer
+from webservice.util.handler_utils import integer, exception
 
 
 class PedalboardDataHandler(AbstractRequestHandler):
@@ -25,39 +25,27 @@ class PedalboardDataHandler(AbstractRequestHandler):
 
         self._manager = self.app.manager
 
+    @exception(Exception, 500)
+    @exception(IndexError, 400, error_message=True)
     @integer('bank_index', 'pedalboard_index')
     def get(self, bank_index, pedalboard_index, key):
-        try:
-            bank = self._manager.banks[bank_index]
-            pedalboard = bank.pedalboards[pedalboard_index]
+        bank = self._manager.banks[bank_index]
+        pedalboard = bank.pedalboards[pedalboard_index]
 
-            if key not in pedalboard.data:
-                return self.write({})
+        if key not in pedalboard.data:
+            return self.write({})
 
-            return self.write(pedalboard.data[key])
+        return self.write(pedalboard.data[key])
 
-        except IndexError as error:
-            return self.error(str(error))
-
-        except Exception:
-            self.print_error()
-            return self.send(500)
-
+    @exception(Exception, 500)
+    @exception(IndexError, 400, error_message=True)
     @integer('bank_index', 'pedalboard_index')
     def put(self, bank_index, pedalboard_index, key):
-        try:
-            bank = self._manager.banks[bank_index]
-            pedalboard = bank.pedalboards[pedalboard_index]
-            pedalboard.data[key] = self.request_data
+        bank = self._manager.banks[bank_index]
+        pedalboard = bank.pedalboards[pedalboard_index]
+        pedalboard.data[key] = self.request_data
 
-            self.app.components_observer.on_pedalboard_updated(pedalboard, UpdateType.UPDATED, index=pedalboard.index,
-                                                               origin=pedalboard.bank, old=pedalboard)
+        self.app.components_observer.on_pedalboard_updated(pedalboard, UpdateType.UPDATED, index=pedalboard.index,
+                                                           origin=pedalboard.bank, old=pedalboard)
 
-            return self.success()
-
-        except IndexError as error:
-            return self.error(str(error))
-
-        except Exception:
-            self.print_error()
-            return self.send(500)
+        return self.success()

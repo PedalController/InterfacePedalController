@@ -13,7 +13,7 @@
 # limitations under the License.
 
 from webservice.handler.abstract_request_handler import AbstractRequestHandler
-from webservice.util.handler_utils import integer
+from webservice.util.handler_utils import integer, exception
 
 
 class MovePedalboardHandler(AbstractRequestHandler):
@@ -24,17 +24,12 @@ class MovePedalboardHandler(AbstractRequestHandler):
 
         self._manager = app.manager
 
+    @exception(Exception, 500)
     @integer('bank_index', 'from_index', 'to_index')
     def put(self, bank_index, from_index, to_index):
-        try:
-            pedalboards = self._manager.banks[bank_index].pedalboards
-            pedalboard = pedalboards[from_index]
+        pedalboards = self._manager.banks[bank_index].pedalboards
+        pedalboard = pedalboards[from_index]
 
-            pedalboards.move(pedalboard, to_index)
-            self.controller.moved(pedalboard, from_index, self.token)
+        pedalboards.move(pedalboard, to_index)
 
-            return self.success()
-
-        except Exception:
-            self.print_error()
-            return self.send(500)
+        return self.success()

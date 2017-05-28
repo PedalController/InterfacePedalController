@@ -13,7 +13,7 @@
 # limitations under the License.
 
 from webservice.handler.abstract_request_handler import AbstractRequestHandler
-from webservice.util.handler_utils import integer
+from webservice.util.handler_utils import integer, exception
 
 
 class SwapBankHandler(AbstractRequestHandler):
@@ -24,17 +24,11 @@ class SwapBankHandler(AbstractRequestHandler):
 
         self._manager = app.manager
 
+    @exception(Exception, 500)
+    @exception(IndexError, 400, message='Invalid index')
     @integer('bank_a_index', 'bank_b_index')
     def put(self, bank_a_index, bank_b_index):
-        try:
-            banks = self._manager.banks
-            banks[bank_a_index], banks[bank_b_index] = banks[bank_b_index], banks[bank_a_index]
+        banks = self._manager.banks
+        banks[bank_a_index], banks[bank_b_index] = banks[bank_b_index], banks[bank_a_index]
 
-            return self.success()
-
-        except IndexError:
-            return self.error("Invalid index")
-
-        except Exception:
-            self.print_error()
-            return self.send(500)
+        return self.success()

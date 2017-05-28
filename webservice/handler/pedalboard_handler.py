@@ -13,7 +13,7 @@
 # limitations under the License.
 
 from webservice.handler.abstract_request_handler import AbstractRequestHandler
-from webservice.util.handler_utils import integer
+from webservice.util.handler_utils import integer, exception
 
 from application.controller.device_controller import DeviceController
 
@@ -31,65 +31,41 @@ class PedalboardHandler(AbstractRequestHandler):
 
         self._decode = PedalboardReader(self.app.controller(DeviceController).sys_effect)
 
+    @exception(Exception, 500)
+    @exception(IndexError, 400, message='Invalid index')
     @integer('bank_index', 'pedalboard_index')
     def get(self, bank_index, pedalboard_index):
-        try:
-            bank = self._manager.banks[bank_index]
-            pedalboard = bank.pedalboards[pedalboard_index]
+        bank = self._manager.banks[bank_index]
+        pedalboard = bank.pedalboards[pedalboard_index]
 
-            return self.write(pedalboard.json)
+        return self.write(pedalboard.json)
 
-        except IndexError:
-            return self.error("Invalid index")
-
-        except Exception:
-            self.print_error()
-            return self.send(500)
-
+    @exception(Exception, 500)
+    @exception(IndexError, 400, message='Invalid index')
     @integer('bank_index')
     def post(self, bank_index):
-        try:
-            pedalboard = self._decode.read(self.request_data)
+        pedalboard = self._decode.read(self.request_data)
 
-            bank = self._manager.banks[bank_index]
-            bank.append(pedalboard)
+        bank = self._manager.banks[bank_index]
+        bank.append(pedalboard)
 
-            return self.created({"index": len(bank.pedalboards) - 1})
+        return self.created({"index": len(bank.pedalboards) - 1})
 
-        except IndexError:
-            return self.error("Invalid index")
-
-        except Exception:
-            self.print_error()
-            return self.send(500)
-
+    @exception(Exception, 500)
+    @exception(IndexError, 400, message='Invalid index')
     @integer('bank_index', 'pedalboard_index')
     def put(self, bank_index, pedalboard_index):
-        try:
-            bank = self._manager.banks[bank_index]
-            pedalboard = self._decode.read(self.request_data)
-            bank.pedalboards[pedalboard_index] = pedalboard
+        bank = self._manager.banks[bank_index]
+        pedalboard = self._decode.read(self.request_data)
+        bank.pedalboards[pedalboard_index] = pedalboard
 
-            return self.success()
+        return self.success()
 
-        except IndexError:
-            return self.error("Invalid index")
-
-        except Exception:
-            self.print_error()
-            return self.send(500)
-
+    @exception(Exception, 500)
+    @exception(IndexError, 400, message='Invalid index')
     @integer('bank_index', 'pedalboard_index')
     def delete(self, bank_index, pedalboard_index):
-        try:
-            bank = self._manager.banks[bank_index]
-            del bank.pedalboards[pedalboard_index]
+        bank = self._manager.banks[bank_index]
+        del bank.pedalboards[pedalboard_index]
 
-            return self.success()
-
-        except IndexError:
-            return self.error("Invalid index")
-
-        except Exception:
-            self.print_error()
-            return self.send(500)
+        return self.success()

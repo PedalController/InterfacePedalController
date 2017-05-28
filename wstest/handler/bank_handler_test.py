@@ -17,6 +17,16 @@ from wstest.handler.handler_test import Test
 
 class BankHandlerTest(Test):
 
+    def generic_test_index_error(self, method):
+        bank = self.default_bank_mock
+        bank.index = 23456789
+
+        self.assertIndexError(method(bank))
+
+    def assertIndexError(self, response):
+        self.assertEqual(Test.ERROR, response.status_code)
+        self.assertEqual('Invalid index', response.json()['error'])
+
     def test_get(self):
         bank = self.default_bank_mock
         bank.index = self.rest.create_bank(bank).json()['index']
@@ -27,6 +37,9 @@ class BankHandlerTest(Test):
         self.assertEqual(bank.json, response.json())
 
         self.rest.delete_bank(bank)
+
+    def test_get_index_error(self):
+        self.generic_test_index_error(self.rest.get_bank)
 
     def test_post(self):
         bank = self.default_bank_mock
@@ -56,13 +69,16 @@ class BankHandlerTest(Test):
 
         self.rest.delete_bank(bank)
 
+    def test_put_index_error(self):
+        self.generic_test_index_error(self.rest.update_bank)
+
     def test_delete(self):
         bank = self.default_bank_mock
         data = self.rest.create_bank(bank).json()
         bank.index = data['index']
-        print('My bank', bank.index, data)
-        print('banks', len(self.rest.get_banks().json()['banks'] ))
-
 
         r = self.rest.delete_bank(bank)
         self.assertEqual(Test.DELETED, r.status_code)
+
+    def test_delete_index_error(self):
+        self.generic_test_index_error(self.rest.delete_bank)
