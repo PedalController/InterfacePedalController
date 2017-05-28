@@ -482,6 +482,15 @@
 </span>}</code></pre><div style="height: 1px;"></div><h5>Schema</h5><pre><code>Not defined</code></pre><div style="height: 1px;"></div></div></div></div><div class="tab"><div><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json; charset=UTF-8</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">error</span>": <span class="hljs-value"><span class="hljs-string">"Plugin \"https://github.com/ninodewit/SHIRO-Plugins/plugins/larynx\" not installed"</span>
 </span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></div></div><div class="middle"><div id="plugins-management-plugin-get" class="action get"><h4 class="action-heading"><div class="name">Plugin data</div><a href="#plugins-management-plugin-get" class="method get">GET</a><code class="uri">/plugin/{uri}</code></h4><p>Get a specific audio plugin json by <code>uri</code> identifier.</p>
+<div class="note">
+<p>Some audio plugins have their uri containing <strong><code>#</code></strong>. To get the plugin data,
+you need to replace <strong><code>#</code></strong> with <strong><code>%23</code></strong>.</p>
+<p>Example:</p>
+<p>Replace</p>
+<pre><code>plugin<span class="hljs-regexp">/http:/</span>/guitarix.sourceforge.net/plugins/gx_redeye<span class="hljs-comment">#chump</span></code></pre>
+<p>with</p>
+<pre><code>plugin<span class="hljs-regexp">/http:/</span><span class="hljs-regexp">/guitarix.sourceforge.net/</span>plugins/gx_redeye%<span class="hljs-number">23</span>chump</code></pre>
+</div>
 <div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>uri</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>http://calf.sourceforge.net/plugins/MonoInput</span></span><p>The plugin URI</p>
 </dd></dl></div></div></div><hr class="split"><div class="middle"><section id="banks-management" class="resource-group"><h2 class="group-heading">Banks management <a href="#banks-management" class="permalink">&para;</a></h2><p>Manages the banks data.</p>
 </section></div><div class="middle"><div id="banks-management-banks" class="resource"><h3 class="resource-heading">Banks <a href="#banks-management-banks" class="permalink">&para;</a></h3></div></div><div class="right"><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">http://pedalpi.local:3000/v1</span>/banks</span></div><div class="tabs"><div class="tabs"><div class="example-names"><span>Responses</span><span class="tab-button">200</span></div><div class="tab"><div><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json; charset=UTF-8</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{

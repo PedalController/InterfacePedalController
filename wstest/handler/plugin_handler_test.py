@@ -26,7 +26,8 @@ class PluginHandlerTest(Test):
 
     @unittest.skipIf('TRAVIS' in os.environ, 'Travis not contains audio interface')
     def test_get_custom_uri(self):
-        r = self.rest.get_plugin('http://guitarix.sourceforge.net/plugins/gx_scream_#_scream_')
+        uri = 'http://guitarix.sourceforge.net/plugins/gx_scream_#_scream_'.replace('#', '%23')
+        r = self.rest.get_plugin(uri)
         self.assertEqual(Test.SUCCESS, r.status_code)
 
     def test_get_invalid(self):

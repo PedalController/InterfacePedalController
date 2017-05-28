@@ -45,6 +45,25 @@ If `lilv` is not installed, an error (400) is returned.
 
 Get a specific audio plugin json by `uri` identifier.
 
+::: note
+Some audio plugins have their uri containing **`#`**. To get the plugin data,
+you need to replace **`#`** with **`%23`**.
+
+Example:
+
+Replace
+
+```
+plugin/http://guitarix.sourceforge.net/plugins/gx_redeye#chump
+```
+
+with
+
+```
+plugin/http://guitarix.sourceforge.net/plugins/gx_redeye%23chump
+```
+:::
+
 + Parameters
     + uri: `http://calf.sourceforge.net/plugins/MonoInput` (required, string) - The plugin URI
 + Response 200 (application/json; charset=UTF-8)
