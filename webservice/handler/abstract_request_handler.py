@@ -16,6 +16,9 @@ import tornado.web
 import json
 from tornado_cors import CorsMixin
 
+from unittest.mock import MagicMock
+from webservice.websocket.web_socket_connections import WebSocketConnections
+
 
 class AbstractRequestHandler(CorsMixin, tornado.web.RequestHandler):
     CORS_ORIGIN = '*'
@@ -54,6 +57,12 @@ class AbstractRequestHandler(CorsMixin, tornado.web.RequestHandler):
 
     @property
     def token(self):
-        token = self.request.headers.get('x-xsrf-token')
+        return self.request.headers.get('x-xsrf-token')
 
-        return '' if token is None else token
+    @property
+    def observer(self):
+        token = self.token
+        if token is None:
+            return MagicMock()
+        else:
+            return WebSocketConnections.observers[token]

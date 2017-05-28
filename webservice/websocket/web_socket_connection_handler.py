@@ -14,15 +14,19 @@
 
 import json
 import uuid
+import logging
 
 from webservice.websocket.web_socket_connections import WebSocketConnections
+from webservice.websocket.websocket_connection_observer import WebSocketConnectionObserver
 
 from tornado import websocket
 
 
 class WebSocketConnectionHandler(websocket.WebSocketHandler):
+    webservice = None
 
     def initialize(self, app, webservice):
+        self.webservice = webservice
         pass
 
     def check_origin(self, origin):
@@ -30,14 +34,21 @@ class WebSocketConnectionHandler(websocket.WebSocketHandler):
         return True
 
     def open(self):
-        print("WebSocket opened")
         token = str(uuid.uuid4())
-        WebSocketConnections.register(token, self)
+        logging.info('WebSocket opened - Token {}'.format(token))
+
+        observer = WebSocketConnectionObserver(self)
+
+        self.webservice.register_observer(observer)
+        WebSocketConnections.register(token, self, observer)
+
         self.write_message(json.dumps({'type': 'TOKEN', 'value': token}))
 
     def on_message(self, message):
         self.write_message(json.dumps({'error': 'Use REST api for send data'}))
 
     def on_close(self):
-        WebSocketConnections.unregister(self)
-        print("WebSocket closed")
+        token, observer = WebSocketConnections.unregister(self)
+        self.webservice.unregister_observer(observer)
+
+        logging.info('WebSocket closed - Token {}'.format(token))
