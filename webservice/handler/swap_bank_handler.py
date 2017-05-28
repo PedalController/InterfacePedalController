@@ -15,29 +15,25 @@
 from webservice.handler.abstract_request_handler import AbstractRequestHandler
 from webservice.util.handler_utils import integer
 
-from application.controller.banks_controller import BanksController, BankError
-
 
 class SwapBankHandler(AbstractRequestHandler):
-    controller = None
+    _manager = None
 
     def initialize(self, app, webservice):
         super(SwapBankHandler, self).initialize(app, webservice)
-        self.controller = self.app.controller(BanksController)
+
+        self._manager = app.manager
 
     @integer('bank_a_index', 'bank_b_index')
     def put(self, bank_a_index, bank_b_index):
         try:
-            banks = self.controller.banks
-            bank_a = banks[bank_a_index]
-            bank_b = banks[bank_b_index]
-
-            self.controller.swap(bank_a, bank_b, self.token)
+            banks = self._manager.banks
+            banks[bank_a_index], banks[bank_b_index] = banks[bank_b_index], banks[bank_a_index]
 
             return self.success()
 
-        except BankError as error:
-            return self.error(str(error))
+        except IndexError:
+            return self.error("Invalid index")
 
         except Exception:
             self.print_error()

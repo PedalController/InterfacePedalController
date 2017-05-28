@@ -15,31 +15,30 @@
 from webservice.handler.abstract_request_handler import AbstractRequestHandler
 from webservice.util.handler_utils import integer
 
-from application.controller.banks_controller import BanksController
 from application.controller.device_controller import DeviceController
 
 from pluginsmanager.util.persistence_decoder import PersistenceDecoder
 
 
 class BankHandler(AbstractRequestHandler):
-    controller = None
-    decoder = None
+    _decoder = None
+    _manager = None
 
     def initialize(self, app, webservice):
         super(BankHandler, self).initialize(app, webservice)
 
-        self.controller = self.app.controller(BanksController)
+        self._manager = self.app.manager
         sys_effect = self.app.controller(DeviceController).sys_effect
-        self.decoder = PersistenceDecoder(sys_effect)
+        self._decoder = PersistenceDecoder(sys_effect)
 
     @integer('bank_index')
     def get(self, bank_index):
         try:
-            bank = self.controller.banks[bank_index]
+            bank = self._manager.banks[bank_index]
 
             self.write(bank.json)
 
-        except IndexError as error:
+        except IndexError:
             return self.error("Invalid index")
 
         except Exception:
@@ -49,14 +48,12 @@ class BankHandler(AbstractRequestHandler):
     def post(self):
         try:
             json = self.request_data
-            bank = self.decoder.read(json)
+            bank = self._decoder.read(json)
 
-            index = self.controller.create(bank, self.token)
+            self._manager.append(bank)
 
-            self.created({"index": index})
-
-        except IndexError as error:
-            return self.error("Invalid index")
+            self.created({"index": bank.index})
+            print('bank created', bank.index, len(self._manager.banks))
 
         except Exception:
             self.print_error()
@@ -67,14 +64,12 @@ class BankHandler(AbstractRequestHandler):
         try:
             json = self.request_data
 
-            new_bank = self.decoder.read(json)
-            old_bank = self.controller.banks[bank_index]
-
-            self.controller.replace(old_bank, new_bank, self.token)
+            bank = self._decoder.read(json)
+            self._manager.banks[bank_index] = bank
 
             self.success()
 
-        except IndexError as error:
+        except IndexError:
             return self.error("Invalid index")
 
         except Exception:
@@ -86,7 +81,10 @@ class BankHandler(AbstractRequestHandler):
         bank_index = int(bank_index)
 
         try:
-            self.controller.delete(self.controller.banks[bank_index], self.token)
+            print('index error?', bank_index, len(self._manager.banks))
+            del self._manager.banks[bank_index]
+
             self.success()
-        except IndexError as error:
+        except IndexError:
+            self.print_error()
             return self.error("Invalid index")

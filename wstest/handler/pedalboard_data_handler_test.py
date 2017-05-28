@@ -24,7 +24,7 @@ class PedalboardDataHandlerTest(Test):
         return Pedalboard('New default pedalboard')
 
     def test_get(self):
-        bank = self.default_bank
+        bank = self.default_bank_mock
         bank.index = self.rest.create_bank(bank).json()['index']
 
         key = 'test_get'
@@ -40,7 +40,7 @@ class PedalboardDataHandlerTest(Test):
         self.rest.delete_bank(bank)
 
     def test_post(self):
-        bank = self.default_bank
+        bank = self.default_bank_mock
         bank.index = self.rest.create_bank(bank).json()['index']
 
         key1 = 'key1'

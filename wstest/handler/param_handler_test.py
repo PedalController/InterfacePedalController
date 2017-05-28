@@ -30,7 +30,7 @@ class ParamHandlerTest(Test):
     # Tests
     ########################
     def test_get(self):
-        bank = self.default_bank
+        bank = self.default_bank_mock
         bank.index = self.rest.create_bank(bank).json()['index']
 
         param = bank.pedalboards[0].effects[0].params[0]
@@ -42,7 +42,7 @@ class ParamHandlerTest(Test):
         self.rest.delete_bank(bank)
 
     def test_put(self):
-        bank = self.default_bank
+        bank = self.default_bank_mock
         bank.index = self.rest.create_bank(bank).json()['index']
 
         param = bank.pedalboards[0].effects[0].params[0]

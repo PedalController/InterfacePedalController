@@ -12,26 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from pluginsmanager.observer.update_type import UpdateType
 from webservice.handler.abstract_request_handler import AbstractRequestHandler
 from webservice.util.handler_utils import integer
 
-from application.controller.banks_controller import BanksController
-from application.controller.pedalboard_controller import PedalboardController
-
 
 class PedalboardDataHandler(AbstractRequestHandler):
-    controller = None
+    _manager = None
 
     def initialize(self, app, webservice):
         super(PedalboardDataHandler, self).initialize(app, webservice)
 
-        self.controller = self.app.controller(PedalboardController)
-        self.banks = self.app.controller(BanksController)
+        self._manager = self.app.manager
 
     @integer('bank_index', 'pedalboard_index')
     def get(self, bank_index, pedalboard_index, key):
         try:
-            bank = self.banks.banks[bank_index]
+            bank = self._manager.banks[bank_index]
             pedalboard = bank.pedalboards[pedalboard_index]
 
             if key not in pedalboard.data:
@@ -49,11 +46,12 @@ class PedalboardDataHandler(AbstractRequestHandler):
     @integer('bank_index', 'pedalboard_index')
     def put(self, bank_index, pedalboard_index, key):
         try:
-            bank = self.banks.banks[bank_index]
+            bank = self._manager.banks[bank_index]
             pedalboard = bank.pedalboards[pedalboard_index]
             pedalboard.data[key] = self.request_data
 
-            self.controller.update(pedalboard, self.token, reload=False)
+            self.app.components_observer.on_pedalboard_updated(pedalboard, UpdateType.UPDATED, index=pedalboard.index,
+                                                               origin=pedalboard.bank, old=pedalboard)
 
             return self.success()
 

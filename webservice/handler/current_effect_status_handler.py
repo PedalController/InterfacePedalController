@@ -15,17 +15,14 @@
 from webservice.handler.abstract_request_handler import AbstractRequestHandler
 from webservice.util.handler_utils import integer
 
-from application.controller.effect_controller import EffectController
 from application.controller.current_controller import CurrentController
 
 
 class CurrentEffectStatusHandler(AbstractRequestHandler):
     current = None
-    controller = None
 
     def initialize(self, app, webservice):
         super(CurrentEffectStatusHandler, self).initialize(app, webservice)
-        self.controller = app.controller(EffectController)
         self.current = app.controller(CurrentController)
 
     @integer('effect_index')

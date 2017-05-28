@@ -24,7 +24,7 @@ class PedalboardHandlerTest(Test):
         return Pedalboard('New default pedalboard')
 
     def test_get(self):
-        bank = self.default_bank
+        bank = self.default_bank_mock
         bank.index = self.rest.create_bank(bank).json()['index']
 
         response = self.rest.get_pedalboard(bank.pedalboards[0])
@@ -35,7 +35,7 @@ class PedalboardHandlerTest(Test):
         self.rest.delete_bank(bank)
 
     def test_post(self):
-        bank = self.default_bank
+        bank = self.default_bank_mock
         bank.index = self.rest.create_bank(bank).json()['index']
 
         pedalboard = self.default_pedalboard
@@ -50,7 +50,7 @@ class PedalboardHandlerTest(Test):
         self.rest.delete_bank(bank)
 
     def test_put(self):
-        bank = self.default_bank
+        bank = self.default_bank_mock
         bank.index = self.rest.create_bank(bank).json()['index']
 
         pedalboard = bank.pedalboards[0]
@@ -67,7 +67,7 @@ class PedalboardHandlerTest(Test):
         self.rest.delete_bank(bank)
 
     def test_delete(self):
-        bank = self.default_bank
+        bank = self.default_bank_mock
         bank.index = self.rest.create_bank(bank).json()['index']
 
         pedalboard = bank.pedalboards[0]

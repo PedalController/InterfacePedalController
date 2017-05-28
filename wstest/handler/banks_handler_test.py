@@ -25,7 +25,7 @@ class BanksHandlerTest(Test):
             self.fail("Server is down")
 
     def test_get(self):
-        r = self.rest.getBanks()
+        r = self.rest.get_banks()
         self.assertEqual(Test.SUCCESS, r.status_code)
 
         banks = r.json()['banks']

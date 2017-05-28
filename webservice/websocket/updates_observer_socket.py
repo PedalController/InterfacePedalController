@@ -40,7 +40,7 @@ class UpdatesObserverSocket(ApplicationObserver):
         self.send({
             'type': 'BANK',
             'updateType': update_type.name,
-            'bank': bank.index,
+            'bank': index,
             'value': bank.json
         }, token)
 

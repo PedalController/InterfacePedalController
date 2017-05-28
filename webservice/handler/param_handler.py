@@ -15,30 +15,26 @@
 from webservice.handler.abstract_request_handler import AbstractRequestHandler
 from webservice.util.handler_utils import integer
 
-from application.controller.banks_controller import BanksController
-from application.controller.param_controller import ParamController
-
 
 class ParamHandler(AbstractRequestHandler):
-    controller = None
-    banks = None
+    _manager = None
 
     def initialize(self, app, webservice):
         super(ParamHandler, self).initialize(app, webservice)
 
-        self.controller = self.app.controller(ParamController)
-        self.banks = self.app.controller(BanksController)
+        self._manager = self.app.manager
 
     @integer('bank_index', 'pedalboard_index', 'effect_index', 'param_index')
     def get(self, bank_index, pedalboard_index, effect_index, param_index):
         try:
-            bank = self.banks.banks[bank_index]
+            bank = self._manager.banks[bank_index]
 
             param = bank.pedalboards[pedalboard_index].effects[effect_index].params[param_index]
             return self.write(param.json)
 
-        except IndexError as error:
+        except IndexError:
             return self.error("Invalid index")
+
         except Exception:
             self.print_error()
             return self.send(500)
@@ -46,17 +42,17 @@ class ParamHandler(AbstractRequestHandler):
     @integer('bank_index', 'pedalboard_index', 'effect_index', 'param_index')
     def put(self, bank_index, pedalboard_index, effect_index, param_index):
         try:
-            bank = self.banks.banks[bank_index]
+            bank = self._manager.banks[bank_index]
             param = bank.pedalboards[pedalboard_index].effects[effect_index].params[param_index]
             value = self.request_data
 
             param.value = value
-            self.controller.updated(param, self.token)
 
             return self.success()
 
-        except IndexError as error:
+        except IndexError:
             return self.error("Invalid index")
+
         except Exception:
             self.print_error()
             return self.send(500)

@@ -18,7 +18,7 @@ from wstest.handler.handler_test import Test
 class BankHandlerTest(Test):
 
     def test_get(self):
-        bank = self.default_bank
+        bank = self.default_bank_mock
         bank.index = self.rest.create_bank(bank).json()['index']
 
         response = self.rest.get_bank(bank)
@@ -29,7 +29,7 @@ class BankHandlerTest(Test):
         self.rest.delete_bank(bank)
 
     def test_post(self):
-        bank = self.default_bank
+        bank = self.default_bank_mock
 
         response = self.rest.create_bank(bank)
         self.assertEqual(Test.CREATED, response.status_code)
@@ -42,7 +42,7 @@ class BankHandlerTest(Test):
         self.rest.delete_bank(bank)
 
     def test_put(self):
-        bank = self.default_bank
+        bank = self.default_bank_mock
         bank.index = self.rest.create_bank(bank).json()['index']
 
         bank.name = 'REST - Default Bank - New name'
@@ -57,8 +57,12 @@ class BankHandlerTest(Test):
         self.rest.delete_bank(bank)
 
     def test_delete(self):
-        bank = self.default_bank
-        bank.index = self.rest.create_bank(bank).json()['index']
+        bank = self.default_bank_mock
+        data = self.rest.create_bank(bank).json()
+        bank.index = data['index']
+        print('My bank', bank.index, data)
+        print('banks', len(self.rest.get_banks().json()['banks'] ))
+
 
         r = self.rest.delete_bank(bank)
         self.assertEqual(Test.DELETED, r.status_code)

@@ -17,7 +17,7 @@ from .handler_test import Test
 
 class EffectHandlerTest(Test):
     def test_get(self):
-        bank = self.default_bank
+        bank = self.default_bank_mock
         bank.index = self.rest.create_bank(bank).json()['index']
 
         effect = bank.pedalboards[0].effects[0]
@@ -29,7 +29,7 @@ class EffectHandlerTest(Test):
         self.rest.delete_bank(bank)
 
     def test_post(self):
-        bank = self.default_bank
+        bank = self.default_bank_mock
         pedalboard = bank.pedalboards[0]
 
         bank.index = self.rest.create_bank(bank).json()['index']
@@ -48,7 +48,7 @@ class EffectHandlerTest(Test):
         self.rest.delete_bank(bank)
 
     def test_delete(self):
-        bank = self.default_bank
+        bank = self.default_bank_mock
         pedalboard = bank.pedalboards[0]
 
         bank.index = self.rest.create_bank(bank).json()['index']

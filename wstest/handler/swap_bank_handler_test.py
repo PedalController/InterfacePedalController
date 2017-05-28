@@ -18,8 +18,8 @@ from .handler_test import Test
 class SwapBankHandlerTest(Test):
 
     def test_swap(self):
-        bank = self.default_bank
-        bank2 = self.default_bank
+        bank = self.default_bank_mock
+        bank2 = self.default_bank_mock
 
         bank.index = self.rest.create_bank(bank).json()['index']
         bank2.index = self.rest.create_bank(bank2).json()['index']

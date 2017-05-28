@@ -15,35 +15,31 @@
 from webservice.handler.abstract_request_handler import AbstractRequestHandler
 from webservice.util.handler_utils import integer
 
-from application.controller.banks_controller import BanksController
 from application.controller.device_controller import DeviceController
-from application.controller.pedalboard_controller import PedalboardController
 
 from pluginsmanager.util.persistence_decoder import PedalboardReader
 
 
 class PedalboardHandler(AbstractRequestHandler):
-    controller = None
-    banks = None
-    decode = None
+    _manager = None
+    _decode = None
 
     def initialize(self, app, webservice):
         super(PedalboardHandler, self).initialize(app, webservice)
 
-        self.controller = self.app.controller(PedalboardController)
-        self.banks = self.app.controller(BanksController)
+        self._manager = self.app.manager
 
-        self.decode = PedalboardReader(self.app.controller(DeviceController).sys_effect)
+        self._decode = PedalboardReader(self.app.controller(DeviceController).sys_effect)
 
     @integer('bank_index', 'pedalboard_index')
     def get(self, bank_index, pedalboard_index):
         try:
-            bank = self.banks.banks[bank_index]
+            bank = self._manager.banks[bank_index]
             pedalboard = bank.pedalboards[pedalboard_index]
 
             return self.write(pedalboard.json)
 
-        except IndexError as error:
+        except IndexError:
             return self.error("Invalid index")
 
         except Exception:
@@ -53,15 +49,14 @@ class PedalboardHandler(AbstractRequestHandler):
     @integer('bank_index')
     def post(self, bank_index):
         try:
-            pedalboard = self.decode.read(self.request_data)
+            pedalboard = self._decode.read(self.request_data)
 
-            bank = self.banks.banks[bank_index]
+            bank = self._manager.banks[bank_index]
             bank.append(pedalboard)
-            self.controller.created(pedalboard, self.token)
 
             return self.created({"index": len(bank.pedalboards) - 1})
 
-        except IndexError as error:
+        except IndexError:
             return self.error("Invalid index")
 
         except Exception:
@@ -71,14 +66,13 @@ class PedalboardHandler(AbstractRequestHandler):
     @integer('bank_index', 'pedalboard_index')
     def put(self, bank_index, pedalboard_index):
         try:
-            old_pedalboard = self.banks.banks[bank_index].pedalboards[pedalboard_index]
-            new_pedalboard = self.decode.read(self.request_data)
-
-            self.controller.replace(old_pedalboard, new_pedalboard, self.token)
+            bank = self._manager.banks[bank_index]
+            pedalboard = self._decode.read(self.request_data)
+            bank.pedalboards[pedalboard_index] = pedalboard
 
             return self.success()
 
-        except IndexError as error:
+        except IndexError:
             return self.error("Invalid index")
 
         except Exception:
@@ -88,12 +82,12 @@ class PedalboardHandler(AbstractRequestHandler):
     @integer('bank_index', 'pedalboard_index')
     def delete(self, bank_index, pedalboard_index):
         try:
-            pedalboard = self.banks.banks[bank_index].pedalboards[pedalboard_index]
-            self.controller.delete(pedalboard, self.token)
+            bank = self._manager.banks[bank_index]
+            del bank.pedalboards[pedalboard_index]
 
             return self.success()
 
-        except IndexError as error:
+        except IndexError:
             return self.error("Invalid index")
 
         except Exception:

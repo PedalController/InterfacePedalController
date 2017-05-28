@@ -49,7 +49,7 @@ class RestFacade(object):
     # **********************
     # Banks
     # **********************
-    def getBanks(self):
+    def get_banks(self):
         return self.get('banks')
 
     # **********************
