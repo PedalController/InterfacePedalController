@@ -36,18 +36,17 @@ class ConnectionHandler(AbstractRequestHandler):
         connection = ConnectionReader(pedalboard, DeviceController.sys_effect).read(self.request_data)
         pedalboard.connections.append(connection)
 
-        self.controller.connected(pedalboard, connection, token=self.token)
-
         self.send(200)
 
     @integer('bank_index', 'pedalboard_index')
     def post(self, bank_index, pedalboard_index):
+        """
+        **Removes** a connection
+        """
         bank = self._manager.banks[bank_index]
         pedalboard = bank.pedalboards[pedalboard_index]
 
         connection = ConnectionReader(pedalboard, DeviceController.sys_effect).read(self.request_data)
         pedalboard.connections.remove(connection)
-
-        self.controller.disconnected(pedalboard, connection, token=self.token)
 
         self.send(200)

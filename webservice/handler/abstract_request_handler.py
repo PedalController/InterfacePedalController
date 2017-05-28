@@ -47,11 +47,6 @@ class AbstractRequestHandler(CorsMixin, tornado.web.RequestHandler):
     def error(self, message):
         self.send(400, {"error": message})
 
-    def print_error(self):
-        import traceback
-        import sys
-        print(traceback.format_exc(), file=sys.stderr, flush=True)
-
     def send(self, status, message=None):
         self.clear()
         self.set_status(status)

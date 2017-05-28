@@ -12,22 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from webservice.handler.abstract_request_handler import AbstractRequestHandler
-
-from application.controller.current_controller import CurrentController
+from .handler_test import Test
 
 
-class CurrentHandler(AbstractRequestHandler):
-    controller = None
+class PluginsHandlerTest(Test):
 
-    def initialize(self, app, webservice):
-        super(CurrentHandler, self).initialize(app, webservice)
-        self.controller = app.controller(CurrentController)
-
-    def get(self):
-        json = {
-            'bank': self.controller.bank.index,
-            'pedalboard': self.controller.pedalboard.index
-        }
-
-        self.send(200, json)
+    def test_get(self):
+        r = self.rest.get_plugins()
+        self.assertEqual(Test.SUCCESS, r.status_code)

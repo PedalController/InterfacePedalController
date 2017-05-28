@@ -12,22 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from webservice.handler.abstract_request_handler import AbstractRequestHandler
-
-from application.controller.current_controller import CurrentController
+from wstest.handler.handler_test import Test
 
 
-class CurrentHandler(AbstractRequestHandler):
-    controller = None
-
-    def initialize(self, app, webservice):
-        super(CurrentHandler, self).initialize(app, webservice)
-        self.controller = app.controller(CurrentController)
-
-    def get(self):
-        json = {
-            'bank': self.controller.bank.index,
-            'pedalboard': self.controller.pedalboard.index
-        }
-
-        self.send(200, json)
+class CurrentHandlerTest(Test):
+    """
+    Tested in current_data_handler and current_pedalboard_handler
+    """
+    pass

@@ -29,11 +29,7 @@ class CurrentPedalboardHandler(AbstractRequestHandler):
 
     @integer('bank_index', 'pedalboard_index')
     def put(self, bank_index, pedalboard_index):
-        bank_changed_and_pedalboard_not_changed = self._controller.bank_number != bank_index \
-                                              and self._controller.pedalboard_number == pedalboard_index
-
         bank = self._manager.banks[bank_index]
         pedalboard = bank.pedalboards[pedalboard_index]
 
-        self._controller.set_bank(bank, notify=bank_changed_and_pedalboard_not_changed, token=self.token)
-        self._controller.set_pedalboard(pedalboard, token=self.token)
+        self._controller.set_pedalboard(pedalboard)

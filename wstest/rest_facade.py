@@ -95,6 +95,10 @@ class RestFacade(object):
         content = pedalboard.data[key]
         return self.put('bank/{0}/pedalboard/{1}/data/{2}'.format(bank_index, pedalboard.index, key), content)
 
+    def move_pedalboard(self, pedalboard, new_index):
+        bank_index = pedalboard.bank.index
+        return self.put("move/bank/{}/pedalboard/{}/to/{}".format(bank_index, pedalboard.index, new_index))
+
     # **********************
     # Effect
     # **********************
@@ -142,6 +146,24 @@ class RestFacade(object):
         )
 
     # **********************
+    # Connection
+    # **********************
+    def create_connection(self, connection):
+        return self.put(self._url_connection(connection), connection.json)
+
+    def delete_connection(self, connection):
+        return self.post(self._url_connection(connection), connection.json)
+
+    def _url_connection(self, connection):
+        effect = connection.output.effect
+        pedalboard = effect.pedalboard
+        bank = pedalboard.bank
+
+        return 'bank/{0}/pedalboard/{1}/connect'.format(
+            bank.index,
+            pedalboard.index
+        )
+    # **********************
     # Swap
     # **********************
     def swap_banks(self, bank_a, bank_b):
@@ -175,3 +197,36 @@ class RestFacade(object):
 
     def configurations_put_name(self, new_name):
         return self.put('configurations/device_name/{}'.format(new_name))
+
+    # **********************
+    # Current
+    # **********************
+    def get_current_pedalboard(self):
+        data = self.get_current_index().json()
+        return self.get('bank/{0}/pedalboard/{1}'.format(data['bank'], data['pedalboard']))
+
+    def set_current_pedalboard(self, pedalboard):
+        bank = pedalboard.bank
+
+        return self.put('current/bank/{}/pedalboard/{}'.format(bank.index, pedalboard.index))
+
+    def get_current_index(self):
+        return self.get('current')
+
+    def get_current_data(self):
+        return self.get('current/data')
+
+    def toggle_effect_current_pedalboard(self, effect):
+        return self.put('current/effect/{}'.format(effect.index))
+
+    # **********************
+    # Plugin
+    # **********************
+    def get_plugins(self):
+        return self.get('plugins')
+
+    def get_plugin(self, uri):
+        return self.get('plugin/{}'.format(uri))
+
+    def reload_plugin(self):
+        return self.put('plugins/reload')

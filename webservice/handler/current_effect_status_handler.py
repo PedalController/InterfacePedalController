@@ -27,5 +27,6 @@ class CurrentEffectStatusHandler(AbstractRequestHandler):
 
     @integer('effect_index')
     def put(self, effect_index):
-        effect = self.current.current_pedalboard.effects[effect_index]
-        self.controller.toggle_status(effect, token=self.token)
+        effect = self.current.pedalboard.effects[effect_index]
+        effect.toggle()
+

@@ -13,13 +13,26 @@
 # limitations under the License.
 
 from .handler_test import Test
+from pluginsmanager.model.pedalboard import Pedalboard
 
 
-class BanksHandlerTest(Test):
+class MovePedalboardHandlerTest(Test):
 
     def test_get(self):
-        r = self.rest.get_banks()
+        bank = self.default_bank_mock
+        bank.append(Pedalboard('Pedalboard 2'))
+        bank.append(Pedalboard('Pedalboard 3'))
+
+        bank.index = self.rest.create_bank(bank).json()['index']
+
+        pedalboard = bank.pedalboards[0]
+        index = 2
+
+        r = self.rest.move_pedalboard(pedalboard, index)
         self.assertEqual(Test.SUCCESS, r.status_code)
 
-        banks = r.json()['banks']
-        self.assertLess(0, len(banks))
+        persisted = self.rest.get_bank(bank).json()
+        bank.pedalboards.move(pedalboard, index)
+        self.assertEqual(bank.json, persisted)
+
+        self.rest.delete_bank(bank)

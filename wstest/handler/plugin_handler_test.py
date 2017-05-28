@@ -12,14 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
+import unittest
+
 from .handler_test import Test
 
 
-class BanksHandlerTest(Test):
+class PluginHandlerTest(Test):
 
     def test_get(self):
-        r = self.rest.get_banks()
+        r = self.rest.get_plugin('http://calf.sourceforge.net/plugins/Compressor')
         self.assertEqual(Test.SUCCESS, r.status_code)
 
-        banks = r.json()['banks']
-        self.assertLess(0, len(banks))
+    @unittest.skipIf('TRAVIS' in os.environ, 'Travis not contains audio interface')
+    def test_get_custom_uri(self):
+        r = self.rest.get_plugin('http://guitarix.sourceforge.net/plugins/gx_scream_#_scream_')
+        self.assertEqual(Test.SUCCESS, r.status_code)
+
+    def test_get_invalid(self):
+        r = self.rest.get_plugin('http://calf.sourceforge.net/plugins/Compressor1234567890')
+        self.assertEqual(Test.ERROR, r.status_code)

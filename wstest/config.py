@@ -72,4 +72,6 @@ if __name__ == "__main__":
     start_new_thread(test_thread, ())
     tornado.ioloop.IOLoop.current().start()
 
+    application.stop()
+
     sys.exit(EXIT_STATUS)
