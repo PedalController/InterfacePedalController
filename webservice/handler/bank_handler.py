@@ -44,7 +44,8 @@ class BankHandler(AbstractRequestHandler):
         json = self.request_data
         bank = self._decoder.read(json)
 
-        self._manager.append(bank)
+        with self.observer:
+            self._manager.append(bank)
 
         self.created({"index": bank.index})
 
@@ -55,7 +56,8 @@ class BankHandler(AbstractRequestHandler):
         json = self.request_data
 
         bank = self._decoder.read(json)
-        self._manager.banks[bank_index] = bank
+        with self.observer:
+            self._manager.banks[bank_index] = bank
 
         self.success()
 
@@ -65,5 +67,7 @@ class BankHandler(AbstractRequestHandler):
     def delete(self, bank_index):
         bank_index = int(bank_index)
 
-        del self._manager.banks[bank_index]
+        with self.observer:
+            del self._manager.banks[bank_index]
+
         self.success()

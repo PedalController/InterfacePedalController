@@ -44,7 +44,8 @@ class EffectHandler(AbstractRequestHandler):
         uri = self.request_data
 
         effect = self._plugins.lv2_effect(uri)
-        pedalboard.append(effect)
+        with self.observer:
+            pedalboard.append(effect)
 
         return self.created({"index": effect.index, "effect": effect.json})
 
@@ -53,6 +54,8 @@ class EffectHandler(AbstractRequestHandler):
     @integer('bank_index', 'pedalboard_index', 'effect_index')
     def delete(self, bank_index, pedalboard_index, effect_index):
         pedalboard = self._manager.banks[bank_index].pedalboards[pedalboard_index]
-        del pedalboard.effects[effect_index]
+
+        with self.observer:
+            del pedalboard.effects[effect_index]
 
         return self.success()

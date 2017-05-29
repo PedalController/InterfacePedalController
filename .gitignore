@@ -6,3 +6,4 @@ htmlcov/
 .idea/
 dist
 wstest/data
+.eggs

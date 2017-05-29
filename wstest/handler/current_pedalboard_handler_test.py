@@ -35,5 +35,5 @@ class CurrentPedalboardHandlerTest(Test):
 
         self.assertEqual(pedalboard.json, self.rest.get_current_pedalboard().json())
 
-        self.rest.put('bank/{0}/pedalboard/{1}'.format(original_current_index['bank'], original_current_index['pedalboard']))
+        self.rest.set_current_pedalboard_by_index(original_current_index['bank'], original_current_index['pedalboard'])
         self.rest.delete_bank(bank)

@@ -41,6 +41,7 @@ class ParamHandler(AbstractRequestHandler):
         param = bank.pedalboards[pedalboard_index].effects[effect_index].params[param_index]
         value = self.request_data
 
-        param.value = value
+        with self.observer:
+            param.value = value
 
         return self.success()

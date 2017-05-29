@@ -16,19 +16,21 @@ from webservice.handler.abstract_request_handler import AbstractRequestHandler
 from webservice.util.handler_utils import integer, exception
 
 
-class SwapBankHandler(AbstractRequestHandler):
+class MoveBankHandler(AbstractRequestHandler):
     _manager = None
 
     def initialize(self, app, webservice):
-        super(SwapBankHandler, self).initialize(app, webservice)
+        super(MoveBankHandler, self).initialize(app, webservice)
 
         self._manager = app.manager
 
     @exception(Exception, 500)
-    @exception(IndexError, 400, message='Invalid index')
-    @integer('bank_a_index', 'bank_b_index')
-    def put(self, bank_a_index, bank_b_index):
+    @integer('from_index', 'to_index')
+    def put(self, from_index, to_index):
         banks = self._manager.banks
-        banks[bank_a_index], banks[bank_b_index] = banks[bank_b_index], banks[bank_a_index]
+        bank = banks[from_index]
+
+        with self.observer:
+            banks.move(bank, to_index)
 
         return self.success()

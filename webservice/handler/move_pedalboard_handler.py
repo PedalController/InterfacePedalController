@@ -30,6 +30,7 @@ class MovePedalboardHandler(AbstractRequestHandler):
         pedalboards = self._manager.banks[bank_index].pedalboards
         pedalboard = pedalboards[from_index]
 
-        pedalboards.move(pedalboard, to_index)
+        with self.observer:
+            pedalboards.move(pedalboard, to_index)
 
         return self.success()

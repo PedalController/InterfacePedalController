@@ -6,6 +6,8 @@ Version 0.3.0 - released 05/??/17
  - Improve Component Data documentation
  - Fix '#' problem when request plugin data
  - Issue #40 - Add support for plugins manager v0.5.0 and Application v0.3.0
+   - Now using PluginsManager notification implementation (``with observer:``)
+ - Issue #37 - Banks swap -> Bank move
 
 Version 0.2.0 - released 05/13/17
 =================================

@@ -34,7 +34,8 @@ class ConnectionHandler(AbstractRequestHandler):
         pedalboard = bank.pedalboards[pedalboard_index]
 
         connection = ConnectionReader(pedalboard, DeviceController.sys_effect).read(self.request_data)
-        pedalboard.connections.append(connection)
+        with self.observer:
+            pedalboard.connections.append(connection)
 
         self.send(200)
 
@@ -47,6 +48,7 @@ class ConnectionHandler(AbstractRequestHandler):
         pedalboard = bank.pedalboards[pedalboard_index]
 
         connection = ConnectionReader(pedalboard, DeviceController.sys_effect).read(self.request_data)
-        pedalboard.connections.remove(connection)
+        with self.observer:
+            pedalboard.connections.remove(connection)
 
         self.send(200)

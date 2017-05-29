@@ -67,6 +67,14 @@ class RestFacade(object):
     def delete_bank(self, bank):
         return self.delete('bank/{0}'.format(bank.index))
 
+    def move_bank(self, bank, new_index):
+        url = 'move/bank/{0}/to/{1}'.format(
+            bank.index,
+            new_index
+        )
+
+        return self.put(url)
+
     # **********************
     # Pedalboard
     # **********************
@@ -163,16 +171,6 @@ class RestFacade(object):
             bank.index,
             pedalboard.index
         )
-    # **********************
-    # Swap
-    # **********************
-    def swap_banks(self, bank_a, bank_b):
-        url = 'swap/bank-a/{0}/bank-b/{1}'.format(
-            bank_a.index,
-            bank_b.index
-        )
-
-        return self.put(url)
 
     # **********************
     # ComponentData
@@ -208,7 +206,10 @@ class RestFacade(object):
     def set_current_pedalboard(self, pedalboard):
         bank = pedalboard.bank
 
-        return self.put('current/bank/{}/pedalboard/{}'.format(bank.index, pedalboard.index))
+        return self.set_current_pedalboard_by_index(bank.index, pedalboard.index)
+
+    def set_current_pedalboard_by_index(self, bank_index, pedalboard_index):
+        return self.put('current/bank/{}/pedalboard/{}'.format(bank_index, pedalboard_index))
 
     def get_current_index(self):
         return self.get('current')

@@ -32,4 +32,5 @@ class CurrentPedalboardHandler(AbstractRequestHandler):
         bank = self._manager.banks[bank_index]
         pedalboard = bank.pedalboards[pedalboard_index]
 
-        self._controller.set_pedalboard(pedalboard)
+        with self.observer:
+            self._controller.set_pedalboard(pedalboard)

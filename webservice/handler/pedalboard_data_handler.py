@@ -45,7 +45,15 @@ class PedalboardDataHandler(AbstractRequestHandler):
         pedalboard = bank.pedalboards[pedalboard_index]
         pedalboard.data[key] = self.request_data
 
-        self.app.components_observer.on_pedalboard_updated(pedalboard, UpdateType.UPDATED, index=pedalboard.index,
-                                                           origin=pedalboard.bank, old=pedalboard)
+        with self.observer:
+            # TODO - Fix gambiarra
+            bank.pedalboards[pedalboard_index] = pedalboard
+            self.app.components_observer.on_pedalboard_updated(
+                pedalboard,
+                UpdateType.UPDATED,
+                index=pedalboard.index,
+                origin=pedalboard.bank,
+                old=pedalboard
+            )
 
         return self.success()

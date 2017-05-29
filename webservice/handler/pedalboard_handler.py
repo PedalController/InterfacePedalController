@@ -47,7 +47,8 @@ class PedalboardHandler(AbstractRequestHandler):
         pedalboard = self._decode.read(self.request_data)
 
         bank = self._manager.banks[bank_index]
-        bank.append(pedalboard)
+        with self.observer:
+            bank.append(pedalboard)
 
         return self.created({"index": len(bank.pedalboards) - 1})
 
@@ -57,7 +58,9 @@ class PedalboardHandler(AbstractRequestHandler):
     def put(self, bank_index, pedalboard_index):
         bank = self._manager.banks[bank_index]
         pedalboard = self._decode.read(self.request_data)
-        bank.pedalboards[pedalboard_index] = pedalboard
+
+        with self.observer:
+            bank.pedalboards[pedalboard_index] = pedalboard
 
         return self.success()
 
@@ -66,6 +69,8 @@ class PedalboardHandler(AbstractRequestHandler):
     @integer('bank_index', 'pedalboard_index')
     def delete(self, bank_index, pedalboard_index):
         bank = self._manager.banks[bank_index]
-        del bank.pedalboards[pedalboard_index]
+
+        with self.observer:
+            del bank.pedalboards[pedalboard_index]
 
         return self.success()

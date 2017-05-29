@@ -35,7 +35,7 @@ from webservice.handler.pedalboard_handler import PedalboardHandler
 from webservice.handler.plugin_handler import PluginHandler
 from webservice.handler.plugins_handler import PluginsHandler
 from webservice.handler.plugins_reload_handler import PluginsReloadHandler
-from webservice.handler.swap_bank_handler import SwapBankHandler
+from webservice.handler.move_bank_handler import MoveBankHandler
 from webservice.properties import WSProperties
 from webservice.search.zeroconf_factory import ZeroconfFactory
 from webservice.websocket.web_socket_connection_handler import WebSocketConnectionHandler
@@ -133,8 +133,8 @@ class WebService(Component):
             .register(r"/v1/current/bank/(?P<bank_index>[0-9]+)/pedalboard/(?P<pedalboard_index>[0-9]+)")
 
         # Swap
-        self.for_handler(SwapBankHandler) \
-            .register(r"/v1/swap/bank-a/(?P<bank_a_index>[0-9]+)/bank-b/(?P<bank_b_index>[0-9]+)")
+        self.for_handler(MoveBankHandler) \
+            .register(r"/v1/move/bank/(?P<from_index>[0-9]+)/to/(?P<to_index>[0-9]+)")
         self.for_handler(MovePedalboardHandler) \
             .register(r"/v1/move/bank/(?P<bank_index>[0-9]+)/pedalboard/(?P<from_index>[0-9]+)/to/(?P<to_index>[0-9]+)")
 
