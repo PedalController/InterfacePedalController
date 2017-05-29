@@ -46,13 +46,11 @@ class PedalboardDataHandler(AbstractRequestHandler):
         pedalboard.data[key] = self.request_data
 
         with self.observer:
-            # TODO - Fix gambiarra
-            bank.pedalboards[pedalboard_index] = pedalboard
-            self.app.components_observer.on_pedalboard_updated(
+            pedalboard.observer.on_pedalboard_updated(
                 pedalboard,
                 UpdateType.UPDATED,
-                index=pedalboard.index,
-                origin=pedalboard.bank,
+                index=pedalboard_index,
+                origin=bank_index,
                 old=pedalboard
             )
 
