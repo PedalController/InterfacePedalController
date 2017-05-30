@@ -33,4 +33,4 @@ class CurrentPedalboardHandler(AbstractRequestHandler):
         pedalboard = bank.pedalboards[pedalboard_index]
 
         with self.observer:
-            self._controller.set_pedalboard(pedalboard)
+            self._controller.pedalboard = pedalboard
