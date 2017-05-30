@@ -12,34 +12,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .handler_test import Test
+from wstest.handler.handler_test import Test
 
 
-class ParamHandlerTest(Test):
-
-    def test_get(self):
-        bank = self.default_bank_mock
-        bank.index = self.rest.create_bank(bank).json()['index']
-
-        param = bank.pedalboards[0].effects[0].params[0]
-        response = self.rest.get_param(param)
-
-        self.assertEqual(Test.SUCCESS, response.status_code)
-        self.assertEqual(param.json, response.json())
-
-        self.rest.delete_bank(bank)
+class CurrentEffectStatusHandlerTest(Test):
 
     def test_put(self):
+        original_current_index = self.rest.get_current_index().json()
+
         bank = self.default_bank_mock
         bank.index = self.rest.create_bank(bank).json()['index']
 
-        param = bank.pedalboards[0].effects[0].params[0]
-        param.value += 1
+        pedalboard = bank.pedalboards[0]
+        self.rest.set_current_pedalboard(pedalboard)
 
-        response = self.rest.put_param(param)
-        self.assertEqual(Test.UPDATED, response.status_code)
+        effect = pedalboard.effects[0]
 
-        get_value = self.rest.get_param(param)
-        self.assertEqual(param.json, get_value.json())
+        response = self.rest.toggle_effect_current_pedalboard(effect)
+        self.assertEqual(Test.SUCCESS, response.status_code)
 
+        response = self.rest.get_pedalboard(pedalboard)
+        effect.toggle()
+        self.assertEqual(pedalboard.json, response.json())
+
+        self.rest.set_current_pedalboard_by_index(original_current_index['bank'], original_current_index['pedalboard'])
         self.rest.delete_bank(bank)

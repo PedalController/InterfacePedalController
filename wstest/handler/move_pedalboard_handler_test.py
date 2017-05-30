@@ -13,29 +13,26 @@
 # limitations under the License.
 
 from .handler_test import Test
+from pluginsmanager.model.pedalboard import Pedalboard
 
 
-class SwapBankHandlerTest(Test):
+class MovePedalboardHandlerTest(Test):
 
-    def test_swap(self):
-        bank = self.default_bank
-        bank2 = self.default_bank
+    def test_get(self):
+        bank = self.default_bank_mock
+        bank.append(Pedalboard('Pedalboard 2'))
+        bank.append(Pedalboard('Pedalboard 3'))
 
         bank.index = self.rest.create_bank(bank).json()['index']
-        bank2.index = self.rest.create_bank(bank2).json()['index']
 
-        response = self.rest.swap_banks(bank, bank2)
-        self.assertEqual(Test.SUCCESS, response.status_code)
+        pedalboard = bank.pedalboards[0]
+        index = 2
 
-        bank.index, bank2.index = bank2.index, bank.index
+        r = self.rest.move_pedalboard(pedalboard, index)
+        self.assertEqual(Test.SUCCESS, r.status_code)
 
-        response = self.rest.get_bank(bank)
-        response2 = self.rest.get_bank(bank2)
-
-        self.assertEqual(Test.SUCCESS, response.status_code)
-
-        self.assertEqual(bank.json, response.json())
-        self.assertEqual(bank2.json, response2.json())
+        persisted = self.rest.get_bank(bank).json()
+        bank.pedalboards.move(pedalboard, index)
+        self.assertEqual(bank.json, persisted)
 
         self.rest.delete_bank(bank)
-        self.rest.delete_bank(bank2)

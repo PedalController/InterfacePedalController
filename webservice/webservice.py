@@ -12,44 +12,33 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import tornado.ioloop
-import tornado.web
-
 import socket
 
+import tornado.ioloop
+import tornado.web
 from application.component.component import Component
 from application.controller.component_data_controller import ComponentDataController
-from webservice.properties import WSProperties
-
-from webservice.handler.banks_handler import BanksHandler
 from webservice.handler.bank_handler import BankHandler
-from webservice.handler.effect_handler import EffectHandler
-from webservice.handler.param_handler import ParamHandler
-from webservice.handler.pedalboard_handler import PedalboardHandler
-from webservice.handler.pedalboard_data_handler import PedalboardDataHandler
-
-from webservice.handler.plugins_handler import PluginsHandler
-from webservice.handler.plugins_reload_handler import PluginsReloadHandler
-from webservice.handler.plugin_handler import PluginHandler
-
+from webservice.handler.banks_handler import BanksHandler
+from webservice.handler.component_data_handler import ComponentDataHandler
 from webservice.handler.connection_handler import ConnectionHandler
-
-from webservice.handler.current_handler import CurrentHandler
 from webservice.handler.current_data_handler import CurrentDataHandler
 from webservice.handler.current_effect_status_handler import CurrentEffectStatusHandler
+from webservice.handler.current_handler import CurrentHandler
 from webservice.handler.current_pedalboard_handler import CurrentPedalboardHandler
-
-from webservice.handler.swap_bank_handler import SwapBankHandler
-from webservice.handler.move_pedalboard_handler import MovePedalboardHandler
-
-from webservice.handler.component_data_handler import ComponentDataHandler
-
-from webservice.websocket.web_socket_connection_handler import WebSocketConnectionHandler
-from webservice.websocket.updates_observer_socket import UpdatesObserverSocket
-
-from webservice.search.zeroconf_factory import ZeroconfFactory
-
 from webservice.handler.device_name_handler import DeviceNameHandler
+from webservice.handler.effect_handler import EffectHandler
+from webservice.handler.move_pedalboard_handler import MovePedalboardHandler
+from webservice.handler.param_handler import ParamHandler
+from webservice.handler.pedalboard_data_handler import PedalboardDataHandler
+from webservice.handler.pedalboard_handler import PedalboardHandler
+from webservice.handler.plugin_handler import PluginHandler
+from webservice.handler.plugins_handler import PluginsHandler
+from webservice.handler.plugins_reload_handler import PluginsReloadHandler
+from webservice.handler.move_bank_handler import MoveBankHandler
+from webservice.properties import WSProperties
+from webservice.search.zeroconf_factory import ZeroconfFactory
+from webservice.websocket.web_socket_connection_handler import WebSocketConnectionHandler
 
 
 class WebService(Component):
@@ -64,7 +53,6 @@ class WebService(Component):
         super().__init__(application)
 
         self.handlers = []
-        self.observer = None
         self.ws_app = None
         self.port = port
 
@@ -72,9 +60,6 @@ class WebService(Component):
 
     def init(self):
         self.register_handlers()
-
-        self.observer = UpdatesObserverSocket()
-        self.register_observer(self.observer)
 
         self.ws_app = self.prepare()
         self.ws_app.listen(self.port)
@@ -148,8 +133,8 @@ class WebService(Component):
             .register(r"/v1/current/bank/(?P<bank_index>[0-9]+)/pedalboard/(?P<pedalboard_index>[0-9]+)")
 
         # Swap
-        self.for_handler(SwapBankHandler) \
-            .register(r"/v1/swap/bank-a/(?P<bank_a_index>[0-9]+)/bank-b/(?P<bank_b_index>[0-9]+)")
+        self.for_handler(MoveBankHandler) \
+            .register(r"/v1/move/bank/(?P<from_index>[0-9]+)/to/(?P<to_index>[0-9]+)")
         self.for_handler(MovePedalboardHandler) \
             .register(r"/v1/move/bank/(?P<bank_index>[0-9]+)/pedalboard/(?P<from_index>[0-9]+)/to/(?P<to_index>[0-9]+)")
 

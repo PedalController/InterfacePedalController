@@ -13,32 +13,24 @@
 # limitations under the License.
 
 from webservice.handler.abstract_request_handler import AbstractRequestHandler
-from webservice.util.handler_utils import integer
-
-from application.controller.pedalboard_controller import PedalboardController
-from application.controller.banks_controller import BanksController
+from webservice.util.handler_utils import integer, exception
 
 
 class MovePedalboardHandler(AbstractRequestHandler):
-    controller = None
-    banks = None
+    _manager = None
 
     def initialize(self, app, webservice):
         super(MovePedalboardHandler, self).initialize(app, webservice)
 
-        self.banks = self.app.controller(BanksController)
-        self.controller = self.app.controller(PedalboardController)
+        self._manager = app.manager
 
+    @exception(Exception, 500)
     @integer('bank_index', 'from_index', 'to_index')
     def put(self, bank_index, from_index, to_index):
-        try:
-            pedalboards = self.banks.banks[bank_index].pedalboards
-            pedalboard = pedalboards[from_index]
+        pedalboards = self._manager.banks[bank_index].pedalboards
+        pedalboard = pedalboards[from_index]
 
-            self.controller.move(pedalboard, to_index, self.token)
+        with self.observer:
+            pedalboards.move(pedalboard, to_index)
 
-            return self.success()
-
-        except Exception:
-            self.print_error()
-            return self.send(500)
+        return self.success()

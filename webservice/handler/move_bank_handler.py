@@ -13,21 +13,24 @@
 # limitations under the License.
 
 from webservice.handler.abstract_request_handler import AbstractRequestHandler
+from webservice.util.handler_utils import integer, exception
 
-from application.controller.current_controller import CurrentController
 
-
-class CurrentHandler(AbstractRequestHandler):
-    controller = None
+class MoveBankHandler(AbstractRequestHandler):
+    _manager = None
 
     def initialize(self, app, webservice):
-        super(CurrentHandler, self).initialize(app, webservice)
-        self.controller = app.controller(CurrentController)
+        super(MoveBankHandler, self).initialize(app, webservice)
 
-    def get(self):
-        json = {
-            'bank': self.controller.bank.index,
-            'pedalboard': self.controller.pedalboard.index
-        }
+        self._manager = app.manager
 
-        self.send(200, json)
+    @exception(Exception, 500)
+    @integer('from_index', 'to_index')
+    def put(self, from_index, to_index):
+        banks = self._manager.banks
+        bank = banks[from_index]
+
+        with self.observer:
+            banks.move(bank, to_index)
+
+        return self.success()

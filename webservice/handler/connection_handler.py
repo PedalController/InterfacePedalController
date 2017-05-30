@@ -15,42 +15,40 @@
 from webservice.handler.abstract_request_handler import AbstractRequestHandler
 from webservice.util.handler_utils import integer
 
-from application.controller.effect_controller import EffectController
-from application.controller.banks_controller import BanksController
 from application.controller.device_controller import DeviceController
 
 from pluginsmanager.util.persistence_decoder import ConnectionReader
 
 
 class ConnectionHandler(AbstractRequestHandler):
-    controller = None
-    banks = None
+    _manager = None
 
     def initialize(self, app, webservice):
         super(ConnectionHandler, self).initialize(app, webservice)
-        self.controller = app.controller(EffectController)
-        self.banks = app.controller(BanksController)
+
+        self._manager = app.manager
 
     @integer('bank_index', 'pedalboard_index')
     def put(self, bank_index, pedalboard_index):
-        bank = self.banks.banks[bank_index]
+        bank = self._manager.banks[bank_index]
         pedalboard = bank.pedalboards[pedalboard_index]
 
         connection = ConnectionReader(pedalboard, DeviceController.sys_effect).read(self.request_data)
-        pedalboard.connections.append(connection)
-
-        self.controller.connected(pedalboard, connection, token=self.token)
+        with self.observer:
+            pedalboard.connections.append(connection)
 
         self.send(200)
 
     @integer('bank_index', 'pedalboard_index')
     def post(self, bank_index, pedalboard_index):
-        bank = self.banks.banks[bank_index]
+        """
+        **Removes** a connection
+        """
+        bank = self._manager.banks[bank_index]
         pedalboard = bank.pedalboards[pedalboard_index]
 
         connection = ConnectionReader(pedalboard, DeviceController.sys_effect).read(self.request_data)
-        pedalboard.connections.remove(connection)
-
-        self.controller.disconnected(pedalboard, connection, token=self.token)
+        with self.observer:
+            pedalboard.connections.remove(connection)
 
         self.send(200)

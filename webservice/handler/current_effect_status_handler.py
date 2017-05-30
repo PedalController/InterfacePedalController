@@ -15,20 +15,20 @@
 from webservice.handler.abstract_request_handler import AbstractRequestHandler
 from webservice.util.handler_utils import integer
 
-from application.controller.effect_controller import EffectController
 from application.controller.current_controller import CurrentController
 
 
 class CurrentEffectStatusHandler(AbstractRequestHandler):
     current = None
-    controller = None
 
     def initialize(self, app, webservice):
         super(CurrentEffectStatusHandler, self).initialize(app, webservice)
-        self.controller = app.controller(EffectController)
         self.current = app.controller(CurrentController)
 
     @integer('effect_index')
     def put(self, effect_index):
-        effect = self.current.current_pedalboard.effects[effect_index]
-        self.controller.toggle_status(effect, token=self.token)
+        effect = self.current.pedalboard.effects[effect_index]
+
+        with self.observer:
+            effect.toggle()
+

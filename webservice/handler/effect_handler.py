@@ -13,70 +13,49 @@
 # limitations under the License.
 
 from webservice.handler.abstract_request_handler import AbstractRequestHandler
-from webservice.util.handler_utils import integer
+from webservice.util.handler_utils import integer, exception
 
-from application.controller.banks_controller import BanksController
-from application.controller.effect_controller import EffectController
 from application.controller.plugins_controller import PluginsController
 
 
 class EffectHandler(AbstractRequestHandler):
-    controller = None
-    banks = None
-    plugins = None
+    _manager = None
+    _plugins = None
 
     def initialize(self, app, webservice):
         super(EffectHandler, self).initialize(app, webservice)
 
-        self.controller = self.app.controller(EffectController)
-        self.banks = self.app.controller(BanksController)
-        self.plugins = self.app.controller(PluginsController)
+        self._manager = self.app.manager
+        self._plugins = self.app.controller(PluginsController)
 
+    @exception(Exception, 500)
+    @exception(IndexError, 400, message='Invalid index')
     @integer('bank_index', 'pedalboard_index', 'effect_index')
     def get(self, bank_index, pedalboard_index, effect_index):
-        try:
-            effect = self.banks.banks[bank_index].pedalboards[pedalboard_index].effects[effect_index]
+        effect = self._manager.banks[bank_index].pedalboards[pedalboard_index].effects[effect_index]
 
-            return self.write(effect.json)
+        return self.write(effect.json)
 
-        except IndexError as error:
-            return self.error("Invalid index")
-
-        except Exception:
-            self.print_error()
-            return self.send(500)
-
+    @exception(Exception, 500)
+    @exception(IndexError, 400, message='Invalid index')
     @integer('bank_index', 'pedalboard_index')
     def post(self, bank_index, pedalboard_index):
-        try:
-            pedalboard = self.banks.banks[bank_index].pedalboards[pedalboard_index]
-            uri = self.request_data
+        pedalboard = self._manager.banks[bank_index].pedalboards[pedalboard_index]
+        uri = self.request_data
 
-            effect = self.plugins.lv2_effect(uri)
+        effect = self._plugins.lv2_effect(uri)
+        with self.observer:
             pedalboard.append(effect)
-            self.controller.created(effect, self.token)
-            effect_index = len(pedalboard.effects) - 1
 
-            return self.created({"index": effect_index, "effect": effect.json})
+        return self.created({"index": effect.index, "effect": effect.json})
 
-        except IndexError as error:
-            return self.error("Invalid index")
-
-        except Exception:
-            self.print_error()
-            return self.send(500)
-
+    @exception(Exception, 500)
+    @exception(IndexError, 400, message='Invalid index')
     @integer('bank_index', 'pedalboard_index', 'effect_index')
     def delete(self, bank_index, pedalboard_index, effect_index):
-        try:
-            effect = self.banks.banks[bank_index].pedalboards[pedalboard_index].effects[effect_index]
+        pedalboard = self._manager.banks[bank_index].pedalboards[pedalboard_index]
 
-            self.controller.delete(effect, self.token)
-            return self.success()
+        with self.observer:
+            del pedalboard.effects[effect_index]
 
-        except IndexError as error:
-            return self.error("Invalid index")
-
-        except Exception:
-            self.print_error()
-            return self.send(500)
+        return self.success()

@@ -15,19 +15,18 @@
 
 class WebSocketConnections(object):
     connections = dict()
+    observers = dict()
 
     @staticmethod
-    def register(token, connection):
+    def register(token, connection, observer):
         WebSocketConnections.connections[connection] = token
+        WebSocketConnections.observers[token] = observer
 
     @staticmethod
     def unregister(connection):
+        token = WebSocketConnections.connections[connection]
+        observer = WebSocketConnections.observers[token]
         del WebSocketConnections.connections[connection]
+        del WebSocketConnections.observers[token]
 
-    @staticmethod
-    def send_broadcast(data, token=None):
-        for connection in WebSocketConnections.connections:
-            connection_token = WebSocketConnections.connections[connection]
-
-            if token is None or token != connection_token:
-                connection.write_message(data)
+        return token, observer
