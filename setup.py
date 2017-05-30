@@ -49,7 +49,7 @@ setup(
     package_data={},
 
     install_requires=[
-        'PedalPi-Application==0.2.1',
+        'PedalPi-Application>=0.3.0',
         'tornado>=4.4.2',
         'tornado-cors==0.6.0',
         'zeroconf'
