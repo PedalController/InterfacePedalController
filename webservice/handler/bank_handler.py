@@ -22,12 +22,11 @@ from pluginsmanager.util.persistence_decoder import PersistenceDecoder
 
 
 class BankHandler(AbstractRequestHandler):
-    app = None
     controller = None
     decoder = None
 
-    def initialize(self, app):
-        self.app = app
+    def initialize(self, app, webservice):
+        super(BankHandler, self).initialize(app, webservice)
 
         self.controller = self.app.controller(BanksController)
         sys_effect = self.app.controller(DeviceController).sys_effect

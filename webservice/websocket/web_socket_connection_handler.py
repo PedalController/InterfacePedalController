@@ -22,7 +22,7 @@ from tornado import websocket
 
 class WebSocketConnectionHandler(websocket.WebSocketHandler):
 
-    def initialize(self, app):
+    def initialize(self, app, webservice):
         pass
 
     def check_origin(self, origin):

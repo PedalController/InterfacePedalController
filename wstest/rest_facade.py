@@ -166,3 +166,12 @@ class RestFacade(object):
 
     def _url_component_data(self, key):
         return 'data/{0}'.format(key)
+
+    # **********************
+    # Configurations
+    # **********************
+    def configurations_get_name(self):
+        return self.get('configurations/device_name')
+
+    def configurations_put_name(self, new_name):
+        return self.put('configurations/device_name/{}'.format(new_name))

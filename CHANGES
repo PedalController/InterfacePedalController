@@ -1,7 +1,9 @@
 Version 0.3.0 - released 05//17
 =================================
- - Issues #27 - Using logging instread print
- - Issues #31 - Implemented secure close ([Application issue 29](https://github.com/PedalPi/Application/issues/29) version 0.3.0)
+ - Issues #31 - Using logging instead print
+ - Issues #26 - Implemented secure close ([Application issue 29](https://github.com/PedalPi/Application/issues/29) version 0.3.0)
+ - Issues #27 - Rename zeroconf device name
+ - Improve Component Data documentation
 
 Version 0.2.0 - released 05/13/17
 =================================

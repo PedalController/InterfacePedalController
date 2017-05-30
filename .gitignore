@@ -5,3 +5,4 @@ PedalPi_WebService.egg-info
 htmlcov/
 .idea/
 dist
+wstest/data

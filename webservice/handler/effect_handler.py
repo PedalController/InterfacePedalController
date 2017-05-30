@@ -21,13 +21,12 @@ from application.controller.plugins_controller import PluginsController
 
 
 class EffectHandler(AbstractRequestHandler):
-    app = None
     controller = None
     banks = None
     plugins = None
 
-    def initialize(self, app):
-        self.app = app
+    def initialize(self, app, webservice):
+        super(EffectHandler, self).initialize(app, webservice)
 
         self.controller = self.app.controller(EffectController)
         self.banks = self.app.controller(BanksController)

@@ -18,10 +18,10 @@ from application.controller.component_data_controller import ComponentDataContro
 
 
 class ComponentDataHandler(AbstractRequestHandler):
-    app = None
     controller = None
 
-    def initialize(self, app):
+    def initialize(self, app, webservice):
+        super(ComponentDataHandler, self).initialize(app, webservice)
         self.controller = app.controller(ComponentDataController)
 
     def get(self, key):

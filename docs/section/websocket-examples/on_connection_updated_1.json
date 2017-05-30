@@ -1,0 +1,18 @@
+{
+   "type":"CONNECTION",
+   "updateType":"CREATED",
+   "bank":2,
+   "pedalboard":0,
+   "value":{
+      "input":{
+         "effect":3,
+         "symbol":"in1",
+         "index":7
+      },
+      "output":{
+         "effect":2,
+         "symbol":"out_l",
+         "index":2
+      }
+   }
+}

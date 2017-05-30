@@ -23,11 +23,11 @@ from pluginsmanager.util.persistence_decoder import ConnectionReader
 
 
 class ConnectionHandler(AbstractRequestHandler):
-    app = None
     controller = None
     banks = None
 
-    def initialize(self, app):
+    def initialize(self, app, webservice):
+        super(ConnectionHandler, self).initialize(app, webservice)
         self.controller = app.controller(EffectController)
         self.banks = app.controller(BanksController)
 

@@ -184,6 +184,9 @@ Test
 
 .. code-block:: bash
 
+    # if number != 0 error
+    sh -c 'coverage3 run --source=webservice wstest/config.py test'; echo $?
+
     coverage3 run --source=webservice wstest/config.py test
     coverage3 report
     coverage3 html

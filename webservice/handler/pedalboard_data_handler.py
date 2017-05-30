@@ -20,11 +20,10 @@ from application.controller.pedalboard_controller import PedalboardController
 
 
 class PedalboardDataHandler(AbstractRequestHandler):
-    app = None
     controller = None
 
-    def initialize(self, app):
-        self.app = app
+    def initialize(self, app, webservice):
+        super(PedalboardDataHandler, self).initialize(app, webservice)
 
         self.controller = self.app.controller(PedalboardController)
         self.banks = self.app.controller(BanksController)

@@ -1,0 +1,54 @@
+In addition to the possibility of persisting additional data for a particular pedalboard, it is possible to persist isolated data, that is, they do not share the same storage space with pedalboards.
+
+## Manage data [/data/{key}]
+
+Access to the data is through a **key**. This key must be unique: more than one component using the same key will result in the same storage space for both.
+
+It is expected, although not mandatory, that data from a component using this API have a unique **key**.
+
++ Parameters
+    + key: `MyAwesomeComponent` (string, required) - Data component identifier. In format `[a-zA-Z\-0-9]+`
+
+### Get component data [GET]
+
+Get the current data persisted for the informed `key`. If any data has previously persisted, returns a empty dict (`{}`).
+
++ Request  (application/json; charset=UTF-8)
++ Response 200
+    + Body
+
+            {"a key": "a value"}
+
++ Request No data previously saved (application/json; charset=UTF-8)
++ Response 200
+    + Body
+
+            {}
+
+### Set component data [PUT]
+
+Persists a data for the informed `key`.
+
+::: warning
+**All current content is replaced by new.**
+
+When adding a new data, remember to stick with what has already been persisted.
+:::
+
++ Request  (application/json; charset=UTF-8)
+    + Body
+
+            {"current-data": {"name": "test"}, {"value": [1, 2, 3]}}
+
++ Response 200
+
+### Clear component data [DELETE]
+
+Removes the current data persisted for the informed `key`.
+
+::: warning
+**Be cautious** and do not erase data from other components that you are not managing.
+:::
+
++ Request  (application/json; charset=UTF-8)
++ Response 200

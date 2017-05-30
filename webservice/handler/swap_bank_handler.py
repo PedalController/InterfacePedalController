@@ -19,11 +19,10 @@ from application.controller.banks_controller import BanksController, BankError
 
 
 class SwapBankHandler(AbstractRequestHandler):
-    app = None
     controller = None
 
-    def initialize(self, app):
-        self.app = app
+    def initialize(self, app, webservice):
+        super(SwapBankHandler, self).initialize(app, webservice)
         self.controller = self.app.controller(BanksController)
 
     @integer('bank_a_index', 'bank_b_index')

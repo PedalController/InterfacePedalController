@@ -19,12 +19,11 @@ from application.controller.plugins_controller import PluginsController
 
 
 class BanksHandler(AbstractRequestHandler):
-    app = None
     controller = None
     plugins = None
 
-    def initialize(self, app):
-        self.app = app
+    def initialize(self, app, webservice):
+        super(BanksHandler, self).initialize(app, webservice)
 
         self.controller = self.app.controller(BanksController)
         self.plugins = self.app.controller(PluginsController)

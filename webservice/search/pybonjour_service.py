@@ -12,12 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import time
-
+import logging
 import select
 
 from webservice.search.abstract_zeroconf_service import AbstractZeroconfService
-import logging
 
 try:
     import pybonjour
@@ -40,8 +38,8 @@ class PybonjourService(AbstractZeroconfService):
         pip install git+https://github.com/depl0y/pybonjour-python3
     """
 
-    def __init__(self, port):
-        super(PybonjourService, self).__init__(port)
+    def __init__(self, name, port):
+        super(PybonjourService, self).__init__(name, port)
 
         self.registered = False
         self.register = None
@@ -49,12 +47,6 @@ class PybonjourService(AbstractZeroconfService):
     @classmethod
     def has_support(cls):
         return support
-
-    def _log(self, message, *args, error=False, **kwargs):
-        if error:
-            logging.error(msg=message.format(*args, **kwargs))
-        else:
-            logging.info(msg=message.format(*args, **kwargs))
 
     def register_callback(self, sdRef, flags, error_code, name, regtype, domain):
         if error_code == pybonjour.kDNSServiceErr_NoError:
@@ -64,6 +56,7 @@ class PybonjourService(AbstractZeroconfService):
             self._log('Zeroconf is not workings', error=True)
 
     def start(self):
+        self.registered = False
         register = pybonjour.DNSServiceRegister(
             name=self.name,
             regtype=self.type,
