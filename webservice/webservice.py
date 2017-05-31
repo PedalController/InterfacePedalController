@@ -83,8 +83,9 @@ class WebService(Component):
         return data
 
     def close(self):
-        self.zeroconf.close()
-        self._log('Stopped zeroconf')
+        if self.zeroconf is not None:
+            self.zeroconf.close()
+            self._log('Stopped zeroconf')
 
     def register_handlers(self):
         self.for_handler(PluginsHandler) \

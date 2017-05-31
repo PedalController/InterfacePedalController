@@ -21,7 +21,7 @@ from .handler_test import Test
 class PluginHandlerTest(Test):
 
     def test_get(self):
-        r = self.rest.get_plugin('http://calf.sourceforge.net/plugins/Compressor')
+        r = self.rest.get_plugin('http://calf.sourceforge.net/plugins/MultiChorus')
         self.assertEqual(Test.SUCCESS, r.status_code)
 
     @unittest.skipIf('TRAVIS' in os.environ, 'Travis not contains audio interface')
@@ -31,5 +31,5 @@ class PluginHandlerTest(Test):
         self.assertEqual(Test.SUCCESS, r.status_code)
 
     def test_get_invalid(self):
-        r = self.rest.get_plugin('http://calf.sourceforge.net/plugins/Compressor1234567890')
+        r = self.rest.get_plugin('http://calf.sourceforge.net/plugins/MultiChorus1234567890')
         self.assertEqual(Test.ERROR, r.status_code)
