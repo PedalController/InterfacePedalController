@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import time
-
+import logging
 import select
 
 from webservice.search.abstract_zeroconf_service import AbstractZeroconfService
@@ -39,8 +38,8 @@ class PybonjourService(AbstractZeroconfService):
         pip install git+https://github.com/depl0y/pybonjour-python3
     """
 
-    def __init__(self, port):
-        super(PybonjourService, self).__init__(port)
+    def __init__(self, name, port):
+        super(PybonjourService, self).__init__(name, port)
 
         self.registered = False
         self.register = None
@@ -49,17 +48,15 @@ class PybonjourService(AbstractZeroconfService):
     def has_support(cls):
         return support
 
-    def _log(self, *args, **kwargs):
-        print('[' + time.strftime('%Y-%m-%d %H:%M:%S') + ']', *args, **kwargs)
-
     def register_callback(self, sdRef, flags, error_code, name, regtype, domain):
         if error_code == pybonjour.kDNSServiceErr_NoError:
             self.registered = True
-            self._log('Zeroconf', self.__class__.__name__, '- Registered service:', 'name='+name, 'regtype='+regtype, 'domain='+domain)
+            self._log('Zeroconf {} - Registered service: name={}, regtype={}, domain={}', self.__class__.__name__, name, regtype, domain)
         else:
-            self._log('zeroconf is not workings')
+            self._log('Zeroconf is not workings', error=True)
 
     def start(self):
+        self.registered = False
         register = pybonjour.DNSServiceRegister(
             name=self.name,
             regtype=self.type,

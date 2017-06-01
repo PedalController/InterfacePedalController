@@ -16,26 +16,21 @@ from webservice.handler.abstract_request_handler import AbstractRequestHandler
 from webservice.util.handler_utils import integer
 
 from application.controller.current_controller import CurrentController
-from application.controller.banks_controller import BanksController
 
 
 class CurrentPedalboardHandler(AbstractRequestHandler):
-    app = None
-    controller = None
-    banks = None
+    _controller = None
+    _manager = None
 
-    def initialize(self, app):
-        self.app = app
-        self.controller = app.controller(CurrentController)
-        self.banks = app.controller(BanksController)
+    def initialize(self, app, webservice):
+        super(CurrentPedalboardHandler, self).initialize(app, webservice)
+        self._controller = app.controller(CurrentController)
+        self._manager = app.manager
 
     @integer('bank_index', 'pedalboard_index')
     def put(self, bank_index, pedalboard_index):
-        bank_changed_and_pedalboard_not_changed = self.controller.bank_number != bank_index \
-                                              and self.controller.pedalboard_number == pedalboard_index
-
-        bank = self.banks.banks[bank_index]
+        bank = self._manager.banks[bank_index]
         pedalboard = bank.pedalboards[pedalboard_index]
 
-        self.controller.set_bank(bank, notify=bank_changed_and_pedalboard_not_changed, token=self.token)
-        self.controller.set_pedalboard(pedalboard, token=self.token)
+        with self.observer:
+            self._controller.pedalboard = pedalboard

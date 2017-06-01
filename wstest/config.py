@@ -13,9 +13,14 @@
 # limitations under the License.
 
 
+import sys
+EXIT_STATUS = 0
+
+
 def test_thread():
     discover_tests()
     stop()
+
 
 def discover_tests():
     import os
@@ -30,10 +35,17 @@ def discover_tests():
     test_files = glob.glob(path + '/handler/*_test.py')
     module_strings = [test_file[0:len(test_file) - 3].replace('/', '.') for test_file in test_files]
 
+    results = []
     for test_file in module_strings:
         tests = unittest.defaultTestLoader.loadTestsFromName(test_file)
         suite = unittest.TestSuite(tests)
-        unittest.TextTestRunner().run(suite)
+        results.append(unittest.TextTestRunner().run(suite))
+
+    global EXIT_STATUS
+    for result in results:
+        if result.errors or result.failures:
+            EXIT_STATUS = -1
+
 
 def stop():
     ioloop = tornado.ioloop.IOLoop.instance()
@@ -47,7 +59,7 @@ if __name__ == "__main__":
     from webservice.webservice import WebService
 
 
-    application = Application(path_data="data/", address='localhost', test=True)
+    application = Application(path_data="wstest/data/", address='localhost', test=True)
     application.register(WebService(application, 3000))
 
     application.start()
@@ -59,3 +71,7 @@ if __name__ == "__main__":
     from _thread import start_new_thread
     start_new_thread(test_thread, ())
     tornado.ioloop.IOLoop.current().start()
+
+    application.stop()
+
+    sys.exit(EXIT_STATUS)

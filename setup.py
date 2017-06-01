@@ -24,7 +24,7 @@ def readme():
 
 setup(
     name='PedalPi-WebService',
-    version='0.2.0',
+    version='0.3.0',
 
     description='WebService (REST and WebSocket) to access and controller your Pedal Pi pedals set configurations',
     long_description=readme(),
@@ -49,7 +49,7 @@ setup(
     package_data={},
 
     install_requires=[
-        'PedalPi-Application',
+        'PedalPi-Application>=0.3.0',
         'tornado>=4.4.2',
         'tornado-cors==0.6.0',
         'zeroconf'
@@ -57,7 +57,7 @@ setup(
 
     test_suite='wstest',
     tests_requires=[
-        'PedalPi-Application',
+        'PedalPi-Application>=0.3.0',
         'requests==2.11.1'
     ],
 
@@ -66,7 +66,9 @@ setup(
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Apache Software License',
         'Topic :: Multimedia :: Sound/Audio',
-        'Programming Language :: Python :: 3'
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6'
     ],
     keywords='pedal-pi mod-host lv2 audio plugins-manager pedal-pi-component',
 

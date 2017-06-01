@@ -1,3 +1,14 @@
+Version 0.3.0 - released 05/31/17
+=================================
+ - Issues #31 - Using logging instead print
+ - Issues #26 - Implemented secure close ([Application issue 29](https://github.com/PedalPi/Application/issues/29) version 0.3.0)
+ - Issues #27 - Rename zeroconf device name
+ - Improve Component Data documentation
+ - Fix '#' problem when request plugin data
+ - Issue #40 - Add support for plugins manager v0.5.0 and Application v0.3.0
+   - Now using PluginsManager notification implementation (``with observer:``)
+ - Issue #37 - Banks swap -> Bank move
+
 Version 0.2.0 - released 05/13/17
 =================================
  - Initial release

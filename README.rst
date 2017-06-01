@@ -98,11 +98,17 @@ lines of code:
     application.start()
 
     import tornado
-    tornado.ioloop.IOLoop.current().start()
+    try:
+        tornado.ioloop.IOLoop.current().start()
+    except KeyboardInterrupt:
+        application.stop()
 
     # Not more necessary
     #from signal import pause
-    #pause()
+    #try:
+    #    pause()
+    #except KeyboardInterrupt:
+    #    application.stop()
 
 Config file
 +++++++++++
@@ -135,20 +141,16 @@ WebSocket
 *********
 
 Communication via WebService basically consists of receiving updates
-about the state of the application. The message types will be
-documented in the future and listed at http://pedalpi.github.io/WebService/.
+about the state of the application.
 
-Currently, information about the messages can be found
-in the `source code of this project`_.
-
-.. _source code of this project: https://github.com/PedalPi/WebService/tree/master/webservice/websocket/updates_observer_socket.py
+WebService API documentation can be found at http://pedalpi.github.io/WebService/#websocket
 
 Using in your client
 --------------------
 
 WebService disposes the Application features in a web service. These projects uses it for control:
 
- * `Apk`_: App controller for smart devices and navigators.
+* `Apk`_: App controller for smart devices and navigators.
 
 .. _Apk: https://github.com/PedalPi/Apk
 
@@ -177,6 +179,9 @@ Test
 ****
 
 .. code-block:: bash
+
+    # if number != 0 error
+    sh -c 'coverage3 run --source=webservice wstest/config.py test'; echo $?
 
     coverage3 run --source=webservice wstest/config.py test
     coverage3 report

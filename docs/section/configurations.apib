@@ -1,0 +1,22 @@
+Manages Pedal Pi configurations
+
+## Device Name [/configurations/device_name]
+
+### Get device name (zeroconf) [GET]
+
+Get the device name that will appear in a search performed by zeroconf.
+
++ Request  (application/json; charset=UTF-8)
++ Response 200
+
+## Set Device Name [/configurations/device_name/{new_name}]
+
++ Parameters
+    + new_name: `Paulo - Pedal Pi` (string, required) - New device name
+
+### Set the device name (zeroconf) [PUT]
+
+Change the device name that will appear in a search performed by zeroconf.
+
++ Request  (application/json; charset=UTF-8)
++ Response 200

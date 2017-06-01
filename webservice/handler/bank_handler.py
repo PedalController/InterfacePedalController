@@ -13,81 +13,61 @@
 # limitations under the License.
 
 from webservice.handler.abstract_request_handler import AbstractRequestHandler
-from webservice.util.handler_utils import integer
+from webservice.util.handler_utils import integer, exception
 
-from application.controller.banks_controller import BanksController
 from application.controller.device_controller import DeviceController
 
 from pluginsmanager.util.persistence_decoder import PersistenceDecoder
 
 
 class BankHandler(AbstractRequestHandler):
-    app = None
-    controller = None
-    decoder = None
+    _decoder = None
+    _manager = None
 
-    def initialize(self, app):
-        self.app = app
+    def initialize(self, app, webservice):
+        super(BankHandler, self).initialize(app, webservice)
 
-        self.controller = self.app.controller(BanksController)
+        self._manager = self.app.manager
         sys_effect = self.app.controller(DeviceController).sys_effect
-        self.decoder = PersistenceDecoder(sys_effect)
+        self._decoder = PersistenceDecoder(sys_effect)
 
+    @exception(Exception, 500)
+    @exception(IndexError, 400, message='Invalid index')
     @integer('bank_index')
     def get(self, bank_index):
-        try:
-            bank = self.controller.banks[bank_index]
+        bank = self._manager.banks[bank_index]
 
-            self.write(bank.json)
+        self.write(bank.json)
 
-        except IndexError as error:
-            return self.error("Invalid index")
-
-        except Exception:
-            self.print_error()
-            return self.send(500)
-
+    @exception(Exception, 500)
     def post(self):
-        try:
-            json = self.request_data
-            bank = self.decoder.read(json)
+        json = self.request_data
+        bank = self._decoder.read(json)
 
-            index = self.controller.create(bank, self.token)
+        with self.observer:
+            self._manager.append(bank)
 
-            self.created({"index": index})
+        self.created({"index": bank.index})
 
-        except IndexError as error:
-            return self.error("Invalid index")
-
-        except Exception:
-            self.print_error()
-            return self.send(500)
-
+    @exception(Exception, 500)
+    @exception(IndexError, 400, message='Invalid index')
     @integer('bank_index')
     def put(self, bank_index):
-        try:
-            json = self.request_data
+        json = self.request_data
 
-            new_bank = self.decoder.read(json)
-            old_bank = self.controller.banks[bank_index]
+        bank = self._decoder.read(json)
+        with self.observer:
+            self._manager.banks[bank_index] = bank
 
-            self.controller.replace(old_bank, new_bank, self.token)
+        self.success()
 
-            self.success()
-
-        except IndexError as error:
-            return self.error("Invalid index")
-
-        except Exception:
-            self.print_error()
-            return self.send(500)
-
+    @exception(Exception, 500)
+    @exception(IndexError, 400, message='Invalid index')
     @integer('bank_index')
     def delete(self, bank_index):
         bank_index = int(bank_index)
 
-        try:
-            self.controller.delete(self.controller.banks[bank_index], self.token)
-            self.success()
-        except IndexError as error:
-            return self.error("Invalid index")
+        with self.observer:
+            del self._manager.banks[bank_index]
+
+        self.success()

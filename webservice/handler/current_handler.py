@@ -18,16 +18,16 @@ from application.controller.current_controller import CurrentController
 
 
 class CurrentHandler(AbstractRequestHandler):
-    app = None
     controller = None
 
-    def initialize(self, app):
+    def initialize(self, app, webservice):
+        super(CurrentHandler, self).initialize(app, webservice)
         self.controller = app.controller(CurrentController)
 
     def get(self):
         json = {
-            'bank': self.controller.bank_number,
-            'pedalboard': self.controller.pedalboard_number
+            'bank': self.controller.bank.index,
+            'pedalboard': self.controller.pedalboard.index
         }
 
         self.send(200, json)

@@ -13,51 +13,35 @@
 # limitations under the License.
 
 from webservice.handler.abstract_request_handler import AbstractRequestHandler
-from webservice.util.handler_utils import integer
-
-from application.controller.banks_controller import BanksController
-from application.controller.param_controller import ParamController
+from webservice.util.handler_utils import integer, exception
 
 
 class ParamHandler(AbstractRequestHandler):
-    app = None
-    controller = None
-    banks = None
+    _manager = None
 
-    def initialize(self, app):
-        self.app = app
+    def initialize(self, app, webservice):
+        super(ParamHandler, self).initialize(app, webservice)
 
-        self.controller = self.app.controller(ParamController)
-        self.banks = self.app.controller(BanksController)
+        self._manager = self.app.manager
 
+    @exception(Exception, 500)
+    @exception(IndexError, 400, message='Invalid index')
     @integer('bank_index', 'pedalboard_index', 'effect_index', 'param_index')
     def get(self, bank_index, pedalboard_index, effect_index, param_index):
-        try:
-            bank = self.banks.banks[bank_index]
+        bank = self._manager.banks[bank_index]
 
-            param = bank.pedalboards[pedalboard_index].effects[effect_index].params[param_index]
-            return self.write(param.json)
+        param = bank.pedalboards[pedalboard_index].effects[effect_index].params[param_index]
+        return self.write(param.json)
 
-        except IndexError as error:
-            return self.error("Invalid index")
-        except Exception:
-            self.print_error()
-            return self.send(500)
-
+    @exception(Exception, 500)
+    @exception(IndexError, 400, message='Invalid index')
     @integer('bank_index', 'pedalboard_index', 'effect_index', 'param_index')
     def put(self, bank_index, pedalboard_index, effect_index, param_index):
-        try:
-            bank = self.banks.banks[bank_index]
-            param = bank.pedalboards[pedalboard_index].effects[effect_index].params[param_index]
-            value = self.request_data
+        bank = self._manager.banks[bank_index]
+        param = bank.pedalboards[pedalboard_index].effects[effect_index].params[param_index]
+        value = self.request_data
 
+        with self.observer:
             param.value = value
-            self.controller.updated(param, self.token)
 
-            return self.success()
-
-        except IndexError as error:
-            return self.error("Invalid index")
-        except Exception:
-            self.print_error()
-            return self.send(500)
+        return self.success()

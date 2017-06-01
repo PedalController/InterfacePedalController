@@ -1,0 +1,31 @@
+{
+  "type":"PEDALBOARD",
+  "updateType":"UPDATED",
+  "bank":2,
+  "pedalboard":0,
+  "value":{
+      "data":{
+         "pedalpi-apk":{
+            "effectPositions":[
+
+            ]
+         }
+      },
+      "effects":[
+
+      ],
+      "name":"Guitar hero",
+      "connections":[
+         {
+            "input":{
+               "symbol":"playback_1",
+               "index":0
+            },
+            "output":{
+               "symbol":"capture_1",
+               "index":0
+            }
+         }
+      ]
+   }
+}

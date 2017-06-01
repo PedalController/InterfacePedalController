@@ -44,8 +44,8 @@ class Test(unittest.TestCase):
             self.fail("Server is down")
 
     @property
-    def default_bank(self):
-        bank = Bank('REST - Default Bank' + str(uuid.uuid4()))
+    def default_bank_mock(self):
+        bank = BankMock('REST - Default Bank' + str(uuid.uuid4()))
         pedalboard = Pedalboard('REST - Default Pedalboard')
 
         reverb = self.plugins_builder.build('http://calf.sourceforge.net/plugins/Reverb')
@@ -59,3 +59,19 @@ class Test(unittest.TestCase):
         reverb.outputs[0].connect(reverb2.inputs[0])
 
         return bank
+
+
+class BankMock(Bank):
+
+    def __init__(self, name):
+        super().__init__(name)
+
+        self._index = -1
+
+    @property
+    def index(self):
+        return self._index
+
+    @index.setter
+    def index(self, value):
+        self._index = value

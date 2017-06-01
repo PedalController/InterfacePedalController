@@ -12,20 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import requests
-
 from .handler_test import Test
 
 
 class BanksHandlerTest(Test):
-    def setUp(self):
-        try:
-            self.rest.get('')
-        except requests.exceptions.ConnectionError:
-            self.fail("Server is down")
 
     def test_get(self):
-        r = self.rest.getBanks()
+        r = self.rest.get_banks()
         self.assertEqual(Test.SUCCESS, r.status_code)
 
         banks = r.json()['banks']

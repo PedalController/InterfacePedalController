@@ -49,7 +49,7 @@ class RestFacade(object):
     # **********************
     # Banks
     # **********************
-    def getBanks(self):
+    def get_banks(self):
         return self.get('banks')
 
     # **********************
@@ -66,6 +66,14 @@ class RestFacade(object):
 
     def delete_bank(self, bank):
         return self.delete('bank/{0}'.format(bank.index))
+
+    def move_bank(self, bank, new_index):
+        url = 'move/bank/{0}/to/{1}'.format(
+            bank.index,
+            new_index
+        )
+
+        return self.put(url)
 
     # **********************
     # Pedalboard
@@ -94,6 +102,10 @@ class RestFacade(object):
         bank_index = pedalboard.bank.index
         content = pedalboard.data[key]
         return self.put('bank/{0}/pedalboard/{1}/data/{2}'.format(bank_index, pedalboard.index, key), content)
+
+    def move_pedalboard(self, pedalboard, new_index):
+        bank_index = pedalboard.bank.index
+        return self.put("move/bank/{}/pedalboard/{}/to/{}".format(bank_index, pedalboard.index, new_index))
 
     # **********************
     # Effect
@@ -142,15 +154,23 @@ class RestFacade(object):
         )
 
     # **********************
-    # Swap
+    # Connection
     # **********************
-    def swap_banks(self, bank_a, bank_b):
-        url = 'swap/bank-a/{0}/bank-b/{1}'.format(
-            bank_a.index,
-            bank_b.index
-        )
+    def create_connection(self, connection):
+        return self.put(self._url_connection(connection), connection.json)
 
-        return self.put(url)
+    def delete_connection(self, connection):
+        return self.post(self._url_connection(connection), connection.json)
+
+    def _url_connection(self, connection):
+        effect = connection.output.effect
+        pedalboard = effect.pedalboard
+        bank = pedalboard.bank
+
+        return 'bank/{0}/pedalboard/{1}/connect'.format(
+            bank.index,
+            pedalboard.index
+        )
 
     # **********************
     # ComponentData
@@ -166,3 +186,48 @@ class RestFacade(object):
 
     def _url_component_data(self, key):
         return 'data/{0}'.format(key)
+
+    # **********************
+    # Configurations
+    # **********************
+    def configurations_get_name(self):
+        return self.get('configurations/device_name')
+
+    def configurations_put_name(self, new_name):
+        return self.put('configurations/device_name/{}'.format(new_name))
+
+    # **********************
+    # Current
+    # **********************
+    def get_current_pedalboard(self):
+        data = self.get_current_index().json()
+        return self.get('bank/{0}/pedalboard/{1}'.format(data['bank'], data['pedalboard']))
+
+    def set_current_pedalboard(self, pedalboard):
+        bank = pedalboard.bank
+
+        return self.set_current_pedalboard_by_index(bank.index, pedalboard.index)
+
+    def set_current_pedalboard_by_index(self, bank_index, pedalboard_index):
+        return self.put('current/bank/{}/pedalboard/{}'.format(bank_index, pedalboard_index))
+
+    def get_current_index(self):
+        return self.get('current')
+
+    def get_current_data(self):
+        return self.get('current/data')
+
+    def toggle_effect_current_pedalboard(self, effect):
+        return self.put('current/effect/{}'.format(effect.index))
+
+    # **********************
+    # Plugin
+    # **********************
+    def get_plugins(self):
+        return self.get('plugins')
+
+    def get_plugin(self, uri):
+        return self.get('plugin/{}'.format(uri))
+
+    def reload_plugin(self):
+        return self.put('plugins/reload')

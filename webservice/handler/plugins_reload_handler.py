@@ -18,10 +18,6 @@ from application.controller.plugins_controller import PluginsController, PluginT
 
 
 class PluginsReloadHandler(AbstractRequestHandler):
-    app = None
-
-    def initialize(self, app):
-        self.app = app
 
     def put(self):
         controller = self.app.controller(PluginsController)

@@ -12,19 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import requests
-
 from .handler_test import Test
 
 
 class ComponentDataHandlerTest(Test):
 
     def setUp(self):
+        super(ComponentDataHandlerTest, self).setUp()
         self.key = 'ComponentDataHandlerTest'
-        try:
-            self.rest.get('')
-        except requests.exceptions.ConnectionError:
-            self.fail("Server is down")
 
     ########################
     # Tests

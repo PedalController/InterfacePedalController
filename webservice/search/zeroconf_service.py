@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import time
 import socket
 
 from webservice.search.abstract_zeroconf_service import AbstractZeroconfService
@@ -39,8 +38,9 @@ class ZeroconfService(AbstractZeroconfService):
         pip install zeroconf
     """
 
-    def __init__(self, port):
-        super(ZeroconfService, self).__init__(port)
+    def __init__(self, name, port):
+        super(ZeroconfService, self).__init__(name, port)
+
         self._zeroconf = None
         self._infos = []
 
@@ -55,11 +55,12 @@ class ZeroconfService(AbstractZeroconfService):
             self._infos.append(info)
 
             self._zeroconf.register_service(info)
-            self._log('Zeroconf', self.__class__.__name__, '- Registered service:', 'name=' + self.name, 'regtype=' + self.type, 'domain=local.')
-            self._log('         Network: ', ip)
+            self._log('Zeroconf {} - Registered service: name={}, regtype={}, domain={}', self.__class__.__name__,
+                      self.name, self.type, 'local.')
+            self._log('         Network: {}', ip)
 
     def _gerenate_service_info(self, index, ip):
-        name = '{}-{}.{}.local.'.format(self.name, index, self.type, '.local.')
+        name = '{}-{}.{}.local.'.format(self.name.lower(), index, self.type, '.local.')
 
         return ServiceInfo(
             self.type + '.local.',
@@ -74,9 +75,6 @@ class ZeroconfService(AbstractZeroconfService):
     def close(self):
         for info in self._infos:
             self._zeroconf.unregister_service(info)
-
-    def _log(self, *args, **kwargs):
-        print('[' + time.strftime('%Y-%m-%d %H:%M:%S') + ']', *args, **kwargs)
 
 if __name__ == '__main__':
     from signal import pause

@@ -17,12 +17,9 @@ from application.controller.plugins_controller import PluginsController, PluginT
 
 
 class PluginHandler(AbstractRequestHandler):
-    app = None
-
-    def initialize(self, app):
-        self.app = app
 
     def get(self, uri):
+        uri.replace('%23', '#')
         controller = self.app.controller(PluginsController)
         plugins = controller.by(PluginTechnology.LV2)
 
