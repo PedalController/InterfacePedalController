@@ -141,13 +141,9 @@ WebSocket
 *********
 
 Communication via WebService basically consists of receiving updates
-about the state of the application. The message types will be
-documented in the future and listed at http://pedalpi.github.io/WebService/.
+about the state of the application.
 
-Currently, information about the messages can be found
-in the `source code of this project`_.
-
-.. _source code of this project: https://github.com/PedalPi/WebService/tree/master/webservice/websocket/updates_observer_socket.py
+WebService API documentation can be found at http://pedalpi.github.io/WebService/#websocket
 
 Using in your client
 --------------------
