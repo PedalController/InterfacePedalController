@@ -50,7 +50,7 @@ class PedalboardDataHandler(AbstractRequestHandler):
                 pedalboard,
                 UpdateType.UPDATED,
                 index=pedalboard_index,
-                origin=bank_index,
+                origin=bank,
                 old=pedalboard
             )
 

@@ -56,7 +56,7 @@ class Test(unittest.TestCase):
         pedalboard.append(reverb)
         pedalboard.append(reverb2)
 
-        reverb.outputs[0].connect(reverb2.inputs[0])
+        pedalboard.connect(reverb.outputs[0], reverb2.inputs[0])
 
         return bank
 

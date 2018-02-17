@@ -49,7 +49,7 @@ class WebService(Component):
     For more details, see http://pedalpi.github.io/WebService.
     """
 
-    def __init__(self, application, port):
+    def __init__(self, application, port=3000):
         super().__init__(application)
 
         self.handlers = []
