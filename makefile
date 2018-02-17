@@ -4,18 +4,18 @@ NORMAL=\033[0m
 
 default: help
 
-FIXME clean: clean-pyc clean-test clean-build clean-docs
+clean: clean-pyc clean-test clean-build clean-docs
 
-FIXME clean-build:
+clean-build:
 	rm -rf .eggs
 	rm -rf build
 	rm -rf dist
 
-FIXME clean-pyc:
+clean-pyc:
 	find . -name '*.pyc' -exec rm --force {} +
 	find . -name '*.pyo' -exec rm --force {} +
 
-FIXME clean-test:
+clean-test:
 	rm -rf .cache
 	rm -f .coverage
 	rm -rf htmlcov
@@ -33,12 +33,13 @@ docs-see: docs
 install-docs-requirements:
 	npm install -g aglio
 
-FIXME install-tests-requirements:
+install-tests-requirements:
+	pip3 install coveralls
 	# For midi tests - https://github.com/x42/midifilter.lv2
-	cd /tmp && git clone git://github.com/x42/midifilter.lv2.git && \
-	cd midifilter.lv2 && \
-	make && \
-	sudo make install PREFIX=/usr
+	#cd /tmp && git clone git://github.com/x42/midifilter.lv2.git && \
+	#cd midifilter.lv2 && \
+	#make && \
+	#sudo make install PREFIX=/usr
 
 run:
 	@echo "Run option isn't created =)"
@@ -46,7 +47,7 @@ run:
 test: clean-test
 	coverage3 run --source=webservice wstest/config.py test
 
-FIXME test-docs:
+not-implemented-test-docs:
 	python -m doctest *.rst -v
 	python -m doctest docs/*/*.rst -v
 

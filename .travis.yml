@@ -12,11 +12,23 @@ sudo: required
 jobs:
   include:
     - stage: unit-test
-      script: make test
+      script:
+        - make install-tests-requirements
+        - make test
+        - 'bash <(curl -s https://codecov.io/bash)'
     - stage: doc
       script:
         - make install-docs-requirements
-        - make test
+        - make docs
 
-after_success:
-  - 'bash <(curl -s https://codecov.io/bash)'
+install:
+  - sudo apt-get update
+  - sudo apt-get install -y portaudio19-dev python-all-dev --no-install-recommends
+  - sudo apt-get install -y lilv-utils calf-plugins guitarix --no-install-recommends
+  - sudo apt-get install -y libavahi-compat-libdnssd1 --no-install-recommends
+  - pip3 install git+https://github.com/depl0y/pybonjour-python3
+  - pip3 install zeroconf
+  - python3 setup.py develop
+
+script:
+  - lv2ls
