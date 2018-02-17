@@ -18,9 +18,5 @@ jobs:
         - make install-docs-requirements
         - make test
 
-script:
-  - lv2ls
-  - coverage3 run --source=webservice wstest/config.py test
-
 after_success:
   - 'bash <(curl -s https://codecov.io/bash)'
