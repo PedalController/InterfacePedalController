@@ -4,22 +4,8 @@ python:
   - "3.4"
   - "3.5"
   - "3.6"
-  - "3.7-dev"
-  - "nightly"
 
 sudo: required
-
-jobs:
-  include:
-    - stage: unit-test
-      script:
-        - make install-tests-requirements
-        - make test
-        - 'bash <(curl -s https://codecov.io/bash)'
-    - stage: doc
-      script:
-        - make install-docs-requirements
-        - make docs
 
 install:
   - sudo apt-get update
@@ -32,3 +18,20 @@ install:
 
 script:
   - lv2ls
+
+
+jobs:
+  include:
+    - stage: unit-test
+      python:
+        - "3.4"
+        - "3.5"
+        - "3.6"
+      script:
+        - make install-tests-requirements
+        - make test
+        - 'bash <(curl -s https://codecov.io/bash)'
+    - stage: doc
+      script:
+        - make install-docs-requirements
+        - make docs
