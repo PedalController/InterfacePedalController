@@ -9,6 +9,15 @@ python:
 
 sudo: required
 
+jobs:
+  include:
+    - stage: unit-test
+      script: make test
+    - stage: doc
+      script: make install-docs-requirements
+    - stage: deploy
+      script: ./deploy
+
 install:
   - sudo apt-get update
   - sudo apt-get install -y portaudio19-dev python-all-dev --no-install-recommends

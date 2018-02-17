@@ -79,7 +79,7 @@ The registration must occur before application initialization (``application.sta
     application = Application(path_data="data/", address='localhost')
 
     from webservice.webservice import WebService
-    application.register(WebService(application, port))
+    application.register(WebService(application, port=3000))
 
 2. Initialization of the web server
 +++++++++++++++++++++++++++++++++++
@@ -122,7 +122,7 @@ look like the following code:
     application = Application(path_data="data/", address='localhost')
 
     from webservice.webservice import WebService
-    application.register(WebService(application, port))
+    application.register(WebService(application, port=3000))
 
     application.start()
 
@@ -163,17 +163,20 @@ Maintenance
 Documentation
 *************
 
+Is necessary to install `nodejs`_.
+
+.. _nodejs: https://nodejs.org/en/
+
 .. code-block:: bash
 
     # Installing dependencies
-    npm install -g aglio
+    make install-docs-requirements
 
     # Generate doc
-    cd docs/
-    aglio -i documentation.apib --theme-variables streak --theme-template triple -o index.html
+    make docs
 
     # View documentation
-    firefox index.html
+    make docs-see
 
 Test
 ****
@@ -185,5 +188,5 @@ Test
 
     coverage3 run --source=webservice wstest/config.py test
     coverage3 report
-    coverage3 html
-    firefox htmlcov/index.html
+    make test-details
+

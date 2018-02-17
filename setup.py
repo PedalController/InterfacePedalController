@@ -50,7 +50,7 @@ setup(
 
     install_requires=[
         'PedalPi-Application>=0.3.0',
-        'tornado>=4.4.2',
+        'tornado>=4.5.3',
         'tornado-cors==0.6.0',
         'zeroconf'
     ],
