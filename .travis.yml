@@ -4,33 +4,25 @@ python:
   - "3.4"
   - "3.5"
   - "3.6"
+  - "3.7-dev"
+  - "nightly"
 
 sudo: required
 
 install:
-  - sudo apt-get update
-  - sudo apt-get install -y portaudio19-dev python-all-dev --no-install-recommends
-  - sudo apt-get install -y lilv-utils calf-plugins guitarix --no-install-recommends
-  - sudo apt-get install -y libavahi-compat-libdnssd1 --no-install-recommends
-  - pip3 install git+https://github.com/depl0y/pybonjour-python3
-  - pip3 install zeroconf
-  - python3 setup.py develop
+  - make install-develop-requirements
+  - make install-tests-requirements
+  - pip3 install .
 
 script:
   - lv2ls
+  - make test
 
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
 
 jobs:
   include:
-    - stage: unit-test
-      python:
-        - "3.4"
-        - "3.5"
-        - "3.6"
-      script:
-        - make install-tests-requirements
-        - make test
-        - 'bash <(curl -s https://codecov.io/bash)'
     - stage: doc
       script:
         - make install-docs-requirements

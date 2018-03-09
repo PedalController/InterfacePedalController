@@ -24,7 +24,7 @@ def readme():
 
 setup(
     name='PedalPi-WebService',
-    version='0.3.0',
+    version='0.4.0',
 
     description='WebService (REST and WebSocket) to access and controller your Pedal Pi pedals set configurations',
     long_description=readme(),
@@ -49,7 +49,7 @@ setup(
     package_data={},
 
     install_requires=[
-        'PedalPi-Application>=0.3.0',
+        'PedalPi-Application==0.4.0',
         'tornado>=4.5.3',
         'tornado-cors==0.6.0',
         'zeroconf'
@@ -57,7 +57,7 @@ setup(
 
     test_suite='wstest',
     tests_requires=[
-        'PedalPi-Application>=0.3.0',
+        'PedalPi-Application==0.4.0',
         'requests==2.11.1'
     ],
 

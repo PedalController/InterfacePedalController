@@ -30,6 +30,14 @@ docs: clean-docs
 docs-see: docs
 	$(BROWSER) docs/index.html
 
+install-develop-requirements:
+	sudo apt-get install -y portaudio19-dev python-all-dev --no-install-recommends
+	sudo apt-get install -y lilv-utils calf-plugins guitarix --no-install-recommends
+	sudo apt-get install -y libavahi-compat-libdnssd1 --no-install-recommends
+	pip3 install -U setuptools
+	pip3 install git+https://github.com/depl0y/pybonjour-python3
+	pip3 install zeroconf
+
 install-docs-requirements:
 	npm install -g aglio
 
