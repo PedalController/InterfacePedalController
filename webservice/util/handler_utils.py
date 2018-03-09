@@ -44,7 +44,7 @@ class exception(object):
     :param bool error_message: Show raised error instead a defined message
     """
 
-    def __init__(self, error, status_code, message=None, error_message=False):
+    def __init__(self, error, status_code, message=None, error_message=True):
         self.error = error
         self.status_code = status_code
         self.message = message

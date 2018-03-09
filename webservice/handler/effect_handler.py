@@ -29,7 +29,7 @@ class EffectHandler(AbstractRequestHandler):
         self._plugins = self.app.controller(PluginsController)
 
     @exception(Exception, 500)
-    @exception(IndexError, 400, message='Invalid index')
+    @exception(IndexError, 400)
     @integer('bank_index', 'pedalboard_index', 'effect_index')
     def get(self, bank_index, pedalboard_index, effect_index):
         effect = self._manager.banks[bank_index].pedalboards[pedalboard_index].effects[effect_index]
@@ -37,7 +37,7 @@ class EffectHandler(AbstractRequestHandler):
         return self.write(effect.json)
 
     @exception(Exception, 500)
-    @exception(IndexError, 400, message='Invalid index')
+    @exception(IndexError, 400)
     @integer('bank_index', 'pedalboard_index')
     def post(self, bank_index, pedalboard_index):
         pedalboard = self._manager.banks[bank_index].pedalboards[pedalboard_index]
@@ -50,7 +50,7 @@ class EffectHandler(AbstractRequestHandler):
         return self.created({"index": effect.index, "effect": effect.json})
 
     @exception(Exception, 500)
-    @exception(IndexError, 400, message='Invalid index')
+    @exception(IndexError, 400)
     @integer('bank_index', 'pedalboard_index', 'effect_index')
     def delete(self, bank_index, pedalboard_index, effect_index):
         pedalboard = self._manager.banks[bank_index].pedalboards[pedalboard_index]

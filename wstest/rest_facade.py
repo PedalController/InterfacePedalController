@@ -141,6 +141,10 @@ class RestFacade(object):
         url = self._url_param(param)
         return self.put(url, param.value)
 
+    def put_param_value_wrong_value(self, param, param_value):
+        url = self._url_param(param)
+        return self.put(url, param_value)
+
     def _url_param(self, param):
         effect = param.effect
         pedalboard = effect.pedalboard

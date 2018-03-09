@@ -32,7 +32,7 @@ class BankHandler(AbstractRequestHandler):
         self._decoder = PersistenceDecoder(sys_effect)
 
     @exception(Exception, 500)
-    @exception(IndexError, 400, message='Invalid index')
+    @exception(IndexError, 400)
     @integer('bank_index')
     def get(self, bank_index):
         bank = self._manager.banks[bank_index]
@@ -50,7 +50,7 @@ class BankHandler(AbstractRequestHandler):
         self.created({"index": bank.index})
 
     @exception(Exception, 500)
-    @exception(IndexError, 400, message='Invalid index')
+    @exception(IndexError, 400)
     @integer('bank_index')
     def put(self, bank_index):
         json = self.request_data
@@ -62,7 +62,7 @@ class BankHandler(AbstractRequestHandler):
         self.success()
 
     @exception(Exception, 500)
-    @exception(IndexError, 400, message='Invalid index')
+    @exception(IndexError, 400)
     @integer('bank_index')
     def delete(self, bank_index):
         bank_index = int(bank_index)

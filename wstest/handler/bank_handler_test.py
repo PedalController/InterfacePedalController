@@ -25,7 +25,7 @@ class BankHandlerTest(Test):
 
     def assertIndexError(self, response):
         self.assertEqual(Test.ERROR, response.status_code)
-        self.assertEqual('Invalid index', response.json()['error'])
+        self.assertEqual('list index out of range', response.json()['error'])
 
     def test_get(self):
         bank = self.default_bank_mock

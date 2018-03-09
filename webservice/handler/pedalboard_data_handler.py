@@ -26,7 +26,7 @@ class PedalboardDataHandler(AbstractRequestHandler):
         self._manager = self.app.manager
 
     @exception(Exception, 500)
-    @exception(IndexError, 400, error_message=True)
+    @exception(IndexError, 400)
     @integer('bank_index', 'pedalboard_index')
     def get(self, bank_index, pedalboard_index, key):
         bank = self._manager.banks[bank_index]
@@ -38,7 +38,7 @@ class PedalboardDataHandler(AbstractRequestHandler):
         return self.write(pedalboard.data[key])
 
     @exception(Exception, 500)
-    @exception(IndexError, 400, error_message=True)
+    @exception(IndexError, 400)
     @integer('bank_index', 'pedalboard_index')
     def put(self, bank_index, pedalboard_index, key):
         bank = self._manager.banks[bank_index]

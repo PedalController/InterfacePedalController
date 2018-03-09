@@ -32,7 +32,7 @@ class PedalboardHandler(AbstractRequestHandler):
         self._decode = PedalboardReader(self.app.controller(DeviceController).sys_effect)
 
     @exception(Exception, 500)
-    @exception(IndexError, 400, message='Invalid index')
+    @exception(IndexError, 400)
     @integer('bank_index', 'pedalboard_index')
     def get(self, bank_index, pedalboard_index):
         bank = self._manager.banks[bank_index]
@@ -41,7 +41,7 @@ class PedalboardHandler(AbstractRequestHandler):
         return self.write(pedalboard.json)
 
     @exception(Exception, 500)
-    @exception(IndexError, 400, message='Invalid index')
+    @exception(IndexError, 400)
     @integer('bank_index')
     def post(self, bank_index):
         pedalboard = self._decode.read(self.request_data)
@@ -53,7 +53,7 @@ class PedalboardHandler(AbstractRequestHandler):
         return self.created({"index": len(bank.pedalboards) - 1})
 
     @exception(Exception, 500)
-    @exception(IndexError, 400, message='Invalid index')
+    @exception(IndexError, 400)
     @integer('bank_index', 'pedalboard_index')
     def put(self, bank_index, pedalboard_index):
         bank = self._manager.banks[bank_index]
@@ -65,7 +65,7 @@ class PedalboardHandler(AbstractRequestHandler):
         return self.success()
 
     @exception(Exception, 500)
-    @exception(IndexError, 400, message='Invalid index')
+    @exception(IndexError, 400)
     @integer('bank_index', 'pedalboard_index')
     def delete(self, bank_index, pedalboard_index):
         bank = self._manager.banks[bank_index]

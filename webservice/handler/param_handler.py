@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from pluginsmanager.model.param import ParamError
 from webservice.handler.abstract_request_handler import AbstractRequestHandler
 from webservice.util.handler_utils import integer, exception
 
@@ -25,7 +26,7 @@ class ParamHandler(AbstractRequestHandler):
         self._manager = self.app.manager
 
     @exception(Exception, 500)
-    @exception(IndexError, 400, message='Invalid index')
+    @exception(IndexError, 400)
     @integer('bank_index', 'pedalboard_index', 'effect_index', 'param_index')
     def get(self, bank_index, pedalboard_index, effect_index, param_index):
         bank = self._manager.banks[bank_index]
@@ -34,7 +35,8 @@ class ParamHandler(AbstractRequestHandler):
         return self.write(param.json)
 
     @exception(Exception, 500)
-    @exception(IndexError, 400, message='Invalid index')
+    @exception(ParamError, 400)
+    @exception(IndexError, 400)
     @integer('bank_index', 'pedalboard_index', 'effect_index', 'param_index')
     def put(self, bank_index, pedalboard_index, effect_index, param_index):
         bank = self._manager.banks[bank_index]

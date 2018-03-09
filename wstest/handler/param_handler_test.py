@@ -43,3 +43,18 @@ class ParamHandlerTest(Test):
         self.assertEqual(param.json, get_value.json())
 
         self.rest.delete_bank(bank)
+
+    def test_put_wrong_value(self):
+        bank = self.default_bank_mock
+        bank.index = self.rest.create_bank(bank).json()['index']
+
+        param = bank.pedalboards[0].effects[0].params[0]
+
+        response = self.rest.put_param_value_wrong_value(param, 10000)
+        self.assertEqual(Test.ERROR, response.status_code)
+
+        # Not changed the param value
+        get_value = self.rest.get_param(param)
+        self.assertEqual(param.json, get_value.json())
+
+        self.rest.delete_bank(bank)
