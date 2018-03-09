@@ -12,7 +12,7 @@ sudo: required
 install:
   - make install-develop-requirements
   - make install-tests-requirements
-  - pip3 install .
+  - python setup.py develop
 
 script:
   - lv2ls
