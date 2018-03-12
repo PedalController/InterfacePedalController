@@ -163,6 +163,11 @@ class RestFacade(object):
     def create_connection(self, connection):
         return self.put(self._url_connection(connection), connection.json)
 
+    def create_connection_without_type(self, connection):
+        data = connection.json
+        del data['type']
+        return self.put(self._url_connection(connection), data)
+
     def delete_connection(self, connection):
         return self.post(self._url_connection(connection), connection.json)
 

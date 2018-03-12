@@ -12,12 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from webservice.handler.abstract_request_handler import AbstractRequestHandler
-from webservice.util.handler_utils import integer
-
 from application.controller.device_controller import DeviceController
-
 from pluginsmanager.util.persistence_decoder import ConnectionReader
+from webservice.handler.abstract_request_handler import AbstractRequestHandler
+from webservice.util.handler_utils import integer, exception
 
 
 class ConnectionHandler(AbstractRequestHandler):
@@ -28,6 +26,7 @@ class ConnectionHandler(AbstractRequestHandler):
 
         self._manager = app.manager
 
+    @exception(Exception, 400)
     @integer('bank_index', 'pedalboard_index')
     def put(self, bank_index, pedalboard_index):
         bank = self._manager.banks[bank_index]
@@ -39,6 +38,7 @@ class ConnectionHandler(AbstractRequestHandler):
 
         self.send(200)
 
+    @exception(Exception, 400)
     @integer('bank_index', 'pedalboard_index')
     def post(self, bank_index, pedalboard_index):
         """

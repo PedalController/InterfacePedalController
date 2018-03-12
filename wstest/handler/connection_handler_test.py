@@ -15,6 +15,7 @@
 from wstest.handler.handler_test import Test
 from pluginsmanager.model.connection import Connection
 
+
 class ConnectionHandlerTest(Test):
 
     def test_put(self):
@@ -32,6 +33,20 @@ class ConnectionHandlerTest(Test):
 
         response = self.rest.get_pedalboard(pedalboard)
         self.assertEqual(pedalboard.json, response.json())
+
+        self.rest.delete_bank(bank)
+
+    def test_put_connection_without_type(self):
+        bank = self.default_bank_mock
+        bank.index = self.rest.create_bank(bank).json()['index']
+
+        pedalboard = bank.pedalboards[0]
+        reverb, reverb2 = pedalboard.effects
+        connection = Connection(reverb2.outputs[0], reverb.inputs[0])
+        pedalboard.connections.append(connection)
+
+        response = self.rest.create_connection_without_type(connection)
+        self.assertEqual(Test.ERROR, response.status_code)
 
         self.rest.delete_bank(bank)
 
