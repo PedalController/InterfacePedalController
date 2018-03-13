@@ -13,13 +13,13 @@ Add a new connection between pedalboards
 + Request  (application/json; charset=UTF-8)
     + Body
 
-            {"output":{"effect":0,"symbol":"out","index":1},"input":{"symbol":"playback_2","index":1}}
+            {"type": "audio", "output":{"effect":0,"symbol":"out","index":1},"input":{"symbol":"playback_2","index":1}}
 + Response 200
 
 + Request  (application/json; charset=UTF-8)
     + Body
 
-            {"output":{"effect":0,"symbol":"out","index":1},"input":{"effect":1,"symbol":"in_l","index":0}}
+            {"type": "audio", "output":{"effect":0,"symbol":"out","index":1},"input":{"effect":1,"symbol":"in_l","index":0}}
 + Response 200
 
 ### Disconnect effects [PUT]

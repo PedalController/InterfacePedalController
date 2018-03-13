@@ -4,6 +4,7 @@
    "bank":2,
    "pedalboard":0,
    "value":{
+      "type": "audio",
       "input":{
          "effect":2,
          "symbol":"in_l",

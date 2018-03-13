@@ -17,6 +17,7 @@
       "name":"Guitar hero",
       "connections":[
          {
+            "type": "audio",
             "input":{
                "symbol":"playback_1",
                "index":0
