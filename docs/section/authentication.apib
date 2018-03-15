@@ -1,8 +1,88 @@
-Authentication has two purposes: Control access and obtaining token request identifier
+To access API methods, you must be authenticated. The authenticatetion is based on [JWT technology](http://jwt.io).
 
-## Control access [/?]
+## Control access [/auth]
 
-Not implemented
+### Authenticate [POST]
+
+For auth, send the `username` and the `password` as a json object. In this
+current version, exists only a `username`: `pedal pi`
+
+```json
+{
+  "username": "pedal pi",
+  "password": "pedal pi",
+}
+```
+
+::: warning
+The initial password is `pedal pi`. Please, on the first login, change
+the password [LINK]!
+:::
+
+If the data is correct, will be returned the **auth token**.
+You need send it in every request. See a example in the [next section](#authentication-auth-token).
+
+::: warning
+The token has a expiration of **7 days** from login response time. If the token has
+expired, is necessary request auth to obtains a new token.
+:::
+
++ Request 200 (application/json; charset=UTF-8)
+
+    + Body
+
+            {
+              "username": "pedal pi",
+              "password": "pedal pi",
+            }
+
++ Response 200 (application/json; charset=UTF-8)
+    + Body
+
+            {"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MjE5ODM1NDZ9.MKT1XRgqa68ADIdH1ro0MkIWwh9mXrNPjz5q5aUhFKc"}
+
++ Response 401 (application/json; charset=UTF-8)
+    + Body
+
+            {"error": "Invalid username or password"}
+
+## Auth token [/something]
+
+This is an example how to request something.
+
+### Example request [GET]
+
+::: note
+The Authorization error are the code `401`. The possible errors are
+
+* Is not send the header Authorization
+```
+{"error": "Missing authorization"}
+```
+* The Authorization header not match with the standart `Authorization: bearer <token>`
+```
+{"error": "Invalid header authorization"}
+```
+* Is sent a auth token with other signature
+```
+{"error": "Signature verification failed"}
+```
+* The token auth has expired.
+```
+{"error": "Signature has expired"}
+```
+:::
+
++ Request 200 (application/json; charset=UTF-8)
+
+    + Headers
+
+            Authorization: bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MjE5ODM1NDZ9.MKT1XRgqa68ADIdH1ro0MkIWwh9mXrNPjz5q5aUhFKc
+
++ Response 200 (application/json; charset=UTF-8)
+    + Body
+
+            something
 
 ## Token identifier [/ws]
 
@@ -24,6 +104,9 @@ x-xsrf-token: {token uuid4}
 ```
 
 ### Example request [GET]
+
+When a user is auth, a access token is sended
+AWhen obtained the access token, all the requests needs
 
 It's a example request for a random address
 

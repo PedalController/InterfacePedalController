@@ -14,7 +14,7 @@
 
 import traceback
 import sys
-
+from functools import wraps
 
 class integer(object):
     """
@@ -24,6 +24,7 @@ class integer(object):
         self.args = args
 
     def __call__(self, f):
+        @wraps(f)
         def wrapped(*args, **kwargs):
             for arg in self.args:
                 kwargs[arg] = int(kwargs[arg])
@@ -51,6 +52,7 @@ class exception(object):
         self.error_message = error_message
 
     def __call__(self, f):
+        @wraps(f)
         def wrapped(*args, **kwargs):
             this = args[0]
 

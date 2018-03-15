@@ -52,12 +52,7 @@ class AbstractRequestHandler(CorsMixin, tornado.web.RequestHandler):
         self.send(400, {"error": message})
 
     def server_error(self):
-        self._transforms = []
         self.send(500, {"error": "Server error"})
-
-    def unauthorized(self, message):
-        self._transforms = []
-        self.send(401, {"error": message})
 
     def send(self, status, message=None):
         self.clear()
