@@ -137,7 +137,7 @@ class WebService(Component):
         self.for_handler(CurrentPedalboardHandler) \
             .register(r"/v1/current/bank/(?P<bank_index>[0-9]+)/pedalboard/(?P<pedalboard_index>[0-9]+)")
 
-        # Swap
+        # Move
         self.for_handler(MoveBankHandler) \
             .register(r"/v1/move/bank/(?P<from_index>[0-9]+)/to/(?P<to_index>[0-9]+)")
         self.for_handler(MovePedalboardHandler) \

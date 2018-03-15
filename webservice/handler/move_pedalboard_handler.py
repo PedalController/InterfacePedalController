@@ -13,21 +13,25 @@
 # limitations under the License.
 
 from webservice.handler.abstract_request_handler import AbstractRequestHandler
+from webservice.util.auth import RequiresAuthMixing
 from webservice.util.handler_utils import integer, exception
 
 
-class MovePedalboardHandler(AbstractRequestHandler):
-    _manager = None
+class MovePedalboardHandler(RequiresAuthMixing, AbstractRequestHandler):
+    manager = None
 
     def initialize(self, app, webservice):
         super(MovePedalboardHandler, self).initialize(app, webservice)
 
-        self._manager = app.manager
+        self.manager = app.manager
+
+    def prepare(self):
+        self.auth()
 
     @exception(Exception, 500)
     @integer('bank_index', 'from_index', 'to_index')
     def put(self, bank_index, from_index, to_index):
-        pedalboards = self._manager.banks[bank_index].pedalboards
+        pedalboards = self.manager.banks[bank_index].pedalboards
         pedalboard = pedalboards[from_index]
 
         with self.observer:

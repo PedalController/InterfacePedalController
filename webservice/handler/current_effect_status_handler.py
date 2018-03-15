@@ -12,18 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from application.controller.current_controller import CurrentController
 from webservice.handler.abstract_request_handler import AbstractRequestHandler
+from webservice.util.auth import RequiresAuthMixing
 from webservice.util.handler_utils import integer
 
-from application.controller.current_controller import CurrentController
 
-
-class CurrentEffectStatusHandler(AbstractRequestHandler):
+class CurrentEffectStatusHandler(RequiresAuthMixing, AbstractRequestHandler):
     current = None
 
     def initialize(self, app, webservice):
         super(CurrentEffectStatusHandler, self).initialize(app, webservice)
         self.current = app.controller(CurrentController)
+
+    def prepare(self):
+        self.auth()
 
     @integer('effect_index')
     def put(self, effect_index):
@@ -31,4 +34,3 @@ class CurrentEffectStatusHandler(AbstractRequestHandler):
 
         with self.observer:
             effect.toggle()
-

@@ -19,14 +19,14 @@ from webservice.util.handler_utils import integer, exception
 
 
 class EffectHandler(RequiresAuthMixing, AbstractRequestHandler):
-    _manager = None
-    _plugins = None
+    manager = None
+    plugins = None
 
     def initialize(self, app, webservice):
         super(EffectHandler, self).initialize(app, webservice)
 
-        self._manager = self.app.manager
-        self._plugins = self.app.controller(PluginsController)
+        self.manager = self.app.manager
+        self.plugins = self.app.controller(PluginsController)
 
     def prepare(self):
         self.auth()
@@ -36,7 +36,7 @@ class EffectHandler(RequiresAuthMixing, AbstractRequestHandler):
     @exception(IndexError, 400)
     @integer('bank_index', 'pedalboard_index', 'effect_index')
     def get(self, bank_index, pedalboard_index, effect_index):
-        effect = self._manager.banks[bank_index].pedalboards[pedalboard_index].effects[effect_index]
+        effect = self.manager.banks[bank_index].pedalboards[pedalboard_index].effects[effect_index]
 
         return self.write(effect.json)
 
@@ -44,10 +44,10 @@ class EffectHandler(RequiresAuthMixing, AbstractRequestHandler):
     @exception(IndexError, 400)
     @integer('bank_index', 'pedalboard_index')
     def post(self, bank_index, pedalboard_index):
-        pedalboard = self._manager.banks[bank_index].pedalboards[pedalboard_index]
+        pedalboard = self.manager.banks[bank_index].pedalboards[pedalboard_index]
         uri = self.request_data
 
-        effect = self._plugins.lv2_effect(uri)
+        effect = self.plugins.lv2_effect(uri)
         with self.observer:
             pedalboard.append(effect)
 
@@ -58,7 +58,7 @@ class EffectHandler(RequiresAuthMixing, AbstractRequestHandler):
     @exception(IndexError, 400)
     @integer('bank_index', 'pedalboard_index', 'effect_index')
     def delete(self, bank_index, pedalboard_index, effect_index):
-        pedalboard = self._manager.banks[bank_index].pedalboards[pedalboard_index]
+        pedalboard = self.manager.banks[bank_index].pedalboards[pedalboard_index]
 
         with self.observer:
             del pedalboard.effects[effect_index]

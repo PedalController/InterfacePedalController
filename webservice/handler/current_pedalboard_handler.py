@@ -12,25 +12,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from application.controller.current_controller import CurrentController
 from webservice.handler.abstract_request_handler import AbstractRequestHandler
+from webservice.util.auth import RequiresAuthMixing
 from webservice.util.handler_utils import integer
 
-from application.controller.current_controller import CurrentController
 
-
-class CurrentPedalboardHandler(AbstractRequestHandler):
-    _controller = None
-    _manager = None
+class CurrentPedalboardHandler(RequiresAuthMixing, AbstractRequestHandler):
+    controller = None
+    manager = None
 
     def initialize(self, app, webservice):
         super(CurrentPedalboardHandler, self).initialize(app, webservice)
-        self._controller = app.controller(CurrentController)
-        self._manager = app.manager
+        self.controller = app.controller(CurrentController)
+        self.manager = app.manager
+
+    def prepare(self):
+        self.auth()
 
     @integer('bank_index', 'pedalboard_index')
     def put(self, bank_index, pedalboard_index):
-        bank = self._manager.banks[bank_index]
+        bank = self.manager.banks[bank_index]
         pedalboard = bank.pedalboards[pedalboard_index]
 
         with self.observer:
-            self._controller.pedalboard = pedalboard
+            self.controller.pedalboard = pedalboard

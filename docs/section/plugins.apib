@@ -32,6 +32,12 @@ To get the audio plugin metadata, you need to install lilv. Check the [`Lv2Effec
 
 If `lilv` is not installed, an error (400) is returned.
 
++ Request  (application/json; charset=UTF-8)
+
+    + Headers
+
+            Authorization: bearer <auth token>
+
 + Response 200 (application/json; charset=UTF-8)
    + Body
 
@@ -72,6 +78,12 @@ plugin/http://guitarix.sourceforge.net/plugins/gx_redeye%23chump
 
 + Parameters
     + uri: `http://calf.sourceforge.net/plugins/MonoInput` (required, string) - The plugin URI
+
++ Request  (application/json; charset=UTF-8)
+
+    + Headers
+
+            Authorization: bearer <auth token>
 + Response 200 (application/json; charset=UTF-8)
     + Body
 

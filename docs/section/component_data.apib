@@ -1,4 +1,4 @@
-In addition to the possibility of persisting additional data for a particular pedalboard, it is possible to persist isolated data, that is, they do not share the same storage space with pedalboards.
+In addition to the possibility of [persisting additional data for a specific pedalboard](#pedalboard-data-management), it's possible to persist isolated data, that is, they do not share the same storage space with pedalboards.
 
 ## Manage data [/data/{key}]
 
@@ -14,12 +14,18 @@ It is expected, although not mandatory, that data from a component using this AP
 Get the current data persisted for the informed `key`. If any data has previously persisted, returns a empty dict (`{}`).
 
 + Request  (application/json; charset=UTF-8)
+    + Headers
+
+            Authorization: bearer <auth token>
 + Response 200
     + Body
 
             {"a key": "a value"}
 
-+ Request No data previously saved (application/json; charset=UTF-8)
++ Request no data previously saved (application/json; charset=UTF-8)
+    + Headers
+
+            Authorization: bearer <auth token>
 + Response 200
     + Body
 
@@ -36,6 +42,9 @@ When adding a new data, remember to stick with what has already been persisted.
 :::
 
 + Request  (application/json; charset=UTF-8)
+    + Headers
+
+            Authorization: bearer <auth token>
     + Body
 
             {"current-data": {"name": "test"}, {"value": [1, 2, 3]}}
@@ -51,4 +60,7 @@ Removes the current data persisted for the informed `key`.
 :::
 
 + Request  (application/json; charset=UTF-8)
+    + Headers
+
+            Authorization: bearer <auth token>
 + Response 200

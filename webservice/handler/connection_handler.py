@@ -15,21 +15,25 @@
 from application.controller.device_controller import DeviceController
 from pluginsmanager.util.persistence_decoder import ConnectionReader
 from webservice.handler.abstract_request_handler import AbstractRequestHandler
+from webservice.util.auth import RequiresAuthMixing
 from webservice.util.handler_utils import integer, exception
 
 
-class ConnectionHandler(AbstractRequestHandler):
-    _manager = None
+class ConnectionHandler(RequiresAuthMixing, AbstractRequestHandler):
+    manager = None
 
     def initialize(self, app, webservice):
         super(ConnectionHandler, self).initialize(app, webservice)
 
-        self._manager = app.manager
+        self.manager = app.manager
+
+    def prepare(self):
+        self.auth()
 
     @exception(Exception, 400)
     @integer('bank_index', 'pedalboard_index')
     def put(self, bank_index, pedalboard_index):
-        bank = self._manager.banks[bank_index]
+        bank = self.manager.banks[bank_index]
         pedalboard = bank.pedalboards[pedalboard_index]
 
         output_port, input_port = ConnectionReader(pedalboard, DeviceController.sys_effect).read(self.request_data)
@@ -44,7 +48,7 @@ class ConnectionHandler(AbstractRequestHandler):
         """
         **Removes** a connection
         """
-        bank = self._manager.banks[bank_index]
+        bank = self.manager.banks[bank_index]
         pedalboard = bank.pedalboards[pedalboard_index]
 
         output_port, input_port = ConnectionReader(pedalboard, DeviceController.sys_effect).read(self.request_data)

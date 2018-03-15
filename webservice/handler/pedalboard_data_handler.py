@@ -19,12 +19,12 @@ from webservice.util.handler_utils import integer, exception
 
 
 class PedalboardDataHandler(RequiresAuthMixing, AbstractRequestHandler):
-    _manager = None
+    manager = None
 
     def initialize(self, app, webservice):
         super(PedalboardDataHandler, self).initialize(app, webservice)
 
-        self._manager = self.app.manager
+        self.manager = self.app.manager
 
     def prepare(self):
         self.auth()
@@ -33,7 +33,7 @@ class PedalboardDataHandler(RequiresAuthMixing, AbstractRequestHandler):
     @exception(IndexError, 400)
     @integer('bank_index', 'pedalboard_index')
     def get(self, bank_index, pedalboard_index, key):
-        bank = self._manager.banks[bank_index]
+        bank = self.manager.banks[bank_index]
         pedalboard = bank.pedalboards[pedalboard_index]
 
         if key not in pedalboard.data:
@@ -45,7 +45,7 @@ class PedalboardDataHandler(RequiresAuthMixing, AbstractRequestHandler):
     @exception(IndexError, 400)
     @integer('bank_index', 'pedalboard_index')
     def put(self, bank_index, pedalboard_index, key):
-        bank = self._manager.banks[bank_index]
+        bank = self.manager.banks[bank_index]
         pedalboard = bank.pedalboards[pedalboard_index]
         pedalboard.data[key] = self.request_data
 

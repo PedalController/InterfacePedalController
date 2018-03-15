@@ -10,13 +10,21 @@ Connect and disconnect effects.
 
 Add a new connection between pedalboards
 
-+ Request  (application/json; charset=UTF-8)
++ Request connection between effect and system port (application/json; charset=UTF-8)
+    + Headers
+
+            Authorization: bearer <auth token>
+
     + Body
 
             {"type": "audio", "output":{"effect":0,"symbol":"out","index":1},"input":{"symbol":"playback_2","index":1}}
 + Response 200
 
-+ Request  (application/json; charset=UTF-8)
++ Request connection between effects ports (application/json; charset=UTF-8)
+    + Headers
+
+            Authorization: bearer <auth token>
+
     + Body
 
             {"type": "audio", "output":{"effect":0,"symbol":"out","index":1},"input":{"effect":1,"symbol":"in_l","index":0}}
@@ -30,13 +38,21 @@ Disconnect the specified connection
 Is used **PUT** instread **DELETE** because DELETE don't accepts body data
 :::
 
-+ Request  (application/json; charset=UTF-8)
++ Request connection between effect and system port (application/json; charset=UTF-8)
+    + Headers
+
+            Authorization: bearer <auth token>
+
     + Body
 
             {"output":{"effect":0,"symbol":"out","index":1},"input":{"symbol":"playback_2","index":1}}
 
 + Response 200
-+ Request  (application/json; charset=UTF-8)
++ Request connection between effects ports (application/json; charset=UTF-8)
+    + Headers
+
+            Authorization: bearer <auth token>
+
     + Body
 
             {"output":{"effect":0,"symbol":"out","index":1},"input":{"effect":1,"symbol":"in_l","index":0}}

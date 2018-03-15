@@ -20,15 +20,15 @@ from webservice.util.handler_utils import integer, exception
 
 
 class BankHandler(RequiresAuthMixing, AbstractRequestHandler):
-    _decoder = None
-    _manager = None
+    decoder = None
+    manager = None
 
     def initialize(self, app, webservice):
         super(BankHandler, self).initialize(app, webservice)
 
-        self._manager = self.app.manager
+        self.manager = self.app.manager
         sys_effect = self.app.controller(DeviceController).sys_effect
-        self._decoder = PersistenceDecoder(sys_effect)
+        self.decoder = PersistenceDecoder(sys_effect)
 
     def prepare(self):
         self.auth()
@@ -38,17 +38,17 @@ class BankHandler(RequiresAuthMixing, AbstractRequestHandler):
     @exception(IndexError, 400)
     @integer('bank_index')
     def get(self, bank_index):
-        bank = self._manager.banks[bank_index]
+        bank = self.manager.banks[bank_index]
 
         self.write(bank.json)
 
     @exception(Exception, 500)
     def post(self):
         json = self.request_data
-        bank = self._decoder.read(json)
+        bank = self.decoder.read(json)
 
         with self.observer:
-            self._manager.append(bank)
+            self.manager.append(bank)
 
         self.created({"index": bank.index})
 
@@ -59,9 +59,9 @@ class BankHandler(RequiresAuthMixing, AbstractRequestHandler):
     def put(self, bank_index):
         json = self.request_data
 
-        bank = self._decoder.read(json)
+        bank = self.decoder.read(json)
         with self.observer:
-            self._manager.banks[bank_index] = bank
+            self.manager.banks[bank_index] = bank
 
         self.success()
 
@@ -73,6 +73,6 @@ class BankHandler(RequiresAuthMixing, AbstractRequestHandler):
         bank_index = int(bank_index)
 
         with self.observer:
-            del self._manager.banks[bank_index]
+            del self.manager.banks[bank_index]
 
         self.success()

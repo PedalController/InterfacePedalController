@@ -18,12 +18,12 @@ from webservice.util.auth import RequiresAuthMixing
 
 
 class BanksHandler(RequiresAuthMixing, AbstractRequestHandler):
-    _plugins = None
+    plugins = None
 
     def initialize(self, app, webservice):
         super(BanksHandler, self).initialize(app, webservice)
 
-        self._plugins = self.app.controller(PluginsController)
+        self.plugins = self.app.controller(PluginsController)
 
     def prepare(self):
         self.auth()
@@ -39,6 +39,6 @@ class BanksHandler(RequiresAuthMixing, AbstractRequestHandler):
                     technology = effect['technology']
                     uri = effect['plugin']
 
-                    effect['pluginData'] = self._plugins.by(technology.upper())[uri].json
+                    effect['pluginData'] = self.plugins.by(technology.upper())[uri].json
 
         self.write({"banks": banks})

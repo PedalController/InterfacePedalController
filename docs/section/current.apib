@@ -6,23 +6,34 @@ Provides easy access to current pedalboard settings
 
 Returns the current pedalboard index and your bank index.
 
++ Request  (application/json; charset=UTF-8)
+    + Headers
+
+            Authorization: bearer <auth token>
+
 + Response 200 (application/json; charset=UTF-8)
     + Body
 
             {"bank": 1, "pedalboard": 0}
 
-## Manages the current effect [/current/data]
+## Current bank data [/current/data]
 
 ### Current data [GET]
 
 Returns the json data of the bank of the current pedalboard.
+
+
++ Request  (application/json; charset=UTF-8)
+    + Headers
+
+            Authorization: bearer <auth token>
 
 + Response 200 (application/json; charset=UTF-8)
     + Body
 
             {"bank": {"index": 2, "name": "Rock 80's", "pedalboards": [{"name": "Go go punk", "connections": [], "data": {}, "effects": []}]}, "pedalboard": 0}
 
-## Manages the current pedalboard [/current/bank/{bank_index}/pedalboard/{pedalboard_index}]
+## Manages current pedalboard [/current/bank/{bank_index}/pedalboard/{pedalboard_index}]
 
 + Parameters
     + bank_index: `1` (number, required) - Bank index
@@ -30,8 +41,13 @@ Returns the json data of the bank of the current pedalboard.
 
 ### Set current pedalboard [PUT]
 
-The the specified pedalboard for the current. The audio processing will be setted for the pedalboard configuration (adding effects and your relationships).
+Define the current pedalboard based on the specified URI. The audio processing
+will be setted for the pedalboard configuration.
 
++ Request  (application/json; charset=UTF-8)
+    + Headers
+
+            Authorization: bearer <auth token>
 + Response 200 (application/json; charset=UTF-8)
 
 ## Maneges effect status of the current pedalboard [/current/effect/{effect_index}]
@@ -46,4 +62,9 @@ Toggle the status of a effect of the current pedalboard.
 ::: note
 **Toggle status effect:** Changes the status `active → bypass` or the reverse (`bypass → active`) for a effect loaded.
 :::
+
++ Request  (application/json; charset=UTF-8)
+    + Headers
+
+            Authorization: bearer <auth token>
 + Response 200 (application/json; charset=UTF-8)

@@ -12,17 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from webservice.handler.abstract_request_handler import AbstractRequestHandler
-
 from application.controller.component_data_controller import ComponentDataController
+from webservice.handler.abstract_request_handler import AbstractRequestHandler
+from webservice.util.auth import RequiresAuthMixing
 
 
-class ComponentDataHandler(AbstractRequestHandler):
+class ComponentDataHandler(RequiresAuthMixing, AbstractRequestHandler):
     controller = None
 
     def initialize(self, app, webservice):
         super(ComponentDataHandler, self).initialize(app, webservice)
         self.controller = app.controller(ComponentDataController)
+
+    def prepare(self):
+        self.auth()
 
     def get(self, key):
         self.send(200, self.controller[key])

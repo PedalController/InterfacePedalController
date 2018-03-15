@@ -16,10 +16,10 @@ import datetime
 
 import jwt
 from webservice.handler.abstract_request_handler import AbstractRequestHandler
-from webservice.util.auth import RequiresAuthMixing, JWTAuth
+from webservice.util.auth import JWTAuth
 
 
-class AuthHandler(RequiresAuthMixing, AbstractRequestHandler):
+class AuthHandler(AbstractRequestHandler):
     """
     Based on https://github.com/paulorodriguesxv/tornado-json-web-token-jwt
 

@@ -20,14 +20,14 @@ from webservice.util.handler_utils import integer, exception
 
 
 class PedalboardHandler(RequiresAuthMixing, AbstractRequestHandler):
-    _manager = None
-    _decode = None
+    manager = None
+    decode = None
 
     def initialize(self, app, webservice):
         super(PedalboardHandler, self).initialize(app, webservice)
 
-        self._manager = self.app.manager
-        self._decode = PedalboardReader(self.app.controller(DeviceController).sys_effect)
+        self.manager = self.app.manager
+        self.decode = PedalboardReader(self.app.controller(DeviceController).sys_effect)
 
     def prepare(self):
         self.auth()
@@ -37,7 +37,7 @@ class PedalboardHandler(RequiresAuthMixing, AbstractRequestHandler):
     @exception(IndexError, 400)
     @integer('bank_index', 'pedalboard_index')
     def get(self, bank_index, pedalboard_index):
-        bank = self._manager.banks[bank_index]
+        bank = self.manager.banks[bank_index]
         pedalboard = bank.pedalboards[pedalboard_index]
 
         return self.write(pedalboard.json)
@@ -46,9 +46,9 @@ class PedalboardHandler(RequiresAuthMixing, AbstractRequestHandler):
     @exception(IndexError, 400)
     @integer('bank_index')
     def post(self, bank_index):
-        pedalboard = self._decode.read(self.request_data)
+        pedalboard = self.decode.read(self.request_data)
 
-        bank = self._manager.banks[bank_index]
+        bank = self.manager.banks[bank_index]
         with self.observer:
             bank.append(pedalboard)
 
@@ -59,8 +59,8 @@ class PedalboardHandler(RequiresAuthMixing, AbstractRequestHandler):
     @exception(IndexError, 400)
     @integer('bank_index', 'pedalboard_index')
     def put(self, bank_index, pedalboard_index):
-        bank = self._manager.banks[bank_index]
-        pedalboard = self._decode.read(self.request_data)
+        bank = self.manager.banks[bank_index]
+        pedalboard = self.decode.read(self.request_data)
 
         with self.observer:
             bank.pedalboards[pedalboard_index] = pedalboard
@@ -72,7 +72,7 @@ class PedalboardHandler(RequiresAuthMixing, AbstractRequestHandler):
     @exception(IndexError, 400)
     @integer('bank_index', 'pedalboard_index')
     def delete(self, bank_index, pedalboard_index):
-        bank = self._manager.banks[bank_index]
+        bank = self.manager.banks[bank_index]
 
         with self.observer:
             del bank.pedalboards[pedalboard_index]

@@ -12,11 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from webservice.handler.abstract_request_handler import AbstractRequestHandler
 from application.controller.plugins_controller import PluginsController, PluginTechnology
+from webservice.handler.abstract_request_handler import AbstractRequestHandler
+from webservice.util.auth import RequiresAuthMixing
 
 
-class PluginHandler(AbstractRequestHandler):
+class PluginHandler(RequiresAuthMixing, AbstractRequestHandler):
+
+    def prepare(self):
+        self.auth()
 
     def get(self, uri):
         uri.replace('%23', '#')

@@ -16,15 +16,19 @@
 from application.controller.component_data_controller import ComponentDataController
 from webservice.handler.abstract_request_handler import AbstractRequestHandler
 from webservice.properties import WSProperties
+from webservice.util.auth import RequiresAuthMixing
 
 
-class DeviceNameHandler(AbstractRequestHandler):
+class DeviceNameHandler(RequiresAuthMixing, AbstractRequestHandler):
     data_controller = None
 
     def initialize(self, app, webservice):
         super(DeviceNameHandler, self).initialize(app, webservice)
 
         self.data_controller = self.app.controller(ComponentDataController)
+
+    def prepare(self):
+        self.auth()
 
     @property
     def data(self):

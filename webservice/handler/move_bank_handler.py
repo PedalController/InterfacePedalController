@@ -13,21 +13,25 @@
 # limitations under the License.
 
 from webservice.handler.abstract_request_handler import AbstractRequestHandler
+from webservice.util.auth import RequiresAuthMixing
 from webservice.util.handler_utils import integer, exception
 
 
-class MoveBankHandler(AbstractRequestHandler):
-    _manager = None
+class MoveBankHandler(RequiresAuthMixing, AbstractRequestHandler):
+    manager = None
 
     def initialize(self, app, webservice):
         super(MoveBankHandler, self).initialize(app, webservice)
 
-        self._manager = app.manager
+        self.manager = app.manager
+
+    def prepare(self):
+        self.auth()
 
     @exception(Exception, 500)
     @integer('from_index', 'to_index')
     def put(self, from_index, to_index):
-        banks = self._manager.banks
+        banks = self.manager.banks
         bank = banks[from_index]
 
         with self.observer:

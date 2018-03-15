@@ -14,22 +14,26 @@
 
 from pluginsmanager.model.param import ParamError
 from webservice.handler.abstract_request_handler import AbstractRequestHandler
+from webservice.util.auth import RequiresAuthMixing
 from webservice.util.handler_utils import integer, exception
 
 
-class ParamHandler(AbstractRequestHandler):
-    _manager = None
+class ParamHandler(RequiresAuthMixing, AbstractRequestHandler):
+    manager = None
 
     def initialize(self, app, webservice):
         super(ParamHandler, self).initialize(app, webservice)
 
-        self._manager = self.app.manager
+        self.manager = self.app.manager
+
+    def prepare(self):
+        self.auth()
 
     @exception(Exception, 500)
     @exception(IndexError, 400)
     @integer('bank_index', 'pedalboard_index', 'effect_index', 'param_index')
     def get(self, bank_index, pedalboard_index, effect_index, param_index):
-        bank = self._manager.banks[bank_index]
+        bank = self.manager.banks[bank_index]
 
         param = bank.pedalboards[pedalboard_index].effects[effect_index].params[param_index]
         return self.write(param.json)
@@ -39,7 +43,7 @@ class ParamHandler(AbstractRequestHandler):
     @exception(IndexError, 400)
     @integer('bank_index', 'pedalboard_index', 'effect_index', 'param_index')
     def put(self, bank_index, pedalboard_index, effect_index, param_index):
-        bank = self._manager.banks[bank_index]
+        bank = self.manager.banks[bank_index]
         param = bank.pedalboards[pedalboard_index].effects[effect_index].params[param_index]
         value = self.request_data
 
