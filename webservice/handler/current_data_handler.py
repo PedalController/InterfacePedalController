@@ -14,17 +14,20 @@
 
 from application.controller.current_controller import CurrentController
 from webservice.handler.abstract_request_handler import AbstractRequestHandler
-from webservice.util.auth import auth
+from webservice.util.auth import RequiresAuthMixing
 
 
-@auth()
-class CurrentDataHandler(AbstractRequestHandler):
+class CurrentDataHandler(RequiresAuthMixing, AbstractRequestHandler):
+
     controller = None
     banksController = None
 
     def initialize(self, app, webservice):
         super(CurrentDataHandler, self).initialize(app, webservice)
         self.controller = app.controller(CurrentController)
+
+    def prepare(self):
+        self.auth()
 
     def get(self):
         json = {

@@ -1,16 +1,28 @@
-"""
-JSON Web Token auth for Tornado
-Based on https://github.com/paulorodriguesxv/tornado-json-web-token-jwt
-"""
+# Copyright 2018 SrMouraSilva
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 import datetime
 
 import jwt
 from webservice.handler.abstract_request_handler import AbstractRequestHandler
-from webservice.util.auth import auth
+from webservice.util.auth import RequiresAuthMixing, JWTAuth
 
 
-class AuthHandler(AbstractRequestHandler):
+class AuthHandler(RequiresAuthMixing, AbstractRequestHandler):
     """
+    Based on https://github.com/paulorodriguesxv/tornado-json-web-token-jwt
+
     Handle to auth method.
     This method aim to provide a new authorization token
     There is a fake payload (for tutorial purpose)
@@ -19,18 +31,14 @@ class AuthHandler(AbstractRequestHandler):
     def initialize(self, app, webservice):
         super(AuthHandler, self).initialize(app, webservice)
 
-    def prepare(self):
-        """
-        Encode a new token with JSON Web Token (PyJWT)
-        """
-        self.encoded = jwt.encode(
-            {'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=7), 'data': 'asdasds'},
-            auth.SECRET_KEY,
-            algorithm='HS256'
-        )
-
     def get(self, *args, **kwargs):
         """
         :return The generated token
         """
-        self.write({'token': self.encoded.decode('ascii')})
+        token = jwt.encode(
+            {'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=700)},
+            JWTAuth.SECRET_KEY,
+            algorithm='HS256'
+        )
+
+        self.write({'token': token.decode('ascii')})
