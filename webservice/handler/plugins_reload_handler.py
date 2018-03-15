@@ -22,6 +22,9 @@ class PluginsReloadHandler(RequiresAuthMixing, AbstractRequestHandler):
     def prepare(self):
         self.auth()
 
+    def prepare(self):
+        self.auth()
+
     def put(self):
         controller = self.app.controller(PluginsController)
 

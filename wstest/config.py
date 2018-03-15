@@ -16,6 +16,8 @@
 import sys
 EXIT_STATUS = 0
 
+LOOP = None
+
 
 def test_thread():
     discover_tests()
@@ -46,10 +48,9 @@ def discover_tests():
         if result.errors or result.failures:
             EXIT_STATUS = -1
 
-
 def stop():
-    ioloop = tornado.ioloop.IOLoop.instance()
-    ioloop.add_callback(ioloop.stop)
+    LOOP.add_callback(LOOP.stop)
+
 
 if __name__ == "__main__":
     import tornado
@@ -70,6 +71,7 @@ if __name__ == "__main__":
 
     from _thread import start_new_thread
     start_new_thread(test_thread, ())
+    LOOP = tornado.ioloop.IOLoop.current()
     tornado.ioloop.IOLoop.current().start()
 
     application.stop()

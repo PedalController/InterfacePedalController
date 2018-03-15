@@ -17,9 +17,10 @@ import datetime
 import jwt
 from webservice.handler.abstract_request_handler import AbstractRequestHandler
 from webservice.util.auth import JWTAuth
+from webservice.util.auth import RequiresAuthMixing
 
 
-class AuthHandler(AbstractRequestHandler):
+class AuthHandler(RequiresAuthMixing, AbstractRequestHandler):
     """
     Based on https://github.com/paulorodriguesxv/tornado-json-web-token-jwt
 
@@ -31,10 +32,14 @@ class AuthHandler(AbstractRequestHandler):
     def initialize(self, app, webservice):
         super(AuthHandler, self).initialize(app, webservice)
 
-    def get(self, *args, **kwargs):
+    def post(self):
         """
         :return The generated token
         """
+        if self.request_data != {"username": "pedal pi", "password": "pedal pi"}:
+            self.unauthorized("Invalid username or password")
+            return
+
         token = jwt.encode(
             {'exp': datetime.datetime.utcnow() + datetime.timedelta(days=7)},
             JWTAuth.SECRET_KEY,

@@ -18,20 +18,30 @@ import json
 
 class RestFacade(object):
     address = 'http://localhost:3000/v1/'
-    
+    token = ""
+
     # **********************
     # CRUD
     # **********************
+    def headers(self):
+        return {
+            'content-type': 'application/json',
+            'Authorization': 'bearer {}'.format(self.token)
+        }
+
     def get(self, url):
         print('[GET]', self.address + url)
-        return requests.get(self.address + url)
+        return requests.get(
+            self.address + url,
+            headers=self.headers()
+        )
 
     def post(self, url, data):
         print('[POST]', self.address + url)
         return requests.post(
             self.address + url,
             data=json.dumps(data),
-            headers={'content-type': 'application/json'}
+            headers=self.headers()
         )
 
     def put(self, url, data=''):
@@ -39,12 +49,21 @@ class RestFacade(object):
         return requests.put(
             self.address + url,
             data=json.dumps(data),
-            headers={'content-type': 'application/json'}
+            headers=self.headers()
         )
 
     def delete(self, url):
         print('[DELETE]', self.address + url)
-        return requests.delete(self.address + url)
+        return requests.delete(
+            self.address + url,
+            headers=self.headers()
+        )
+
+    # **********************
+    # Auth
+    # **********************
+    def auth(self, password="pedal pi"):
+        return self.post('auth', {"username": "pedal pi", "password": password})
 
     # **********************
     # Banks

@@ -33,13 +33,18 @@ class Test(unittest.TestCase):
     DELETED = 200
 
     ERROR = 400
+    AUTH_ERROR = 401
+    SERVER_ERROR = 500
+
     rest = RestFacade()
 
     plugins_builder = Lv2EffectBuilder()
 
     def setUp(self):
         try:
-            self.rest.get('')
+            response = self.rest.auth()
+            self.rest.token = response.json()['token']
+
         except requests.exceptions.ConnectionError:
             self.fail("Server is down")
 
