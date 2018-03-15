@@ -18,6 +18,7 @@ import tornado.ioloop
 import tornado.web
 from application.component.component import Component
 from application.controller.component_data_controller import ComponentDataController
+from webservice.handler.auth_handler import AuthHandler
 from webservice.handler.bank_handler import BankHandler
 from webservice.handler.banks_handler import BanksHandler
 from webservice.handler.component_data_handler import ComponentDataHandler
@@ -88,6 +89,9 @@ class WebService(Component):
             self._log('Stopped zeroconf')
 
     def register_handlers(self):
+        self.for_handler(AuthHandler) \
+            .register(r"/v1/auth")
+
         self.for_handler(PluginsHandler) \
             .register(r"/v1/plugins")
         self.for_handler(PluginsReloadHandler) \

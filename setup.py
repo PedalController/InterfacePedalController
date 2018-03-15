@@ -52,7 +52,8 @@ setup(
         'PedalPi-Application==0.4.0',
         'tornado>=4.5.3',
         'tornado-cors==0.6.0',
-        'zeroconf'
+        'zeroconf',
+        'PyJWT>=1.6.0'
     ],
 
     test_suite='wstest',

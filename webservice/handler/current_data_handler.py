@@ -12,11 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from webservice.handler.abstract_request_handler import AbstractRequestHandler
-
 from application.controller.current_controller import CurrentController
+from webservice.handler.abstract_request_handler import AbstractRequestHandler
+from webservice.util.auth import auth
 
 
+@auth()
 class CurrentDataHandler(AbstractRequestHandler):
     controller = None
     banksController = None
