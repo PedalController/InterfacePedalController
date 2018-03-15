@@ -1,4 +1,4 @@
-Version 0.4.0 - released mm/dd/18
+Version 0.4.0 - released 05/dd/18
 =================================
 
  - Issue #45 - Add Makefile
@@ -6,6 +6,13 @@ Version 0.4.0 - released mm/dd/18
 
    - PluginsManager v0.4.0? -> v0.7.0
    - Application v0.2.0 -> v0.4.0
+
+ - Issue #33 - Add auth
+
+   - Breaking change!
+   - See http://pedalpi.github.io/WebService/ for details
+
+ - Improve errors when is not passed all parameters
 
 Version 0.3.0 - released 05/31/17
 =================================

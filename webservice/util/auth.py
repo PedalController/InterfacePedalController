@@ -65,7 +65,9 @@ class JWTAuth(object):
         parts = auth_header.split()
 
         if not JWTAuth.is_valid_header(parts):
-            raise UnauthorizedError("Invalid header authorization")
+            raise UnauthorizedError("Invalid header authorization."
+                                    " The Authorization header not match with the standart"
+                                    " `Authorization: bearer <token>`")
 
         token = parts[1]
         try:

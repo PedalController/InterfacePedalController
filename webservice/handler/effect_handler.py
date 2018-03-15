@@ -12,13 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from application.controller.plugins_controller import PluginsController
 from webservice.handler.abstract_request_handler import AbstractRequestHandler
+from webservice.util.auth import RequiresAuthMixing
 from webservice.util.handler_utils import integer, exception
 
-from application.controller.plugins_controller import PluginsController
 
-
-class EffectHandler(AbstractRequestHandler):
+class EffectHandler(RequiresAuthMixing, AbstractRequestHandler):
     _manager = None
     _plugins = None
 
@@ -28,7 +28,11 @@ class EffectHandler(AbstractRequestHandler):
         self._manager = self.app.manager
         self._plugins = self.app.controller(PluginsController)
 
+    def prepare(self):
+        self.auth()
+
     @exception(Exception, 500)
+    @exception(KeyError, 400, message="Missing parameter {}")
     @exception(IndexError, 400)
     @integer('bank_index', 'pedalboard_index', 'effect_index')
     def get(self, bank_index, pedalboard_index, effect_index):
@@ -50,6 +54,7 @@ class EffectHandler(AbstractRequestHandler):
         return self.created({"index": effect.index, "effect": effect.json})
 
     @exception(Exception, 500)
+    @exception(KeyError, 400, message="Missing parameter {}")
     @exception(IndexError, 400)
     @integer('bank_index', 'pedalboard_index', 'effect_index')
     def delete(self, bank_index, pedalboard_index, effect_index):

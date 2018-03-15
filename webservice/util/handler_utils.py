@@ -63,7 +63,7 @@ class exception(object):
                 print(traceback.format_exc(), file=sys.stderr, flush=True)
 
                 if self.message is not None:
-                    this.send(self.status_code, {"error": self.message})
+                    this.send(self.status_code, {"error": self.message.format(str(e))})
                 elif self.error_message:
                     this.send(self.status_code, {"error": str(e)})
                 else:

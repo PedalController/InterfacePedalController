@@ -14,16 +14,20 @@
 
 from pluginsmanager.observer.update_type import UpdateType
 from webservice.handler.abstract_request_handler import AbstractRequestHandler
+from webservice.util.auth import RequiresAuthMixing
 from webservice.util.handler_utils import integer, exception
 
 
-class PedalboardDataHandler(AbstractRequestHandler):
+class PedalboardDataHandler(RequiresAuthMixing, AbstractRequestHandler):
     _manager = None
 
     def initialize(self, app, webservice):
         super(PedalboardDataHandler, self).initialize(app, webservice)
 
         self._manager = self.app.manager
+
+    def prepare(self):
+        self.auth()
 
     @exception(Exception, 500)
     @exception(IndexError, 400)

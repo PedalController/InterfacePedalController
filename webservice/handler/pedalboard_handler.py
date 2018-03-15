@@ -12,15 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from application.controller.device_controller import DeviceController
+from pluginsmanager.util.persistence_decoder import PedalboardReader
 from webservice.handler.abstract_request_handler import AbstractRequestHandler
+from webservice.util.auth import RequiresAuthMixing
 from webservice.util.handler_utils import integer, exception
 
-from application.controller.device_controller import DeviceController
 
-from pluginsmanager.util.persistence_decoder import PedalboardReader
-
-
-class PedalboardHandler(AbstractRequestHandler):
+class PedalboardHandler(RequiresAuthMixing, AbstractRequestHandler):
     _manager = None
     _decode = None
 
@@ -28,10 +27,13 @@ class PedalboardHandler(AbstractRequestHandler):
         super(PedalboardHandler, self).initialize(app, webservice)
 
         self._manager = self.app.manager
-
         self._decode = PedalboardReader(self.app.controller(DeviceController).sys_effect)
 
+    def prepare(self):
+        self.auth()
+
     @exception(Exception, 500)
+    @exception(KeyError, 400, message="Missing parameter {}")
     @exception(IndexError, 400)
     @integer('bank_index', 'pedalboard_index')
     def get(self, bank_index, pedalboard_index):
@@ -53,6 +55,7 @@ class PedalboardHandler(AbstractRequestHandler):
         return self.created({"index": len(bank.pedalboards) - 1})
 
     @exception(Exception, 500)
+    @exception(KeyError, 400, message="Missing parameter {}")
     @exception(IndexError, 400)
     @integer('bank_index', 'pedalboard_index')
     def put(self, bank_index, pedalboard_index):
@@ -65,6 +68,7 @@ class PedalboardHandler(AbstractRequestHandler):
         return self.success()
 
     @exception(Exception, 500)
+    @exception(KeyError, 400, message="Missing parameter {}")
     @exception(IndexError, 400)
     @integer('bank_index', 'pedalboard_index')
     def delete(self, bank_index, pedalboard_index):

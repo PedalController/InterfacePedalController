@@ -20,7 +20,10 @@ The effect position in pedalboard effects list is returned.
 The effect does not have an identifier, the returned index is only for listing and sorting purpose.
 :::
 
-+ Request 201 (application/json; charset=UTF-8)
++ Request  (application/json; charset=UTF-8)
+    + Headers
+
+            Authorization: bearer <auth token>
     + Body
 
             <!-- include(effect.json) -->
@@ -41,6 +44,12 @@ The effect does not have an identifier, the returned index is only for listing a
 
 Request a effect data with the your index (effect position in pedalboard effects list).
 
++ Request  (application/json; charset=UTF-8)
+
+    + Headers
+
+            Authorization: bearer <auth token>
+
 + Response 200 (application/json; charset=UTF-8)
     + Body
 
@@ -48,14 +57,20 @@ Request a effect data with the your index (effect position in pedalboard effects
 + Response 400 (application/json; charset=UTF-8)
     + Body
 
-            {"error": "Invalid index"}
+            {"error": "list index out of range"}
 
 ### Delete by index position [DELETE]
 
 Delete a effect
 
++ Request  (application/json; charset=UTF-8)
+
+    + Headers
+
+            Authorization: bearer <auth token>
+
 + Response 200
 + Response 400 (application/json; charset=UTF-8)
     + Body
 
-            {"error": "Invalid index"}
+            {"error": "list index out of range"}

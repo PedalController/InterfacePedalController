@@ -12,18 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from webservice.handler.abstract_request_handler import AbstractRequestHandler
-
 from application.controller.plugins_controller import PluginsController
+from webservice.handler.abstract_request_handler import AbstractRequestHandler
+from webservice.util.auth import RequiresAuthMixing
 
 
-class BanksHandler(AbstractRequestHandler):
+class BanksHandler(RequiresAuthMixing, AbstractRequestHandler):
     _plugins = None
 
     def initialize(self, app, webservice):
         super(BanksHandler, self).initialize(app, webservice)
 
         self._plugins = self.app.controller(PluginsController)
+
+    def prepare(self):
+        self.auth()
 
     def get(self):
         banks = {}

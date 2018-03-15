@@ -51,12 +51,20 @@ If the request with a `key` that not data has been not persisted yet, the respon
 ```
 :::
 
-+ Request 200 (application/json; charset=UTF-8)
++ Request with content (application/json; charset=UTF-8)
+    + Headers
+
+            Authorization: bearer <auth token>
+
 + Response 200 (application/json; charset=UTF-8)
     + Body
 
             {"effectPositions": [{"x": 159.74801635742188, "y": 91.4995002746582}]}
-+ Request 200 (application/json; charset=UTF-8)
++ Request possibly without content (application/json; charset=UTF-8)
+    + Headers
+
+            Authorization: bearer <auth token>
+
 + Response 200 (application/json; charset=UTF-8)
     + Body
 
@@ -70,7 +78,11 @@ Update the data for a pedalboard
 If any data has been not persisted yet, uses **PUT** too instread **POST** method (POST method has been not implemented)
 :::
 
-+ Request 200 (application/json; charset=UTF-8)
++ Request  (application/json; charset=UTF-8)
+    + Headers
+
+            Authorization: bearer <auth token>
+
     + Body
 
             {"effectPositions": [{"x": 159.74801635742188, "y": 91.4995002746582}]}

@@ -27,7 +27,7 @@ The token has a expiration of **7 days** from login response time. If the token 
 expired, is necessary request auth to obtains a new token.
 :::
 
-+ Request 200 (application/json; charset=UTF-8)
++ Request  (application/json; charset=UTF-8)
 
     + Body
 
@@ -53,36 +53,53 @@ This is an example how to request something.
 ### Example request [GET]
 
 ::: note
-The Authorization error are the code `401`. The possible errors are
+The Authorization code error is `401`.
 
-* Is not send the header Authorization
-```
-{"error": "Missing authorization"}
-```
-* The Authorization header not match with the standart `Authorization: bearer <token>`
-```
-{"error": "Invalid header authorization"}
-```
-* Is sent a auth token with other signature
-```
-{"error": "Signature verification failed"}
-```
-* The token auth has expired.
-```
-{"error": "Signature has expired"}
-```
+See the possible errors in right selecting a request.
 :::
 
-+ Request 200 (application/json; charset=UTF-8)
-
++ Request successful (application/json; charset=UTF-8)
     + Headers
 
             Authorization: bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MjE5ODM1NDZ9.MKT1XRgqa68ADIdH1ro0MkIWwh9mXrNPjz5q5aUhFKc
-
 + Response 200 (application/json; charset=UTF-8)
     + Body
 
             something
+
+
++ Request without Authorization (application/json; charset=UTF-8)
++ Response 401 (application/json; charset=UTF-8)
+    + Body
+
+            {"error": "Missing authorization"}
+
++ Request invalid Authorization standart (application/json; charset=UTF-8)
+    + Headers
+
+            Authorization: bearer something eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MjE5ODM1NDZ9.MKT1XRgqa68ADIdH1ro0MkIWwh9mXrNPjz5q5aUhFKc
++ Response 401 (application/json; charset=UTF-8)
+    + Body
+
+            {"error": "Invalid header authorization. The Authorization header not match with the standart `Authorization: bearer <token>`"}
+
++ Request token with wrong signature (application/json; charset=UTF-8)
+    + Headers
+
+            Authorization: bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MjE5ODM1NDZ9.MKT1XRgqa68ADIdH1ro0MkIWwh9mXrNPjz5q5aUhFKc
++ Response 401 (application/json; charset=UTF-8)
+    + Body
+
+            {"error": "Signature verification failed"}
+
++ Request token expired (application/json; charset=UTF-8)
+    + Headers
+
+            Authorization: bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MjE5ODM1NDZ9.MKT1XRgqa68ADIdH1ro0MkIWwh9mXrNPjz5q5aUhFKc
++ Response 401 (application/json; charset=UTF-8)
+    + Body
+
+            {"error": "Signature has expired"}
 
 ## Token identifier [/ws]
 
@@ -110,7 +127,7 @@ AWhen obtained the access token, all the requests needs
 
 It's a example request for a random address
 
-+ Request 200 (application/json; charset=UTF-8)
++ Request  (application/json; charset=UTF-8)
 
     + Headers
 

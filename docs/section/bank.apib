@@ -13,6 +13,11 @@ It's necessary updates the (client) bank data with the returned index.
 :::
 
 + Request  (application/json; charset=UTF-8)
+
+    + Headers
+
+            Authorization: bearer <auth token>
+
     + Body
 
             <!-- include(bank_post.json) -->
@@ -30,6 +35,12 @@ Request a bank data with the bank index.
 
 + Parameters
     + bank_index: `1` (number, required) - Bank index
++ Request  (application/json; charset=UTF-8)
+
+    + Headers
+
+            Authorization: bearer <auth token>
+
 + Response 200 (application/json; charset=UTF-8)
     + Body
 
@@ -37,7 +48,7 @@ Request a bank data with the bank index.
 + Response 400 (application/json; charset=UTF-8)
     + Body
 
-            {"error": "Invalid index"}
+            {"error": "list index out of range"}
 
 ### Update by index [PUT]
 
@@ -45,7 +56,13 @@ Update a bank
 
 + Parameters
     + bank_index: `1` (number, required) - Bank index
+
 + Request  (application/json; charset=UTF-8)
+
+    + Headers
+
+            Authorization: bearer <auth token>
+
     + Body
 
             <!-- include(bank_post.json) -->
@@ -54,7 +71,7 @@ Update a bank
 + Response 400 (application/json; charset=UTF-8)
     + Body
 
-            {"error": "Invalid index"}
+            {"error": "list index out of range"}
 
 ### Delete by index [DELETE]
 
@@ -62,8 +79,15 @@ Delete a bank
 
 + Parameters
     + bank_index: `1` (number, required) - Bank index
+
++ Request  (application/json; charset=UTF-8)
+
+    + Headers
+
+            Authorization: bearer <auth token>
+
 + Response 200
 + Response 400 (application/json; charset=UTF-8)
     + Body
 
-            {"error": "Invalid index"}
+            {"error": "list index out of range"}

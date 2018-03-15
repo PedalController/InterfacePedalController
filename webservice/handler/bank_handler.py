@@ -12,15 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from application.controller.device_controller import DeviceController
+from pluginsmanager.util.persistence_decoder import PersistenceDecoder
 from webservice.handler.abstract_request_handler import AbstractRequestHandler
+from webservice.util.auth import RequiresAuthMixing
 from webservice.util.handler_utils import integer, exception
 
-from application.controller.device_controller import DeviceController
 
-from pluginsmanager.util.persistence_decoder import PersistenceDecoder
-
-
-class BankHandler(AbstractRequestHandler):
+class BankHandler(RequiresAuthMixing, AbstractRequestHandler):
     _decoder = None
     _manager = None
 
@@ -31,7 +30,11 @@ class BankHandler(AbstractRequestHandler):
         sys_effect = self.app.controller(DeviceController).sys_effect
         self._decoder = PersistenceDecoder(sys_effect)
 
+    def prepare(self):
+        self.auth()
+
     @exception(Exception, 500)
+    @exception(KeyError, 400, message="Missing parameter {}")
     @exception(IndexError, 400)
     @integer('bank_index')
     def get(self, bank_index):
@@ -50,6 +53,7 @@ class BankHandler(AbstractRequestHandler):
         self.created({"index": bank.index})
 
     @exception(Exception, 500)
+    @exception(KeyError, 400, message="Missing parameter {}")
     @exception(IndexError, 400)
     @integer('bank_index')
     def put(self, bank_index):
@@ -62,6 +66,7 @@ class BankHandler(AbstractRequestHandler):
         self.success()
 
     @exception(Exception, 500)
+    @exception(KeyError, 400, message="Missing parameter {}")
     @exception(IndexError, 400)
     @integer('bank_index')
     def delete(self, bank_index):
