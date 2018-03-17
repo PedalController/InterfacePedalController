@@ -28,12 +28,13 @@ class RequiresAuthMixing:
     Uses this Mixing with AbstractRequestHandler
     """
 
-    def auth(self):
+    def auth(self, ignore_methods=('OPTIONS',)):
         """
+        :param tuple ignore_methods: All methods that are be ignored
         :return bool: Is auth?
         """
         try:
-            JWTAuth.require_auth(self)
+            JWTAuth.require_auth(self, ignore_methods)
             return True
 
         except UnauthorizedError as e:
@@ -56,20 +57,7 @@ class JWTAuth(object):
     SECRET_KEY = binascii.hexlify(os.urandom(16)).decode('ascii')
 
     @staticmethod
-    def require_auth(handler):
-        auth_header = handler.request.headers.get(JWTAuth.AUTHORIZATION_HEADER)
-
-        if not auth_header:
-            raise UnauthorizedError("Missing authorization")
-
-        parts = auth_header.split()
-
-        if not JWTAuth.is_valid_header(parts):
-            raise UnauthorizedError("Invalid header authorization."
-                                    " The Authorization header not match with the standart"
-                                    " `Authorization: bearer <token>`")
-
-        token = parts[1]
+    def auth_token(token):
         try:
             jwt.decode(token, JWTAuth.SECRET_KEY, options=jwt_options)
 
@@ -77,15 +65,50 @@ class JWTAuth(object):
             raise UnauthorizedError(err)
 
     @staticmethod
-    def is_valid_header(parts):
+    def require_auth(handler, ignore_methods):
         """
-        Validate the header
+        :param tornado.web.RequestHandler handler:
+        :param tuple ignore_methods: All methods that are be ignored
+        :return:
         """
-        if parts[0].lower() != JWTAuth.AUTHORIZATION_METHOD:
-            return False
-        elif len(parts) == 1:
-            return False
-        elif len(parts) > 2:
-            return False
+        if handler.request.method in ignore_methods:
+            return True
 
-        return True
+        header = handler.request.headers.get(JWTAuth.AUTHORIZATION_HEADER)
+
+        if not header:
+            raise UnauthorizedError("Missing authorization")
+
+        auth_header = JWTAuth.extract_header(header)
+        if auth_header['method'].lower() != JWTAuth.AUTHORIZATION_METHOD:
+            raise JWTAuth._invalid_header_authorization()
+
+        JWTAuth.auth_token(auth_header['token'])
+
+    @staticmethod
+    def extract_header(header):
+        try:
+            parts = header.split()
+
+            return {
+                'method': parts[0].lower(),
+                'token': parts[1]
+            }
+
+        except Exception:
+            raise JWTAuth._invalid_header_authorization()
+
+    @staticmethod
+    def _invalid_header_authorization():
+        return UnauthorizedError("Invalid header authorization."
+                                 " The Authorization header not match with the standard"
+                                 " `Authorization: bearer <token>`")
+
+    @staticmethod
+    def extract_token(request):
+        """
+        Try extract token from request.
+        It not validate if is valid or if the header has a correct format
+        :param HTTPRequest request:
+        """
+        return JWTAuth.extract_header(request.headers.get(JWTAuth.AUTHORIZATION_HEADER))['token']

@@ -23,6 +23,15 @@ class WebSocketConnections(object):
         WebSocketConnections.observers[token] = observer
 
     @staticmethod
+    def has_registered(connection):
+        return connection in WebSocketConnections.connections
+
+    @staticmethod
+    def get_observer(connection):
+        token = WebSocketConnections.connections[connection]
+        return WebSocketConnections.observers[token]
+
+    @staticmethod
     def unregister(connection):
         token = WebSocketConnections.connections[connection]
         observer = WebSocketConnections.observers[token]

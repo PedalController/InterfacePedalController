@@ -1,7 +1,26 @@
 **Pedal Pi - WebService** uses [WebSockets](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API) to receive notification of changes made by other clients. For example, consider a Pedal Pi configured with the [Raspberry-P0](https://github.com/PedalPi/Raspberry-P0) and WebSocket components, when the user presses a button to change the current pedalboard, WebService clients will be notified that the status of the application has changed via their WebSocket connections.
 
-::: note
-In order for a client to not receive notifications of state changes made by the client itself, [**TOKEN identifier** must be passed in the header](#authentication-token-identifier).
+## Register client [/ws]
+
+After the connection is stabilised, is necessary request the self register using
+the auth token. Send to server:
+
+```json
+{
+  "register": "<token>"
+}
+```
+
+After the sucessful registration, the client will be receive notifications.
+In the next section they will be presented.
+
+::: warning
+After the auth token expires, when occurs any update, will be sent to the client
+a message error instead the data:
+
+```json
+{"error": "Token has been expired. Your data now is possibly unsynchronized"}
+```
 :::
 
 ### WebSocket notification messages
@@ -11,7 +30,7 @@ Notification messages have a **type** field that determines the type of notifica
 Some message types have an **updateType** field to tell you what type of update occurred. The accepted values ​​for **updateType** are `CREATED`, `UPDATED` and `DELETED`. A `type=CONNECTION` message with `updateType=DELETED` indicates that a connection (which is described in the other fields of the message) has been removed.
 
 ::: note
-For implementation details, check [`updates_observer_socket.py`](https://github.com/PedalPi/WebService/tree/master/webservice/websocket/updates_observer_socket.py).
+For implementation details, check [`websocket_connection_observer.py`](https://github.com/PedalPi/WebService/blob/master/webservice/websocket/websocket_connection_observer.py).
 :::
 
 #### Notification `on_current_pedalboard_changed`

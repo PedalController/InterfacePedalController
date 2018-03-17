@@ -12,19 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import tornado.web
 import json
-from tornado_cors import CorsMixin
-
 from unittest.mock import MagicMock
+
+import tornado.web
+from tornado_cors import CorsMixin
 from webservice.websocket.web_socket_connections import WebSocketConnections
+from webservice.util.auth import JWTAuth
 
 
 class AbstractRequestHandler(CorsMixin, tornado.web.RequestHandler):
     CORS_ORIGIN = '*'
     CORS_CREDENTIALS = True
     CORS_MAX_AGE = 21600
-    CORS_HEADERS = 'Content-Type, x-xsrf-token'
+    CORS_HEADERS = 'Content-Type, Authorization'
 
     app = None
     ws = None
@@ -61,12 +62,13 @@ class AbstractRequestHandler(CorsMixin, tornado.web.RequestHandler):
 
     @property
     def token(self):
-        return self.request.headers.get('x-xsrf-token')
+        return JWTAuth.extract_token(self.request)
 
     @property
     def observer(self):
         token = self.token
-        if token is None:
+        if token is None\
+        or token not in WebSocketConnections.observers:
             return MagicMock()
         else:
             return WebSocketConnections.observers[token]

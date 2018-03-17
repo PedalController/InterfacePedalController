@@ -13,16 +13,24 @@
 # limitations under the License.
 
 from application.component.application_observer import ApplicationObserver
+from webservice.util.auth import JWTAuth, UnauthorizedError
 
 
 class WebSocketConnectionObserver(ApplicationObserver):
 
-    def __init__(self, connection):
+    def __init__(self, connection, token):
         super(WebSocketConnectionObserver, self).__init__()
         self.connection = connection
+        self.token = token
 
     def send(self, json_data):
-        self.connection.write_message(json_data)                
+        try:
+            JWTAuth.auth_token(self.token)
+
+            self.connection.write_message(json_data)
+
+        except UnauthorizedError:
+            self.connection.write_message({'error': 'Token has been expired. Your data now is possibly unsynchronized'})
 
     def on_current_pedalboard_changed(self, pedalboard, **kwargs):
         bank = pedalboard.bank

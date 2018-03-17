@@ -13,42 +13,64 @@
 # limitations under the License.
 
 import json
-import uuid
-import logging
-
-from webservice.websocket.web_socket_connections import WebSocketConnections
-from webservice.websocket.websocket_connection_observer import WebSocketConnectionObserver
 
 from tornado import websocket
+from webservice.util.auth import JWTAuth, UnauthorizedError
+from webservice.websocket.web_socket_connections import WebSocketConnections
+from webservice.websocket.websocket_connection_observer import WebSocketConnectionObserver
 
 
 class WebSocketConnectionHandler(websocket.WebSocketHandler):
     webservice = None
+    app = None
 
     def initialize(self, app, webservice):
+        super(WebSocketConnectionHandler, self).initialize()
+        self.app = app
         self.webservice = webservice
-        pass
 
     def check_origin(self, origin):
         #return bool(re.match(r'^.*?\.mydomain\.com', origin))
         return True
 
     def open(self):
-        token = str(uuid.uuid4())
-        logging.info('WebSocket opened - Token {}'.format(token))
+        self.app.log('WebSocket opened - Waiting data connection')
 
-        observer = WebSocketConnectionObserver(self)
+    def on_message(self, message):
+        message = json.loads(message)
+        if 'register' not in message:
+            self.write_message(json.dumps({'error': 'Use REST api for send data'}))
+            return
+
+        token = message['register']
+        try:
+            JWTAuth.auth_token(token)
+        except UnauthorizedError:
+            self.app.log('WebSocket not registered - Wrong token {}'.format(token))
+            self.close()
+            return
+
+        if not WebSocketConnections.has_registered(self):
+            self.app.log('WebSocket registered - Token {}'.format(token))
+            self._register_observer(token)
+
+        else:
+            self.app.log('WebSocket token updated - Token {}'.format(token))
+            self._update_token_observer(token)
+
+    def _register_observer(self, token):
+        observer = WebSocketConnectionObserver(self, token)
 
         self.webservice.register_observer(observer)
         WebSocketConnections.register(token, self, observer)
 
-        self.write_message(json.dumps({'type': 'TOKEN', 'value': token}))
-
-    def on_message(self, message):
-        self.write_message(json.dumps({'error': 'Use REST api for send data'}))
+    def _update_token_observer(self, token):
+        observer = WebSocketConnections.get_observer(self)
+        observer.token = token
 
     def on_close(self):
-        token, observer = WebSocketConnections.unregister(self)
-        self.webservice.unregister_observer(observer)
+        if WebSocketConnections.has_registered(self):
+            token, observer = WebSocketConnections.unregister(self)
+            self.webservice.unregister_observer(observer)
 
-        logging.info('WebSocket closed - Token {}'.format(token))
+            self.app.log('WebSocket closed - Token {}'.format(token))
