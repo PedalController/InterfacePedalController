@@ -38,6 +38,10 @@ class BankHandlerTest(Test):
 
         self.rest.delete_bank(bank)
 
+    def test_get_missing_parameter(self):
+        response = self.rest.get('bank')
+        self.assertEqual(Test.ERROR, response.status_code)
+
     def test_get_index_error(self):
         self.generic_test_index_error(self.rest.get_bank)
 

@@ -37,6 +37,7 @@ from webservice.handler.plugin_handler import PluginHandler
 from webservice.handler.plugins_handler import PluginsHandler
 from webservice.handler.plugins_reload_handler import PluginsReloadHandler
 from webservice.handler.move_bank_handler import MoveBankHandler
+from webservice.handler.libs_list_hander import LibsListHandler
 from webservice.properties import WSProperties
 from webservice.search.zeroconf_factory import ZeroconfFactory
 from webservice.websocket.web_socket_connection_handler import WebSocketConnectionHandler
@@ -162,6 +163,9 @@ class WebService(Component):
         self.for_handler(DeviceNameHandler) \
             .register(r"/v1/configurations/device_name/?$") \
             .register(r"/v1/configurations/device_name/(?P<new_name>[^^]+)")
+
+        self.for_handler(LibsListHandler) \
+            .register(r"/v1/configurations/libs/?$")
 
     def for_handler(self, handler_class):
         return HandlerRegister(self, handler_class)

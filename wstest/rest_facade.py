@@ -231,6 +231,9 @@ class RestFacade(object):
     def configurations_put_name(self, new_name):
         return self.put('configurations/device_name/{}'.format(new_name))
 
+    def configurations_list_libs(self):
+        return self.get('configurations/libs')
+
     # **********************
     # Current
     # **********************

@@ -31,3 +31,19 @@ Change the device name that will appear in a search performed by zeroconf.
 
             Authorization: bearer <auth token>
 + Response 200
+
+## Libs [/configurations/libs]
+
+### Get lib (zeroconf) [GET]
+
+Get the current used libs
+
++ Request  (application/json; charset=UTF-8)
+
+    + Headers
+
+            Authorization: bearer <auth token>
++ Response 200
+    + Body
+
+            {"libs": {"gpiozero": "1.3.2", "PedalPi-Raspberry-P0": "0.2.1", "pybonjour": "1.1.1", "zeroconf": "0.19.0", "PedalPi-WebServiceSerial": "0.2.0", "PedalPi-Application": "0.4.1", "JACK-Client": "0.4.2", "PedalPi-PluginsManager": "0.7.1", "PedalPi-Physical": "0.0.0", "cffi": "1.9.1", "requests": "2.18.4", "tornado-cors": "0.6.0", "pip": "9.0.1", "PedalPi-WebService": "0.4.0", "coverage": "4.2", "mod-lilvlib": "1.0.0", "sphinx-rtd-theme": "0.2.4", "tornado": "5.0"}}
