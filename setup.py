@@ -51,7 +51,7 @@ setup(
 
     install_requires=[
         'PedalPi-Application==0.4.*',
-        'tornado>=4.5.3',
+        'tornado==5.0.*',
         'tornado-cors==0.6.0',
         'zeroconf',
         'PyJWT>=1.6.0'
