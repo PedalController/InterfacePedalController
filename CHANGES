@@ -11,6 +11,7 @@ Version 0.4.0 - released 05/dd/18
 
    - Breaking change!
    - See http://pedalpi.github.io/WebService/ for details
+   - Components that uses WebService can be use WSParameters.COMPONENT_USERNAME and WSParameters.COMPONENT_PASSWORD for auth
 
  - Improve errors when is not passed all parameters
 

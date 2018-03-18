@@ -40,6 +40,7 @@ setup(
 
     packages=[
         'webservice',
+        'webservice/database',
         'webservice/handler',
         'webservice/search',
         'webservice/util',

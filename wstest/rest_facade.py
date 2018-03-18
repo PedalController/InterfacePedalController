@@ -59,11 +59,18 @@ class RestFacade(object):
             headers=self.headers()
         )
 
+    def options(self, url):
+        print('[OPTIONS]', self.address + url)
+        return requests.options(
+            self.address + url,
+            headers=self.headers()
+        )
+
     # **********************
     # Auth
     # **********************
-    def auth(self, password="pedal pi"):
-        return self.post('auth', {"username": "pedal pi", "password": password})
+    def auth(self, username="pedal pi", password="pedal pi"):
+        return self.post('auth', {"username": username, "password": password})
 
     # **********************
     # Banks

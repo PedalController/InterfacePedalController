@@ -50,11 +50,21 @@ class RequiresAuthMixing:
         self.send(401, {"error": message})
 
 
+def generate_random_string(size):
+    """
+    Generate a random string with size specified
+    Like python 3.6 secrets
+
+    :param int size: Size of the random string that will be generated
+    """
+    return binascii.hexlify(os.urandom(size)).decode('ascii')
+
+
 class JWTAuth(object):
 
     AUTHORIZATION_HEADER = 'Authorization'
     AUTHORIZATION_METHOD = 'bearer'
-    SECRET_KEY = binascii.hexlify(os.urandom(16)).decode('ascii')
+    SECRET_KEY = generate_random_string(16)
 
     @staticmethod
     def auth_token(token):

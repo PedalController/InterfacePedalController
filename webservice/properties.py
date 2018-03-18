@@ -12,9 +12,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from webservice.util.auth import generate_random_string
+
 
 class WSProperties(object):
     DATA_KEY = 'WebService'
 
     DEVICE_NAME = 'device_name'
+    USER = 'user'
 
+    """ Default username for component clients"""
+    COMPONENT_USERNAME = generate_random_string(16)
+    """ Default password for component clients"""
+    COMPONENT_PASSWORD = generate_random_string(16)
+
+    @staticmethod
+    def auth_client_component(username, password):
+        """
+        :param string username:
+        :param string password:
+        :return:
+        """
+        return username == WSProperties.COMPONENT_USERNAME \
+           and password == WSProperties.COMPONENT_PASSWORD

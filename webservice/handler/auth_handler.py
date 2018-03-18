@@ -15,28 +15,35 @@
 import datetime
 
 import jwt
+from application.controller.component_data_controller import ComponentDataController
+from webservice.database.database import UsersDatabase
 from webservice.handler.abstract_request_handler import AbstractRequestHandler
+from webservice.properties import WSProperties
 from webservice.util.auth import JWTAuth
 from webservice.util.auth import RequiresAuthMixing
+from webservice.util.handler_utils import exception
 
 
 class AuthHandler(RequiresAuthMixing, AbstractRequestHandler):
     """
     Based on https://github.com/paulorodriguesxv/tornado-json-web-token-jwt
-
-    Handle to auth method.
-    This method aim to provide a new authorization token
-    There is a fake payload (for tutorial purpose)
     """
+    database = None
 
     def initialize(self, app, webservice):
         super(AuthHandler, self).initialize(app, webservice)
+        self.database = UsersDatabase(app.controller(ComponentDataController))
 
+    @exception(Exception, 500)
     def post(self):
         """
         :return The generated token
         """
-        if self.request_data != {"username": "pedal pi", "password": "pedal pi"}:
+        username = self.request_data["username"]
+        password = self.request_data["password"]
+
+        if not self.database.auth(username, password) \
+        and not WSProperties.auth_client_component(username, password):
             self.unauthorized("Invalid username or password")
             return
 
